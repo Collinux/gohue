@@ -19,7 +19,7 @@ Info struct {
     DeviceType          string
     FriendlyName        string
     ManufacturerURL     string
-    About               string
+    ModelDescription    string
     ModelName           string
     ModelNumber         string
     ModelURL            string
