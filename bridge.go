@@ -1,5 +1,7 @@
 package main
 
+// username: 319b36233bd2328f3e40731b23479207
+
 import (
     "log"
     "os"
@@ -11,10 +13,8 @@ import (
 )
 
 func main() {
-    bridge := NewBridge("192.168.1.128")
+    bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
     log.Println(bridge.IPAddress)
-
-    //trace("this is a trace")
 }
 
 type Bridge struct {
@@ -42,10 +42,10 @@ type Device struct {
     UDN                 string      `xml:"UDN"`
 }
 
-func NewBridge(ip string) *Bridge {
+func NewBridge(ip string, username string) *Bridge {
     bridge := Bridge {
         IPAddress: ip,
-        // TODO: other defaults here
+        Username: username,
     }
 
     GetBridgeInfo(&bridge)
