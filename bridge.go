@@ -1,7 +1,6 @@
 package main
 
 // username: 319b36233bd2328f3e40731b23479207
-
 import (
     "log"
     "os"
@@ -15,6 +14,8 @@ import (
 func main() {
     bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
     log.Println(bridge.IPAddress)
+
+    GetAllLights(bridge)
 }
 
 type Bridge struct {
@@ -42,6 +43,7 @@ type Device struct {
     UDN                 string      `xml:"UDN"`
 }
 
+// NewBridge defines hardware that is compatible with Hue.
 func NewBridge(ip string, username string) *Bridge {
     bridge := Bridge {
         IPAddress: ip,
@@ -52,7 +54,8 @@ func NewBridge(ip string, username string) *Bridge {
     return &bridge
 }
 
-// Go to http://<bridge_ip>/description.xml set the bridge.Info
+// GetBridgeInfo retreives the description.xml file from the bridge.
+// Go to http://<bridge_ip>/description.xml
 func GetBridgeInfo(self *Bridge) {
     response, error := http.Get("http://" + self.IPAddress + "/description.xml")
     if error != nil {

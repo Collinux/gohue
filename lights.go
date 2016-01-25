@@ -32,6 +32,8 @@ type Light struct {
 
 //http://192.168.1.128/api/319b36233bd2328f3e40731b23479207/lights/
 // http://<bridge_ip>/api/<username>/lights/
+
+// GetAllLights retreives the state of all lights that the bridge is aware of.
 func GetAllLights(bridge *Bridge) {
     response, error := http.Get(
         fmt.Sprintf("http://%s/api/%s/lights/", bridge.IPAddress, bridge.Username)) 
@@ -50,7 +52,7 @@ func GetAllLights(bridge *Bridge) {
         os.Exit(1)
     }
     
-    data := []Light{}
+    data := Light{}
     error = json.Unmarshal(body, &data)
     if error != nil {
         trace("", error)
