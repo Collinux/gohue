@@ -1,4 +1,4 @@
-package main
+package hue
 
 // username: 319b36233bd2328f3e40731b23479207
 import (
@@ -10,13 +10,6 @@ import (
     "runtime"
     "fmt"
 )
-
-func main() {
-    bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
-    log.Println(bridge.IPAddress)
-
-    GetAllLights(bridge)
-}
 
 type Bridge struct {
     IPAddress   string
