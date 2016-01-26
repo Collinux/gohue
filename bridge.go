@@ -5,10 +5,12 @@ import (
     "log"
     "os"
     "encoding/xml"
+    "encoding/json"
     "net/http"
     "io/ioutil"
     "runtime"
     "fmt"
+    "bytes"
 )
 
 type Bridge struct {
@@ -75,14 +77,27 @@ func GetBridgeInfo(self *Bridge) {
 }
 
 func CreateUser(bridge *Bridge, deviceType string) (string, error) {
-    uri := fmt.Sprintf("http://%s/api", bridge.IPAddress)
-    response, err := http.PostForm(uri, uurl.Values{"deviceType": deviceType})
+    // Construct the http POST
+    params := map[string]string{"devicetype": deviceType}
+    request, err := json.Marshal(params)
     if err != nil {
-        // TODO: handle error
+        return "", err
     }
-    defer response.Body.Close
+
+    // Send the request to create the user and read the response
+    uri := fmt.Sprintf("http://%s/api", bridge.IPAddress)
+    response, err := http.Post(uri, "text/json", bytes.NewReader(request))
+    if err != nil {
+        return "", err
+    }
+    defer response.Body.Close()
     body, err := ioutil.ReadAll(response.Body)
     fmt.Printf(string(body))
+
+    // TODO: handle description saying "link button not pressed"
+    // ^ handle "error":{"type":101}
+
+    return string(body), err
 }
 
 // Log the date, time, file location, line number, and function.
