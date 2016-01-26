@@ -57,9 +57,9 @@ func GetBridgeInfo(self *Bridge) {
         trace(fmt.Sprintf("Bridge status error: %d", response.StatusCode), nil)
         os.Exit(1)
     }
+    defer response.Body.Close()
 
     body, error := ioutil.ReadAll(response.Body)
-    defer response.Body.Close()
     if error != nil {
         trace("Error parsing bridge description xml.", nil)
         os.Exit(1)
@@ -72,6 +72,17 @@ func GetBridgeInfo(self *Bridge) {
         os.Exit(1)
     }
     self.Info = *data
+}
+
+func CreateUser(bridge *Bridge, deviceType string) (string, error) {
+    uri := fmt.Sprintf("http://%s/api", bridge.IPAddress)
+    response, err := http.PostForm(uri, uurl.Values{"deviceType": deviceType})
+    if err != nil {
+        // TODO: handle error
+    }
+    defer response.Body.Close
+    body, err := ioutil.ReadAll(response.Body)
+    fmt.Printf(string(body))
 }
 
 // Log the date, time, file location, line number, and function.
