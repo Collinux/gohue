@@ -76,6 +76,8 @@ func GetBridgeInfo(self *Bridge) {
     self.Info = *data
 }
 
+// CreateUser posts to ./api on the bridge to create a new whitelisted user.
+// If the button on the bridge was not pressed then _____todo_____
 func CreateUser(bridge *Bridge, deviceType string) (string, error) {
     // Construct the http POST
     params := map[string]string{"devicetype": deviceType}
@@ -92,12 +94,12 @@ func CreateUser(bridge *Bridge, deviceType string) (string, error) {
     }
     defer response.Body.Close()
     body, err := ioutil.ReadAll(response.Body)
-    fmt.Printf(string(body))
+    fmt.Println(string(body))
 
-    // TODO: handle description saying "link button not pressed"
-    // ^ handle "error":{"type":101}
+    // TODO: decode and return
+    // TODO: handle errors. http://www.developers.meethue.com/documentation/error-messages
 
-    return string(body), err
+    return "", err
 }
 
 // Log the date, time, file location, line number, and function.
