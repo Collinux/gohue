@@ -76,6 +76,16 @@ func GetBridgeInfo(self *Bridge) {
     self.Info = *data
 }
 
+// Error Struct - REST Error Response Format
+// http://www.developers.meethue.com/documentation/error-messages
+type Error struct {
+    response struct {
+        Type        string  `xml:"type"`
+        Address     string  `xml:"address"`
+        Description string  `xml:"description"`
+    } `xml:"error"`
+}
+
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
 // If the button on the bridge was not pressed then _____todo_____
 func CreateUser(bridge *Bridge, deviceType string) (string, error) {
