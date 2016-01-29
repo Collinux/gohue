@@ -20,22 +20,20 @@ type Bridge struct {
 }
 
 type BridgeInfo struct {
-    XMLName	    xml.Name	`xml:"root"`
-    Device      Device      `xml:"device"`
-}
-
-type Device struct {
-    XMLName	            xml.Name    `xml:"device"`
-    DeviceType          string      `xml:"deviceType"`
-    FriendlyName        string      `xml:"friendlyName"`
-    Manufacturer        string      `xml:"manufacturer"`
-    ManufacturerURL     string      `xml:"manufacturerURL"`
-    ModelDescription    string      `xml:"modelDescription"`
-    ModelName           string      `xml:"modelName"`
-    ModelNumber         string      `xml:"modelNumber"`
-    ModelURL            string      `xml:"modelURL"`
-    SerialNumber        string      `xml:"serialNumber"`
-    UDN                 string      `xml:"UDN"`
+    Info struct {
+        Info struct {
+            DeviceType          string      `xml:"deviceType"`
+            FriendlyName        string      `xml:"friendlyName"`
+            Manufacturer        string      `xml:"manufacturer"`
+            ManufacturerURL     string      `xml:"manufacturerURL"`
+            ModelDescription    string      `xml:"modelDescription"`
+            ModelName           string      `xml:"modelName"`
+            ModelNumber         string      `xml:"modelNumber"`
+            ModelURL            string      `xml:"modelURL"`
+            SerialNumber        string      `xml:"serialNumber"`
+            UDN                 string      `xml:"UDN"`
+        } `xml:"device"`
+    } `xml:"root"`
 }
 
 // NewBridge defines hardware that is compatible with Hue.
@@ -104,7 +102,15 @@ func CreateUser(bridge *Bridge, deviceType string) (string, error) {
     }
     defer response.Body.Close()
     body, err := ioutil.ReadAll(response.Body)
-    fmt.Println(string(body))
+    log.Println(string(body))
+
+    data := []Error{}
+    err = json.Unmarshal(body, &data)
+    if err != nil {
+        trace("", err)
+        os.Exit(1)
+    }
+    fmt.Println(data)
 
     // TODO: decode and return
     // TODO: handle errors. http://www.developers.meethue.com/documentation/error-messages
