@@ -20,7 +20,7 @@ type Light struct {
         Saturation  int       `json:"sat"`    // Saturation value 0-254
         Effect      string    `json:"effect"` //
         XY          []string  `json:"xy"`     // Coordinates of color in CIE color space
-        CT          int       `json:"ct"`     // Mired Color Temperature
+        CT          int       `json:"ct"`     // Mired Color Temperature (google it)
         Alert       string    `json:"alert"`
         ColorMode   string    `json:"colormode"`
         Reachable   bool      `json:"reachable"`
@@ -33,12 +33,13 @@ type Light struct {
     SWVersion        string     `json:"swversion"`
 }
 
-type SetLightState struct {
+// LightState used in SetLightState to ammend light attributes.
+type LightState struct {
     On  bool
     Bri uint8
     Hue uint16
     Sat uint8
-    XY  [2]float4
+    XY  [2]float32
     CT  uint16
     Alert   string
     Effect  string
@@ -47,9 +48,14 @@ type SetLightState struct {
     SaturationIncrement  int // TODO: -254 to 254
     HueIncrement    int // TODO: -65534 to 65534
     CTIncrement     int // TODO: -65534 to 65534
-    XYIncrement     [2]float4
+    XYIncrement     [2]float32
 }
 
+// SetLightState will modify light attributes such as on/off, saturation,
+// brightness, and more. See `SetLightState` struct.
+func SetLightState(bridge *Bridge, newState LightState) {
+
+}
 
 //http://192.168.1.128/api/319b36233bd2328f3e40731b23479207/lights/
 
@@ -87,7 +93,6 @@ func GetAllLights(bridge *Bridge) []Light {
         err = json.Unmarshal(body, &data)
         if err != nil {
             trace("", err)
-            os.Exit(1)
         }
         lights = append(lights, data)
     }
