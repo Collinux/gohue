@@ -141,7 +141,6 @@ func GetBridgeInfo(self *Bridge) {
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
-// If the button on the bridge was not pressed then _____todo_____
 func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
     // Construct the http POST
     params := map[string]string{"devicetype": deviceType}
@@ -165,16 +164,14 @@ func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
         return "", ErrResponse
     }
 
+    // Parse the result and return it
     result := string(body)
     errFound := strings.Contains(result, "error")
     noLink := strings.Contains(result, "link button not pressed")
     if errFound && noLink {
         return "", ErrLink
     }
-
     // TODO: decode and return
-    // TODO: handle errors. http://www.developers.meethue.com/documentation/error-messages
-
     return "", NoErr
 }
 
