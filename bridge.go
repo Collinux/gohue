@@ -86,7 +86,15 @@ var (
          processing of the command. This indicates an error in the
          bridge, not in the message being sent.`}
 
-    // TODO: Command specific error numbers and descriptions
+    // Command Specific Errors
+    ErrLink   = Error{101, "Link button not pressed.",
+        `/config/linkbutton is false. Link button has
+         not been pressed in last 30 seconds.`}
+    ErrDHCP   = Error{110, "DHCP cannot be disabled.",
+        "DHCP can only be disabled if there is a valid static IP configuration"}
+    ErrUpdate = Error{111, "Invalid updatestate.",
+        "Checkforupdate can only be set in updatestate 0 and 1."}
+    // TODO: Need to add 201, 301, 305, 306, 402, 403, 501, 502, 601...
 )
 
 // NewBridge defines hardware that is compatible with Hue.
