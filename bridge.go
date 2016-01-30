@@ -50,15 +50,15 @@ type Error struct {
 // http://www.developers.meethue.com/documentation/error-messages
 var (
     // Generic Errors
-    ErrAuth = Error{1, "Unauthorized User",
+    ErrAuth         = Error{1, "Unauthorized User",
         `This will be returned if an invalid username is used in the request,
         or if the username does not have the rights to modify the resource.`}
-    ErrJson = Error{2, "Body contains invalid JSON.",
+    ErrJson         = Error{2, "Body contains invalid JSON.",
         "This will be returned if the body of the message contains invalid JSON."}
-    ErrResource = Error{3, "Resource, <resource>, not available.",
+    ErrResource     = Error{3, "Resource, <resource>, not available.",
         `This will be returned if the addressed resource does not exist.
          E.g. the user specifies a light ID that does not exist.`}
-    ErrMethod = Error{4, "Method, <method_name>, not available for resource, <resource>",
+    ErrMethod       = Error{4, "Method, <method_name>, not available for resource, <resource>",
         `This will be returned if the method (GET/POST/PUT/DELETE)
          used is not supported by the URL e.g. DELETE is not
          supported on the /config resource`}
@@ -66,26 +66,26 @@ var (
          required parameters are not present in the message body. The presence
          of invalid parameters should not trigger this error as long as all
          required parameters are present.`}
-    ErrParamNA = Error{6, "Parameter, <parameter>, not available.",
+    ErrParamNA      = Error{6, "Parameter, <parameter>, not available.",
         `This will be returned if a parameter sent in the message body does
          not exist. This error is specific to PUT commands; invalid parameters
          in other commands are simply ignored.`}
     ErrParamInvalid = Error{7, "Invalid value, <value>, for parameter, <parameter>",
         `This will be returned if the value set for a parameter is of the
          incorrect format or is out of range.`}
-    ErrParamStatic = Error{8, "Parameter, <parameter>, is not modifiable",
-        `This will be returned if an attempt to modify a read only
-         parameter is made.`}
+    ErrParamStatic  = Error{8, "Parameter, <parameter>, is not modifiable",
+        `This will be returned if an attempt to modify
+         a read only parameter is made.`}
     ErrItemOverflow = Error{11, "Too many items to list.",
         "List in request contains too many items"}
-    ErrPortalConn = Error{12, "Portal connection required.",
+    ErrPortalConn   = Error{12, "Portal connection required.",
         `Command requires portal connection.
         Returned if portalservices is “false“ or the portal connection is down`}
-    ErrorInternal = Error{901, "Internal error, <error code>",
+    ErrorInternal   = Error{901, "Internal error, <error code>",
         `This will be returned if there is an internal error in the
          processing of the command. This indicates an error in the
          bridge, not in the message being sent.`}
-    
+
     // TODO: Command specific error numbers and descriptions
 )
 
