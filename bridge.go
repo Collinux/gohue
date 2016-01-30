@@ -183,8 +183,8 @@ func trace(message string, err error) {
     f := runtime.FuncForPC(pc[0])
     file, line := f.FileLine(pc[0])
     if err != nil {
-        log.Printf("%s:%d %s: %s\n", file, line, f.Name(), err)
+        log.Fatalf("%s:%d %s: %s\n", file, line, f.Name(), err)
     } else {
-        log.Printf("%s:%d %s: %s\n", file, line, f.Name(), message)
+        log.Fatalf("%s:%d %s: %s\n", file, line, f.Name(), message)
     }
 }
