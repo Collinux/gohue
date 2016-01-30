@@ -10,7 +10,9 @@ import (
     "io/ioutil"
     "runtime"
     "fmt"
+    "strings"
     "bytes"
+    "errors"
 )
 
 type Bridge struct {
@@ -102,20 +104,21 @@ func CreateUser(bridge *Bridge, deviceType string) (string, error) {
     }
     defer response.Body.Close()
     body, err := ioutil.ReadAll(response.Body)
-    log.Println(string(body))
-
-    data := []Error{}
-    err = json.Unmarshal(body, &data)
     if err != nil {
         trace("", err)
-        os.Exit(1)
     }
-    fmt.Println(data)
+
+    result := string(body)
+    errFound := strings.Contains(result, "error")
+    noLink := strings.Contains(result, "link button not pressed")
+    if errFound && noLink {
+        return "", errors.New("Link button not pressed.")
+    }
 
     // TODO: decode and return
     // TODO: handle errors. http://www.developers.meethue.com/documentation/error-messages
 
-    return "", err
+    return "", nil
 }
 
 // Log the date, time, file location, line number, and function.
