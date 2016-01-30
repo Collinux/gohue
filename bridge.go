@@ -12,7 +12,6 @@ import (
     "fmt"
     "strings"
     "bytes"
-    "errors"
 )
 
 type Bridge struct {
@@ -49,7 +48,13 @@ type Error struct {
 // Error Return Values
 // http://www.developers.meethue.com/documentation/error-messages
 var (
-    // Generic Errors
+    // Not from Hue documentation
+    NoErr = Error{}
+    ErrResponse = Error{0, "Could not read or parse response from bridge",
+        "Data structure for return type may be invalid."}
+
+
+    // Generic Errors from Hue SDK
     ErrAuth         = Error{1, "Unauthorized User",
         `This will be returned if an invalid username is used in the request,
         or if the username does not have the rights to modify the resource.`}
@@ -86,7 +91,7 @@ var (
          processing of the command. This indicates an error in the
          bridge, not in the message being sent.`}
 
-    // Command Specific Errors
+    // Command Specific Errors from Hue SDK
     ErrLink   = Error{101, "Link button not pressed.",
         `/config/linkbutton is false. Link button has
          not been pressed in last 30 seconds.`}
@@ -111,24 +116,24 @@ func NewBridge(ip string, username string) *Bridge {
 // GetBridgeInfo retreives the description.xml file from the bridge.
 // Go to http://<bridge_ip>/description.xml
 func GetBridgeInfo(self *Bridge) {
-    response, error := http.Get("http://" + self.IPAddress + "/description.xml")
-    if error != nil {
-        trace("", error)
+    response, err := http.Get("http://" + self.IPAddress + "/description.xml")
+    if err != nil {
+        trace("", err)
     } else if response.StatusCode != 200 {
         trace(fmt.Sprintf("Bridge status error: %d", response.StatusCode), nil)
         os.Exit(1)
     }
     defer response.Body.Close()
 
-    body, error := ioutil.ReadAll(response.Body)
-    if error != nil {
+    body, err := ioutil.ReadAll(response.Body)
+    if err != nil {
         trace("Error parsing bridge description xml.", nil)
         os.Exit(1)
     }
 
     data := new(BridgeInfo)
-    error = xml.Unmarshal(body, &data)
-    if error != nil {
+    err = xml.Unmarshal(body, &data)
+    if err != nil {
         trace("Error using unmarshal to split xml.", nil)
         os.Exit(1)
     }
@@ -137,37 +142,40 @@ func GetBridgeInfo(self *Bridge) {
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
 // If the button on the bridge was not pressed then _____todo_____
-func CreateUser(bridge *Bridge, deviceType string) (string, error) {
+func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
     // Construct the http POST
     params := map[string]string{"devicetype": deviceType}
     request, err := json.Marshal(params)
     if err != nil {
-        return "", err
+        trace("", err)
+        return "", ErrResponse
     }
 
     // Send the request to create the user and read the response
     uri := fmt.Sprintf("http://%s/api", bridge.IPAddress)
     response, err := http.Post(uri, "text/json", bytes.NewReader(request))
     if err != nil {
-        return "", err
+        trace("", err)
+        return "", ErrResponse
     }
     defer response.Body.Close()
     body, err := ioutil.ReadAll(response.Body)
     if err != nil {
         trace("", err)
+        return "", ErrResponse
     }
 
     result := string(body)
     errFound := strings.Contains(result, "error")
     noLink := strings.Contains(result, "link button not pressed")
     if errFound && noLink {
-        return "", errors.New("Link button not pressed.")
+        return "", ErrLink
     }
 
     // TODO: decode and return
     // TODO: handle errors. http://www.developers.meethue.com/documentation/error-messages
 
-    return "", nil
+    return "", NoErr
 }
 
 // Log the date, time, file location, line number, and function.
