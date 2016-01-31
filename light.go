@@ -4,7 +4,6 @@ package hue
 
 import (
     "fmt"
-    "os"
     "net/http"
     "io/ioutil"
     "encoding/json"
@@ -18,8 +17,8 @@ type Light struct {
         Bri         int       `json:"bri"`    // Brightness value 1-254
         Hue         int       `json:"hue"`    // Hue value 1-65535
         Saturation  int       `json:"sat"`    // Saturation value 0-254
-        Effect      string    `json:"effect"` //
-        XY          []string  `json:"xy"`     // Coordinates of color in CIE color space
+        Effect      string    `json:"effect"`
+        XY          [2]float32 `json:"xy"`     // Coordinates of color in CIE color space
         CT          int       `json:"ct"`     // Mired Color Temperature (google it)
         Alert       string    `json:"alert"`
         ColorMode   string    `json:"colormode"`
@@ -69,10 +68,8 @@ func GetAllLights(bridge *Bridge) []Light {
             fmt.Sprintf("http://%s/api/%s/lights/%d", bridge.IPAddress, bridge.Username, index))
         if err != nil {
             trace("", err)
-            os.Exit(1)
         } else if response.StatusCode != 200 {
             trace(fmt.Sprintf("Bridge status error %d", response.StatusCode), nil)
-            os.Exit(1)
         }
 
         // Read the response
@@ -80,7 +77,6 @@ func GetAllLights(bridge *Bridge) []Light {
         defer response.Body.Close()
         if err != nil {
             trace("", err)
-            os.Exit(1)
         }
         if strings.Contains(string(body), "not available") {
             // Handle end of searchable lights
