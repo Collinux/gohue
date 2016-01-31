@@ -89,18 +89,18 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
     // and parse their values. Supports 100 lights.
     var lights []Light
     for index := 1; index < 101; index++ {
-        response, err := http.Get(
+        resp, err := http.Get(
             fmt.Sprintf("http://%s/api/%s/lights/%d", bridge.IPAddress, bridge.Username, index))
         if err != nil {
             trace("", err)
             return lights, err
-        } else if response.StatusCode != 200 {
-            trace(fmt.Sprintf("Bridge status error %d", response.StatusCode), nil)
+        } else if resp.StatusCode != 200 {
+            trace(fmt.Sprintf("Bridge status error %d", resp.StatusCode), nil)
         }
 
         // Read the response
-        body, err := ioutil.ReadAll(response.Body)
-        defer response.Body.Close()
+        body, err := ioutil.ReadAll(resp.Body)
+        defer resp.Body.Close()
         if err != nil {
             trace("", err)
             return lights, err
