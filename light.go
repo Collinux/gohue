@@ -9,6 +9,7 @@ import (
     "encoding/json"
     "strings"
     "errors"
+    "bytes"
 )
 
 type Light struct {
@@ -17,8 +18,8 @@ type Light struct {
         Bri         int       `json:"bri"`    // Brightness value 1-254
         Hue         int       `json:"hue"`    // Hue value 1-65535
         Saturation  int       `json:"sat"`    // Saturation value 0-254
-        Effect      string    `json:"effect"`
-        XY          [2]float32 `json:"xy"`     // Coordinates of color in CIE color space
+        Effect      string    `json:"effect"` // "None" or "Colorloop"
+        XY          [2]float32 `json:"xy"`    // Coordinates of color in CIE color space
         CT          int       `json:"ct"`     // Mired Color Temperature (google it)
         Alert       string    `json:"alert"`
         ColorMode   string    `json:"colormode"`
@@ -52,8 +53,29 @@ type LightState struct {
 
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
-func SetLightState(bridge *Bridge, newState LightState) {
+func SetLightState(bridge *Bridge, lightID string, newState LightState) {
+    // Construct the http POST
+    req, err := json.Marshal(newState)
+    if err != nil {
+        trace("", err)
+    }
 
+    // Send the request and read the response
+    uri := fmt.Sprintf("http://%s/api/%s/lights/%s/state",
+        bridge.IPAddress, bridge.Username, lightID)
+    resp, err := http.Post(uri, "text/json", bytes.NewReader(req))
+    if err != nil {
+        trace("", err)
+    }
+    defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        trace("", err)
+    }
+
+    // TODO: parse the response
+
+    fmt.Println(string(body))
 }
 
 //http://192.168.1.128/api/319b36233bd2328f3e40731b23479207/lights/
