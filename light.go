@@ -35,20 +35,20 @@ type Light struct {
 
 // LightState used in SetLightState to ammend light attributes.
 type LightState struct {
-    On  bool
-    Bri uint8
-    Hue uint16
-    Sat uint8
-    XY  [2]float32
-    CT  uint16
-    Alert   string
-    Effect  string
-    TransitionTime string
+    On                   bool
+    Bri                  uint8
+    Hue                  uint16
+    Sat                  uint8
+    XY                   [2]float32
+    CT                   uint16
+    Alert                string
+    Effect               string
+    TransitionTime       string
     BrightnessIncrement  int // TODO: -254 to 254
     SaturationIncrement  int // TODO: -254 to 254
-    HueIncrement    int // TODO: -65534 to 65534
-    CTIncrement     int // TODO: -65534 to 65534
-    XYIncrement     [2]float32
+    HueIncrement         int // TODO: -65534 to 65534
+    CTIncrement          int // TODO: -65534 to 65534
+    XYIncrement          [2]float32
 }
 
 // SetLightState will modify light attributes such as on/off, saturation,
@@ -81,14 +81,14 @@ func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
     return nil
 }
 
-//http://192.168.1.128/api/319b36233bd2328f3e40731b23479207/lights/
-
 // GetAllLights retreives the state of all lights that the bridge is aware of.
 func GetAllLights(bridge *Bridge) ([]Light, error) {
     // Loop through all light indicies to see if they exist
     // and parse their values. Supports 100 lights.
     var lights []Light
     for index := 1; index < 101; index++ {
+
+        // Send an http GET and inspect the response
         resp, err := http.Get(
             fmt.Sprintf("http://%s/api/%s/lights/%d", bridge.IPAddress, bridge.Username, index))
         if err != nil {
@@ -98,7 +98,7 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
             trace(fmt.Sprintf("Bridge status error %d", resp.StatusCode), nil)
         }
 
-        // Read the response
+        // Read and inspect the response content
         body, err := ioutil.ReadAll(resp.Body)
         defer resp.Body.Close()
         if err != nil {
