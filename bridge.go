@@ -37,6 +37,17 @@ type BridgeInfo struct {
     } `xml:"root"`
 }
 
+func (self *Bridge) get(path string) (*http.Response, error) {
+    resp, err := http.Get("http://" + self.IPAddress + path)
+    if err != nil {
+        trace("", err)
+        return nil, err
+    } else if resp.StatusCode != 200 {
+        trace("Invalid bridge status.", nil)
+    }
+    return resp, nil
+}
+
 // Error Struct
 // http://www.developers.meethue.com/documentation/error-messages
 type Error struct {
