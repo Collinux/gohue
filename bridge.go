@@ -114,7 +114,6 @@ func NewBridge(ip string, username string) *Bridge {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-// Go to http://<bridge_ip>/description.xml
 func GetBridgeInfo(self *Bridge) {
     response, err := http.Get("http://" + self.IPAddress + "/description.xml")
     if err != nil {
@@ -171,7 +170,6 @@ func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
     if errFound && noLink {
         return "", ErrLink
     }
-    // TODO: decode and return
     return "", NoErr
 }
 
@@ -183,8 +181,8 @@ func trace(message string, err error) {
     f := runtime.FuncForPC(pc[0])
     file, line := f.FileLine(pc[0])
     if err != nil {
-        log.Fatalf("%s:%d %s: %s\n", file, line, f.Name(), err)
+        log.Printf("%s:%d %s: %s\n", file, line, f.Name(), err)
     } else {
-        log.Fatalf("%s:%d %s: %s\n", file, line, f.Name(), message)
+        log.Printf("%s:%d %s: %s\n", file, line, f.Name(), message)
     }
 }

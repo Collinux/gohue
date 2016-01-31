@@ -53,11 +53,12 @@ type LightState struct {
 
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
-func SetLightState(bridge *Bridge, lightID string, newState LightState) {
+func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
     // Construct the http POST
     req, err := json.Marshal(newState)
     if err != nil {
         trace("", err)
+        return err
     }
 
     // Send the request and read the response
@@ -66,22 +67,24 @@ func SetLightState(bridge *Bridge, lightID string, newState LightState) {
     resp, err := http.Post(uri, "text/json", bytes.NewReader(req))
     if err != nil {
         trace("", err)
+        return err
     }
     defer resp.Body.Close()
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
         trace("", err)
+        return err
     }
 
-    // TODO: parse the response
-
+    // TODO: Parse the response and return any error
     fmt.Println(string(body))
+    return nil
 }
 
 //http://192.168.1.128/api/319b36233bd2328f3e40731b23479207/lights/
 
 // GetAllLights retreives the state of all lights that the bridge is aware of.
-func GetAllLights(bridge *Bridge) []Light {
+func GetAllLights(bridge *Bridge) ([]Light, error) {
     // Loop through all light indicies to see if they exist
     // and parse their values. Supports 100 lights.
     var lights []Light
@@ -90,6 +93,7 @@ func GetAllLights(bridge *Bridge) []Light {
             fmt.Sprintf("http://%s/api/%s/lights/%d", bridge.IPAddress, bridge.Username, index))
         if err != nil {
             trace("", err)
+            return lights, err
         } else if response.StatusCode != 200 {
             trace(fmt.Sprintf("Bridge status error %d", response.StatusCode), nil)
         }
@@ -99,10 +103,11 @@ func GetAllLights(bridge *Bridge) []Light {
         defer response.Body.Close()
         if err != nil {
             trace("", err)
+            return lights, err
         }
         if strings.Contains(string(body), "not available") {
             // Handle end of searchable lights
-            fmt.Printf("\n\n%d lights found.\n\n", index)
+            //fmt.Printf("\n\n%d lights found.\n\n", index)
             break
         }
 
@@ -114,12 +119,12 @@ func GetAllLights(bridge *Bridge) []Light {
         }
         lights = append(lights, data)
     }
-    return lights
+    return lights, nil
 }
 
 // GetLight will return a light struct containing data on a given name.
 func GetLight(bridge *Bridge, name string) (Light, error) {
-    lights := GetAllLights(bridge)
+    lights, _ := GetAllLights(bridge)
     for index := 0; index < len(lights); index++ {
         if lights[index].Name == name {
             return lights[index], nil
