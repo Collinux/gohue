@@ -12,7 +12,31 @@ import (
     "fmt"
     "strings"
     "bytes"
+    "io"
 )
+
+// type Bridge struct {
+//     IPAddress   string
+//     Username    string
+//     Info        BridgeInfo
+// }
+//
+// type BridgeInfo struct {
+//     Root struct {
+//         Device struct {
+//             DeviceType          string      `xml:"deviceType"`
+//             FriendlyName        string      `xml:"friendlyName"`
+//             Manufacturer        string      `xml:"manufacturer"`
+//             ManufacturerURL     string      `xml:"manufacturerURL"`
+//             ModelDescription    string      `xml:"modelDescription"`
+//             ModelName           string      `xml:"modelName"`
+//             ModelNumber         string      `xml:"modelNumber"`
+//             ModelURL            string      `xml:"modelURL"`
+//             SerialNumber        string      `xml:"serialNumber"`
+//             UDN                 string      `xml:"UDN"`
+//         } `xml:"device"`
+//     } `xml:"root"`
+// }
 
 type Bridge struct {
     IPAddress   string
@@ -21,31 +45,39 @@ type Bridge struct {
 }
 
 type BridgeInfo struct {
-    Info struct {
-        Info struct {
-            DeviceType          string      `xml:"deviceType"`
-            FriendlyName        string      `xml:"friendlyName"`
-            Manufacturer        string      `xml:"manufacturer"`
-            ManufacturerURL     string      `xml:"manufacturerURL"`
-            ModelDescription    string      `xml:"modelDescription"`
-            ModelName           string      `xml:"modelName"`
-            ModelNumber         string      `xml:"modelNumber"`
-            ModelURL            string      `xml:"modelURL"`
-            SerialNumber        string      `xml:"serialNumber"`
-            UDN                 string      `xml:"UDN"`
-        } `xml:"device"`
-    } `xml:"root"`
+    XMLName	    xml.Name	`xml:"root"`
+    Device      Device      `xml:"device"`
 }
 
-func (self *Bridge) get(path string) (*http.Response, error) {
+type Device struct {
+    XMLName	            xml.Name    `xml:"device"`
+    DeviceType          string      `xml:"deviceType"`
+    FriendlyName        string      `xml:"friendlyName"`
+    Manufacturer        string      `xml:"manufacturer"`
+    ManufacturerURL     string      `xml:"manufacturerURL"`
+    ModelDescription    string      `xml:"modelDescription"`
+    ModelName           string      `xml:"modelName"`
+    ModelNumber         string      `xml:"modelNumber"`
+    ModelURL            string      `xml:"modelURL"`
+    SerialNumber        string      `xml:"serialNumber"`
+    UDN                 string      `xml:"UDN"`
+}
+
+func (self *Bridge) Get(path string) (io.Reader, error) {
     resp, err := http.Get("http://" + self.IPAddress + path)
     if err != nil {
         trace("", err)
-        return nil, err
     } else if resp.StatusCode != 200 {
-        trace("Invalid bridge status.", nil)
+        trace(fmt.Sprintf("Bridge status error: %d", resp.StatusCode), nil)
     }
-    return resp, nil
+    //defer resp.Body.Close()
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        trace("Error parsing bridge description xml.", nil)
+    }
+    reader := bytes.NewReader(body)
+    // TODO: handle individual error codes
+    return reader, nil
 }
 
 // Error Struct
@@ -125,29 +157,21 @@ func NewBridge(ip string, username string) *Bridge {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func GetBridgeInfo(self *Bridge) {
-    response, err := http.Get("http://" + self.IPAddress + "/description.xml")
+func GetBridgeInfo(self *Bridge) Error {
+    reader, err := self.Get("/description.xml")
     if err != nil {
-        trace("", err)
-    } else if response.StatusCode != 200 {
-        trace(fmt.Sprintf("Bridge status error: %d", response.StatusCode), nil)
-        os.Exit(1)
+        return ErrResponse
     }
-    defer response.Body.Close()
-
-    body, err := ioutil.ReadAll(response.Body)
-    if err != nil {
-        trace("Error parsing bridge description xml.", nil)
-        os.Exit(1)
-    }
-
-    data := new(BridgeInfo)
-    err = xml.Unmarshal(body, &data)
+    data := BridgeInfo{}
+    err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
         trace("Error using unmarshal to split xml.", nil)
         os.Exit(1)
     }
-    self.Info = *data
+    self.Info = data
+    fmt.Println("Bridge Info:\n", self.Info)
+
+    return NoErr
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
