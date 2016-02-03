@@ -42,19 +42,10 @@ type Device struct {
 
 func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     resp, err := http.Get("http://" + self.IPAddress + path)
-    if err != nil {
-        trace("", err)
-    } else if resp.StatusCode != 200 {
-        trace(fmt.Sprintf("Bridge status error: %d", resp.StatusCode), nil)
+    if self.Error(resp, err) {
+        return []byte{}, nil, err
     }
-    //defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        trace("Error parsing bridge description xml.", nil)
-    }
-    reader := bytes.NewReader(body)
-    // TODO: handle individual error codes
-    return body, reader, nil
+    return handleResponse(resp)
 }
 
 func (self *Bridge) Post(path string) ([]byte, io.Reader, error) {
@@ -62,6 +53,33 @@ func (self *Bridge) Post(path string) ([]byte, io.Reader, error) {
     // if err != nil {
     //     trace("", err)
     // }
+    return []byte{}, nil, nil
+}
+
+// HandleResponse manages the http.Response from a bridge Get/Put/Post/Delete
+// by checking it for errors and invalid return types.
+func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
+    body, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        trace("Error parsing bridge description xml.", nil)
+        return []byte{}, nil, err
+    }
+    reader := bytes.NewReader(body)
+
+    return body, reader, nil
+}
+
+// bridge.Error handles any bridge request or response errors
+func (self *Bridge) Error(resp *http.Response, err error) (bool) {
+    if err != nil {
+        trace("", err)
+        return true
+    } else if resp.StatusCode != 200 {
+        // TODO: handle other status codes
+        trace(fmt.Sprintf("Bridge status error: %d", resp.StatusCode), nil)
+        return true
+    }
+    return false
 }
 
 // Error Struct
