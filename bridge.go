@@ -57,6 +57,13 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     return body, reader, nil
 }
 
+func (self *Bridge) Post(path string) ([]byte, io.Reader, error) {
+    // resp, err := http.Post("http://" + self.IpAddress + path)
+    // if err != nil {
+    //     trace("", err)
+    // }
+}
+
 // Error Struct
 // http://www.developers.meethue.com/documentation/error-messages
 type Error struct {
