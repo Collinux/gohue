@@ -76,8 +76,10 @@ func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
         return err
     }
 
+    _ = body
+
     // TODO: Parse the response and return any error
-    fmt.Println(string(body))
+    //fmt.Println("LightState: ", string(body))
     return nil
 }
 
@@ -89,20 +91,9 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
     for index := 1; index < 101; index++ {
 
         // Send an http GET and inspect the response
-        resp, err := http.Get(
-            fmt.Sprintf("http://%s/api/%s/lights/%d", bridge.IPAddress, bridge.Username, index))
+        uri := fmt.Sprintf("/api/%s/lights/%d", bridge.Username, index)
+        body, _, err := bridge.Get(uri)
         if err != nil {
-            trace("", err)
-            return lights, err
-        } else if resp.StatusCode != 200 {
-            trace(fmt.Sprintf("Bridge status error %d", resp.StatusCode), nil)
-        }
-
-        // Read and inspect the response content
-        body, err := ioutil.ReadAll(resp.Body)
-        defer resp.Body.Close()
-        if err != nil {
-            trace("", err)
             return lights, err
         }
         if strings.Contains(string(body), "not available") {

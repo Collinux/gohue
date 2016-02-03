@@ -15,29 +15,6 @@ import (
     "io"
 )
 
-// type Bridge struct {
-//     IPAddress   string
-//     Username    string
-//     Info        BridgeInfo
-// }
-//
-// type BridgeInfo struct {
-//     Root struct {
-//         Device struct {
-//             DeviceType          string      `xml:"deviceType"`
-//             FriendlyName        string      `xml:"friendlyName"`
-//             Manufacturer        string      `xml:"manufacturer"`
-//             ManufacturerURL     string      `xml:"manufacturerURL"`
-//             ModelDescription    string      `xml:"modelDescription"`
-//             ModelName           string      `xml:"modelName"`
-//             ModelNumber         string      `xml:"modelNumber"`
-//             ModelURL            string      `xml:"modelURL"`
-//             SerialNumber        string      `xml:"serialNumber"`
-//             UDN                 string      `xml:"UDN"`
-//         } `xml:"device"`
-//     } `xml:"root"`
-// }
-
 type Bridge struct {
     IPAddress   string
     Username    string
@@ -63,7 +40,7 @@ type Device struct {
     UDN                 string      `xml:"UDN"`
 }
 
-func (self *Bridge) Get(path string) (io.Reader, error) {
+func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     resp, err := http.Get("http://" + self.IPAddress + path)
     if err != nil {
         trace("", err)
@@ -77,7 +54,7 @@ func (self *Bridge) Get(path string) (io.Reader, error) {
     }
     reader := bytes.NewReader(body)
     // TODO: handle individual error codes
-    return reader, nil
+    return body, reader, nil
 }
 
 // Error Struct
@@ -158,7 +135,7 @@ func NewBridge(ip string, username string) *Bridge {
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
 func GetBridgeInfo(self *Bridge) Error {
-    reader, err := self.Get("/description.xml")
+    _, reader, err := self.Get("/description.xml")
     if err != nil {
         return ErrResponse
     }
@@ -169,7 +146,7 @@ func GetBridgeInfo(self *Bridge) Error {
         os.Exit(1)
     }
     self.Info = data
-    fmt.Println("Bridge Info:\n", self.Info)
+    //fmt.Println("Bridge Info:\n", self.Info)
 
     return NoErr
 }
