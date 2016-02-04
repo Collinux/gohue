@@ -75,7 +75,13 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
 func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
     client := &http.Client{}
-	request, err := http.NewRequest("PUT", uri, strings.NewReader(params))
+
+    data, err := json.Marshal(params)
+    if err != nil {
+        return []byte{}, nil, err
+    }
+
+	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
     resp, err := client.Do(request)
 	if err != nil {
 		return []byte{}, nil, err

@@ -16,9 +16,10 @@ func TestGetLight(t *testing.T) {
 }
 
 func TestSetLightState(t *testing.T) {
+    fmt.Println("\nTESTING LIGHT STATE:\n\n")
     bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
     lights, _ := GetAllLights(bridge)
-    fmt.Println(lights[0].Name)
-    newState := LightState{On: true}
-    SetLightState(bridge, lights[0].UniqueID, newState)
+    fmt.Println("\nUNIQUE ID: ", lights[0].UniqueID)
+    newState := LightState{On: false}
+    SetLightState(bridge, lights[1].Index, newState)
 }

@@ -28,6 +28,7 @@ type Light struct {
     ManufacturerName string     `json:"manufacturername"`
     UniqueID         string     `json:"uniqueid"`
     SWVersion        string     `json:"swversion"`
+    Index            int        // Set by index of light array response
 }
 
 // LightState used in SetLightState to ammend light attributes.
@@ -52,7 +53,7 @@ type LightState struct {
 // brightness, and more. See `SetLightState` struct.
 func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
     uri := fmt.Sprintf("/api/%s/lights/%s/state", bridge.Username, lightID)
-    _, _, err := bridge.Post(uri, newState) // TODO: change to PUT
+    _, _, err := bridge.Put(uri, newState) // TODO: change to PUT
     if err != nil {
         return err
     }
@@ -84,6 +85,7 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
         if err != nil {
             trace("", err)
         }
+        data.Index = index
         lights = append(lights, data)
     }
     return lights, nil
