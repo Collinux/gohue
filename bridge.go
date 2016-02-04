@@ -2,7 +2,6 @@ package hue
 
 import (
     "log"
-    "os"
     "encoding/xml"
     "encoding/json"
     "net/http"
@@ -55,8 +54,8 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
 }
 
 // bridge.Post will send an http POST to the bridge with
-// a body formatted with parameters.
-func (self *Bridge) Post(path string, params map[string]string) ([]byte, io.Reader, error) {
+// a body formatted with parameters (in a generic interface)
+func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
     // Add the params to the request
     request, err := json.Marshal(params)
     if err != nil {
@@ -83,6 +82,7 @@ func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     reader := bytes.NewReader(body)
+    log.Println("Handled request: ", string(body))
     return body, reader, nil
 }
 

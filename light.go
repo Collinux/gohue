@@ -4,12 +4,9 @@ package hue
 
 import (
     "fmt"
-    "net/http"
-    "io/ioutil"
     "encoding/json"
     "strings"
     "errors"
-    "bytes"
 )
 
 type Light struct {
@@ -54,32 +51,11 @@ type LightState struct {
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
 func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
-    // Construct the http POST
-    req, err := json.Marshal(newState)
+    uri := fmt.Sprintf("/api/%s/lights/%s/state", bridge.Username, lightID)
+    _, _, err := bridge.Post(uri, newState) // TODO: change to PUT
     if err != nil {
-        trace("", err)
         return err
     }
-
-    // Send the request and read the response
-    uri := fmt.Sprintf("http://%s/api/%s/lights/%s/state",
-        bridge.IPAddress, bridge.Username, lightID)
-    resp, err := http.Post(uri, "text/json", bytes.NewReader(req))
-    if err != nil {
-        trace("", err)
-        return err
-    }
-    defer resp.Body.Close()
-    body, err := ioutil.ReadAll(resp.Body)
-    if err != nil {
-        trace("", err)
-        return err
-    }
-
-    _ = body
-
-    // TODO: Parse the response and return any error
-    //fmt.Println("LightState: ", string(body))
     return nil
 }
 
