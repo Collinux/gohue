@@ -172,21 +172,18 @@ func NewBridge(ip string, username string) *Bridge {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func GetBridgeInfo(self *Bridge) Error {
+func GetBridgeInfo(self *Bridge) error {
     _, reader, err := self.Get("/description.xml")
     if err != nil {
-        return ErrResponse
+        return err
     }
     data := BridgeInfo{}
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
-        trace("Error using unmarshal to split xml.", nil)
-        os.Exit(1)
+        return err
     }
     self.Info = data
-    //fmt.Println("Bridge Info:\n", self.Info)
-
-    return NoErr
+    return nil
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
