@@ -72,6 +72,17 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
     return handleResponse(resp)
 }
 
+func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
+    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+    client := &http.Client{}
+	request, err := http.NewRequest("PUT", uri, strings.NewReader(params))
+    resp, err := client.Do(request)
+	if err != nil {
+		return []byte{}, nil, err
+    }
+    return handleResponse(resp)
+}
+
 // HandleResponse manages the http.Response content from a
 // bridge Get/Put/Post/Delete by checking it for errors
 // and invalid return types.
