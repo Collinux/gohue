@@ -13,6 +13,7 @@ import (
     "strings"
     "bytes"
     "io"
+    "errors"
 )
 
 type Bridge struct {
@@ -48,16 +49,28 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     return handleResponse(resp)
 }
 
-func (self *Bridge) Post(path string) ([]byte, io.Reader, error) {
-    // resp, err := http.Post("http://" + self.IpAddress + path)
-    // if err != nil {
-    //     trace("", err)
-    // }
-    return []byte{}, nil, nil
+// bridge.Post will send an http POST to the bridge with
+// a body formatted with parameters.
+func (self *Bridge) Post(path string, params map[string]string) ([]byte, io.Reader, error) {
+    // Add the params to the request
+    request, err := json.Marshal(params)
+    if err != nil {
+        trace("", err)
+        return []byte{}, nil, nil
+    }
+
+    // Send the request and handle the response
+    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+    resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
+    if self.Error(resp, err) {
+        return []byte{}, nil, nil
+    }
+    return handleResponse(resp)
 }
 
-// HandleResponse manages the http.Response from a bridge Get/Put/Post/Delete
-// by checking it for errors and invalid return types.
+// HandleResponse manages the http.Response content from a
+// bridge Get/Put/Post/Delete by checking it for errors
+// and invalid return types.
 func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
@@ -69,7 +82,7 @@ func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     return body, reader, nil
 }
 
-// bridge.Error handles any bridge request or response errors
+// bridge.Error handles all bridge response status errors
 func (self *Bridge) Error(resp *http.Response, err error) (bool) {
     if err != nil {
         trace("", err)
@@ -177,27 +190,12 @@ func GetBridgeInfo(self *Bridge) Error {
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
-func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
-    // Construct the http POST
+func CreateUser(bridge *Bridge, deviceType string) (string, error) {
+    // Send an HTTP POST with the body content
     params := map[string]string{"devicetype": deviceType}
-    request, err := json.Marshal(params)
+    body, _, err := bridge.Post("/api", params)
     if err != nil {
-        trace("", err)
-        return "", ErrResponse
-    }
-
-    // Send the request to create the user and read the response
-    uri := fmt.Sprintf("http://%s/api", bridge.IPAddress)
-    response, err := http.Post(uri, "text/json", bytes.NewReader(request))
-    if err != nil {
-        trace("", err)
-        return "", ErrResponse
-    }
-    defer response.Body.Close()
-    body, err := ioutil.ReadAll(response.Body)
-    if err != nil {
-        trace("", err)
-        return "", ErrResponse
+        return "", err
     }
 
     // Parse the result and return it
@@ -205,9 +203,9 @@ func CreateUser(bridge *Bridge, deviceType string) (string, Error) {
     errFound := strings.Contains(result, "error")
     noLink := strings.Contains(result, "link button not pressed")
     if errFound && noLink {
-        return "", ErrLink
+        return "", errors.New("Bridge link button not pressed.")
     }
-    return "", NoErr
+    return "", nil
 }
 
 // Log the date, time, file location, line number, and function.
