@@ -28,31 +28,31 @@ type Light struct {
     ManufacturerName string     `json:"manufacturername"`
     UniqueID         string     `json:"uniqueid"`
     SWVersion        string     `json:"swversion"`
-    Index            int        // Set by index of light array response
+    Index            int        // Set by index of light array response // TODO: change to smaller int
 }
 
 // LightState used in SetLightState to ammend light attributes.
 type LightState struct {
-    On                   bool
-    Bri                  uint8
-    Hue                  uint16
-    Sat                  uint8
-    XY                   [2]float32
-    CT                   uint16
-    Alert                string
-    Effect               string
-    TransitionTime       string
-    BrightnessIncrement  int // TODO: -254 to 254
-    SaturationIncrement  int // TODO: -254 to 254
-    HueIncrement         int // TODO: -65534 to 65534
-    CTIncrement          int // TODO: -65534 to 65534
-    XYIncrement          [2]float32
+    On                   bool           `json:"on,omitempty"`
+    Bri                  uint8          `json:"bri,omitempty"`
+    Hue                  uint16         `json:"hue,omitempty"`
+    Sat                  uint8          `json:"sat,omitempty"`
+    XY                   [2]float32     `json:"xy,omitempty"`
+    CT                   uint16         `json:"ct,omitempty"`
+    Alert                string         `json:"alert,omitempty"`
+    Effect               string         `json:"effect,omitempty"`
+    TransitionTime       string         `json:"transitiontime,omitempty"`
+    BrightnessIncrement  int            `json:"bri_inc,omitempty"` // TODO: -254 to 254
+    SaturationIncrement  int            `json:"sat_inc,omitempty"` // TODO: -254 to 254
+    HueIncrement         int            `json:"hue_inc,omitempty"` // TODO: -65534 to 65534
+    CTIncrement          int            `json:"ct_inc,omitempty"` // TODO: -65534 to 65534
+    XYIncrement          [2]float32     `json:"xy_inc,omitempty"`
 }
 
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
-func SetLightState(bridge *Bridge, lightID string, newState LightState) error {
-    uri := fmt.Sprintf("/api/%s/lights/%s/state", bridge.Username, lightID)
+func SetLightState(bridge *Bridge, index int, newState LightState) error {
+    uri := fmt.Sprintf("/api/%s/lights/%d/state", bridge.Username, index)
     _, _, err := bridge.Put(uri, newState) // TODO: change to PUT
     if err != nil {
         return err
