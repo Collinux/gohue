@@ -3,6 +3,7 @@ package hue
 import (
     "testing"
     "fmt"
+    "time"
 )
 
 func TestGetAllLights(t *testing.T) {
@@ -20,7 +21,14 @@ func TestSetLightState(t *testing.T) {
     bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
     lights, _ := GetAllLights(bridge)
     selectedLight := lights[0]
-    newState := LightState{On: true,} //On: false, *XY: [2]float32{5.0, 5.0},
-    //fmt.Println("\n\nSTATE: ", newState)
+
+    // Turn light on, off, on again
+    newState := LightState{On: true,}
+    SetLightState(bridge, selectedLight.Index, newState)
+    time.Sleep(time.Second)
+    newState = LightState{On: false,}
+    SetLightState(bridge, selectedLight.Index, newState)
+    time.Sleep(time.Second)
+    newState = LightState{On: true,}
     SetLightState(bridge, selectedLight.Index, newState)
 }
