@@ -33,20 +33,20 @@ type Light struct {
 
 // LightState used in SetLightState to ammend light attributes.
 type LightState struct {
-    On                   bool           `json:"on,omitempty"`
+    On                   bool           `json:"on"`
     Bri                  uint8          `json:"bri,omitempty"`
     Hue                  uint16         `json:"hue,omitempty"`
     Sat                  uint8          `json:"sat,omitempty"`
-    XY                   [2]float32     `json:"xy,omitempty"`
+    XY                   *[2]float32     `json:"xy,omitempty"`
     CT                   uint16         `json:"ct,omitempty"`
-    Alert                string         `json:"alert,omitempty"`
     Effect               string         `json:"effect,omitempty"`
+    Alert                string         `json:"alert,omitempty"`
     TransitionTime       string         `json:"transitiontime,omitempty"`
-    BrightnessIncrement  int            `json:"bri_inc,omitempty"` // TODO: -254 to 254
     SaturationIncrement  int            `json:"sat_inc,omitempty"` // TODO: -254 to 254
     HueIncrement         int            `json:"hue_inc,omitempty"` // TODO: -65534 to 65534
+    BrightnessIncrement  int            `json:"bri_inc,omitempty"` // TODO: -254 to 254
     CTIncrement          int            `json:"ct_inc,omitempty"` // TODO: -65534 to 65534
-    XYIncrement          [2]float32     `json:"xy_inc,omitempty"`
+    XYIncrement          *[2]float32     `json:"xy_inc,omitempty"`
 }
 
 // SetLightState will modify light attributes such as on/off, saturation,
