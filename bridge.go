@@ -62,6 +62,7 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
         trace("", err)
         return []byte{}, nil, nil
     }
+    log.Println("\nSending POST body: ", string(request))
 
     // Send the request and handle the response
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
@@ -81,7 +82,7 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
         return []byte{}, nil, err
     }
     //fmt.Println("\n\nPARAMS: ", params)
-    log.Println("\n\nSending HTTP PUT body: ", string(data))
+    log.Println("\nSending PUT body: ", string(data))
 
 	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
     resp, err := client.Do(request)
@@ -101,7 +102,8 @@ func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     reader := bytes.NewReader(body)
-    log.Println("Handled response: ", string(body))
+    log.Println("Handled response:\n--------------------\n", string(body) +
+        "\n--------------------\n")
     return body, reader, nil
 }
 
