@@ -4,8 +4,8 @@ Phillips Hue Golang Library.
 ## Roadmap
 - [ ] Bridge
   - [x] GET
-  - [ ] PUT
-  - [ ] POST
+  - [x] PUT
+  - [x] POST
   - [ ] DELETE
   - [ ] Find Bridges
   - [ ] Find New Lights
