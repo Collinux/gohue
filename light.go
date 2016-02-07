@@ -29,6 +29,7 @@ type Light struct {
     UniqueID         string     `json:"uniqueid"`
     SWVersion        string     `json:"swversion"`
     Index            int        // Set by index of light array response // TODO: change to smaller int
+    Bridge          *Bridge
 }
 
 // LightState used in SetLightState to ammend light attributes.
@@ -50,18 +51,20 @@ type LightState struct {
 }
 
 func (self *Light) TurnOff() {
-    SetLightState(self.Index, LightState{On: false})
+    SetLightState(self, LightState{On: false})
 }
 
 func (self *Light) TurnOn() {
-    SetLightState(self.Index, LightState{On: true})
+    SetLightState(self, LightState{On: true})
 }
+
+
 
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
-func SetLightState(bridge *Bridge, index int, newState LightState) error {
-    uri := fmt.Sprintf("/api/%s/lights/%d/state", bridge.Username, index)
-    _, _, err := bridge.Put(uri, newState) // TODO: change to PUT
+func SetLightState(light *Light, newState LightState) error {
+    uri := fmt.Sprintf("/api/%s/lights/%d/state", light.Bridge.Username, light.Index)
+    _, _, err := light.Bridge.Put(uri, newState) // TODO: change to PUT
     if err != nil {
         return err
     }
@@ -94,6 +97,7 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
             trace("", err)
         }
         data.Index = index
+        data.Bridge = bridge
         lights = append(lights, data)
     }
     return lights, nil
