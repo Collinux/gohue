@@ -1,7 +1,7 @@
 # Go Hue
 Phillips Hue Golang Library.
 
-## Roadmap
+## Features
 - [ ] Bridge
   - [x] GET
   - [x] PUT
@@ -13,9 +13,9 @@ Phillips Hue Golang Library.
   - [x] Create User
 - [ ] Lights
   - [x] Get All Lights
-  - [ ] Turn On
-  - [ ] Turn Off
-  - [ ] Toggle On/Off
+  - [x] Turn On
+  - [x] Turn Off
+  - [x] Toggle On/Off
   - [ ] Toggle ColorLoop Mode
   - [ ] Change Name
 - [ ] Development
