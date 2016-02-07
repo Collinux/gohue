@@ -49,6 +49,14 @@ type LightState struct {
     XYIncrement          *[2]float32     `json:"xy_inc,omitempty"`
 }
 
+func (self *Light) TurnOff() {
+    SetLightState(self.Index, LightState{On: false})
+}
+
+func (self *Light) TurnOn() {
+    SetLightState(self.Index, LightState{On: true})
+}
+
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.
 func SetLightState(bridge *Bridge, index int, newState LightState) error {

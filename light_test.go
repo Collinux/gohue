@@ -22,13 +22,9 @@ func TestSetLightState(t *testing.T) {
     lights, _ := GetAllLights(bridge)
     selectedLight := lights[0]
 
-    // Turn light on, off, on again
-    newState := LightState{On: true,}
-    SetLightState(bridge, selectedLight.Index, newState)
+    selectedLight.TurnOn()
     time.Sleep(time.Second)
-    newState = LightState{On: false,}
-    SetLightState(bridge, selectedLight.Index, newState)
+    selectedLight.TurnOf()
     time.Sleep(time.Second)
-    newState = LightState{On: true,}
-    SetLightState(bridge, selectedLight.Index, newState)
+    selectedLight.TurnOn()
 }
