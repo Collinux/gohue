@@ -50,15 +50,25 @@ type LightState struct {
     XYIncrement          *[2]float32     `json:"xy_inc,omitempty"`
 }
 
+// light.TurnOff will change the light state to the "Off" mode.
 func (self *Light) TurnOff() {
     SetLightState(self, LightState{On: false})
 }
 
+// light.TurnOn will change the light state to the "On" mode.
 func (self *Light) TurnOn() {
     SetLightState(self, LightState{On: true})
 }
 
-
+// light.Toggle will change the light state to "On" if
+// the light is off or "Off" if the light is on.
+func (self *Light) Toggle() {
+    if self.State.On {
+        self.TurnOff()
+    } else {
+        self.TurnOn()
+    }
+}
 
 // SetLightState will modify light attributes such as on/off, saturation,
 // brightness, and more. See `SetLightState` struct.

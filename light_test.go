@@ -27,4 +27,8 @@ func TestSetLightState(t *testing.T) {
     selectedLight.TurnOff()
     time.Sleep(time.Second)
     selectedLight.TurnOn()
+    time.Sleep(time.Second)
+    selectedLight.Toggle()
+    time.Sleep(time.Second)
+    selectedLight.Toggle()
 }
