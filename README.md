@@ -3,15 +3,16 @@ Phillips Hue Golang Library.
 
 ## Features
 - [ ] Lights
-  - [ ] Get all lights
+  - [x] Get all lights
   - [ ] Get new lights
   - [ ] Search for new lights
-  - [ ] Get lights attributes and state
+  - [x] Get lights attributes and state
   - [ ] Set lights attributes (rename)
-  - [ ] Set light state
+  - [x] Set light state
   - [ ] Delete light
-  - [ ] Turn On, Off, Toggle
+  - [x] Turn On, Off, Toggle
   - [ ] Blink
+  - [ ] Color loop
 - [ ] Groups
   - [ ] Get all groups
   - [ ] Create group
@@ -48,10 +49,11 @@ Phillips Hue Golang Library.
   - [ ] Update rule
   - [ ] Delete rule
 - [ ] Configuration
-  - [ ] Create user
+  - [x] Create user
   - [ ] Get configuration
   - [ ] Modify configuration
   - [ ] Delete user from whitelist
   - [ ] Get full state (datastore)
 - [ ] Info
   - [ ] Get all timezones
+  - [ ] Search for bridges
