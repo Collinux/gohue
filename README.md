@@ -2,22 +2,56 @@
 Phillips Hue Golang Library.
 
 ## Features
-- [ ] Bridge
-  - [x] GET
-  - [x] PUT
-  - [x] POST
-  - [ ] DELETE
-  - [ ] Find Bridges
-  - [ ] Find New Lights
-  - [ ] Do Update
-  - [x] Create User
 - [ ] Lights
-  - [x] Get All Lights
-  - [x] Turn On
-  - [x] Turn Off
-  - [x] Toggle On/Off
-  - [ ] Toggle ColorLoop Mode
-  - [ ] Change Name
-- [ ] Development
-  - [ ] Improved debugging system
-  - [ ] Improved error handling
+  - [ ] Get all lights
+  - [ ] Get new lights
+  - [ ] Search for new lights
+  - [ ] Get lights attributes and state
+  - [ ] Set lights attributes (rename)
+  - [ ] Set light state
+  - [ ] Delete light
+  - [ ] Turn On, Off, Toggle
+  - [ ] Blink
+- [ ] Groups
+  - [ ] Get all groups
+  - [ ] Create group
+  - [ ] Get group attributes
+  - [ ] Set group attributes
+  - [ ] Set group state
+  - [ ] Delete Group
+- [ ] Schedules 
+  - [ ] Get all schedules
+  - [ ] Create schedules
+  - [ ] Get schedule attributes
+  - [ ] Set schedule attributes
+  - [ ] Delete schedule
+- [ ] Scenes
+  - [ ] Get all scenes
+  - [ ] Create scene
+  - [ ] Modify scene
+  - [ ] Recall scene
+  - [ ] Delete scene
+  - [ ] Get scene
+- [ ] Sensors
+  - [ ] Get all sensors
+  - [ ] Create sensor
+  - [ ] Find new sensors
+  - [ ] Get new sensors
+  - [ ] Get sensor
+  - [ ] Update sensor
+  - [ ] Delete sensor
+  - [ ] Change sensor config
+- [ ] Rules
+  - [ ] Get all rules
+  - [ ] Get rule
+  - [ ] Create rule
+  - [ ] Update rule
+  - [ ] Delete rule
+- [ ] Configuration
+  - [ ] Create user
+  - [ ] Get configuration
+  - [ ] Modify configuration
+  - [ ] Delete user from whitelist
+  - [ ] Get full state (datastore)
+- [ ] Info
+  - [ ] Get all timezones
