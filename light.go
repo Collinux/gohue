@@ -51,6 +51,14 @@ type LightState struct {
     XYIncrement          *[2]float32     `json:"xy_inc,omitempty"`
 }
 
+func (self *Light) SetName(name string) error {
+    uri := fmt.Sprintf("/api/%s/lights/%s", self.Bridge.Username, self.Index)
+    body := make(map[string]string)
+    body["name"] = name
+    _, _, err := self.Bridge.Put(uri, body)
+    return err
+}
+
 // Light.Off will turn the light source off
 func (self *Light) Off() error {
     return SetLightState(self, LightState{On: false})
@@ -95,11 +103,8 @@ func (self *Light) ColorLoop() error {
 // brightness, and more. See `SetLightState` struct.
 func SetLightState(light *Light, newState LightState) error {
     uri := fmt.Sprintf("/api/%s/lights/%d/state", light.Bridge.Username, light.Index)
-    _, _, err := light.Bridge.Put(uri, newState) // TODO: change to PUT
-    if err != nil {
-        return err
-    }
-    return nil
+    _, _, err := light.Bridge.Put(uri, newState)
+    return err
 }
 
 // GetAllLights retreives the state of all lights that the bridge is aware of.

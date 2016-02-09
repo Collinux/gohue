@@ -29,4 +29,6 @@ func TestSetLightState(t *testing.T) {
     selectedLight.Toggle()
     time.Sleep(time.Second)
     selectedLight.ColorLoop()
+
+    selectedLight.SetName("testing")
 }
