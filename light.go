@@ -51,17 +51,17 @@ type LightState struct {
     XYIncrement          *[2]float32     `json:"xy_inc,omitempty"`
 }
 
-// light.Off will turn the light source off
+// Light.Off will turn the light source off
 func (self *Light) Off() error {
     return SetLightState(self, LightState{On: false})
 }
 
-// light.Off will turn the light source on
+// Light.Off will turn the light source on
 func (self *Light) On() error {
     return SetLightState(self, LightState{On: true})
 }
 
-// light.Toggle will toggle the light source on and off
+// Light.Toggle will toggle the light source on and off
 func (self *Light) Toggle() error {
     if self.State.On {
         return self.Off()
