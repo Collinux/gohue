@@ -62,11 +62,11 @@ func (self *Light) On() error {
 }
 
 // light.Toggle will toggle the light source on and off
-func (self *Light) Toggle() {
+func (self *Light) Toggle() error {
     if self.State.On {
-        self.Off()
+        return self.Off()
     } else {
-        self.On()
+        return self.On()
     }
 }
 
