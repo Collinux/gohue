@@ -9,6 +9,7 @@ import (
     "errors"
 )
 
+// Light struct defines attributes of a light.
 type Light struct {
     State struct {
         On          bool      `json:"on"`     // On or Off state of the light ("true" or "false")
@@ -32,7 +33,7 @@ type Light struct {
     Bridge          *Bridge
 }
 
-// LightState used in SetLightState to ammend light attributes.
+// LightState used in SetLightState to amend light attributes.
 type LightState struct {
     On                   bool           `json:"on"`
     Bri                  uint8          `json:"bri,omitempty"`
@@ -66,6 +67,22 @@ func (self *Light) Toggle() {
         self.Off()
     } else {
         self.On()
+    }
+}
+
+func (self *Light) ColorLoopOn() error {
+    return SetLightState(self, LightState{On: true, Effect: "colorloop"})
+}
+
+func (self *Light) ColorLoopOff() error {
+    return SetLightState(self, LightState{On: true, Effect: "none"})
+}
+
+func (self *Light) ColorLoop() error {
+    if self.State.Effect == "colorloop" {
+        return self.ColorLoopOff()
+    } else {
+        return self.ColorLoopOn()
     }
 }
 
