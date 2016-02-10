@@ -56,7 +56,10 @@ func (self *Light) SetName(name string) error {
     body := make(map[string]string)
     body["name"] = name
     _, _, err := self.Bridge.Put(uri, body)
-    return err
+    if err != nil {
+        return err
+    }
+    return nil
 }
 
 // Light.Off will turn the light source off

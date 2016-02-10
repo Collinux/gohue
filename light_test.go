@@ -30,5 +30,5 @@ func TestSetLightState(t *testing.T) {
     time.Sleep(time.Second)
     selectedLight.ColorLoop()
 
-    selectedLight.SetName("testing")
+    selectedLight.SetName("Ceiling Fan Outer")
 }
