@@ -21,7 +21,7 @@ Pull requests happily accepted on GitHub
   - [ ] Delete light
   - [x] Turn On, Off, Toggle
   - [ ] Blink
-  - [x] Colorloop On, Off, Toggle
+  - [x] Colorloop On/Off
 - [ ] Groups
   - [ ] Get all groups
   - [ ] Create group
