@@ -1,7 +1,7 @@
 /*
 * bridge_test.go
 * GoHue library for Philips Hue
-* Copyright (C) 2016 Collin Guarino
+* Copyright (C) 2016 Collin Guarino (Collinux)
 * License: GPL version 2 or higher http://www.gnu.org/licenses/gpl.html
 */
 
