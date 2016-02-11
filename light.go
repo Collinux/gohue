@@ -87,25 +87,14 @@ func (self *Light) Toggle() error {
     }
 }
 
-// Light.ColorLoopOn will turn the light on and set the effect to "colorloop"
-func (self *Light) ColorLoopOn() error {
-    return SetLightState(self, LightState{On: true, Effect: "colorloop"})
-}
-
-// Light.ColorLoopOn will turn the light on and set the effect to "none"
-func (self *Light) ColorLoopOff() error {
-    return SetLightState(self, LightState{On: true, Effect: "none"})
-}
-
-// Light.ColorLoop will set the light state to a colorloop if there is no
-// current effect in place or if the state is in colorloop then it will
-// set it to "none".
-func (self *Light) ColorLoop() error {
-    if self.State.Effect == "colorloop" {
-        return self.ColorLoopOff()
-    } else {
-        return self.ColorLoopOn()
+// Light.ColorLoop will set the light state to 'colorloop' if `active`
+// is true or it will set the light state to "none" if `activate` is false.
+func (self *Light) ColorLoop(activate bool) error {
+    var state = "none"
+    if activate {
+        state = "colorloop"
     }
+    return SetLightState(self, LightState{On: true, Effect: state})
 }
 
 // SetLightState will modify light attributes such as on/off, saturation,
