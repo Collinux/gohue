@@ -1,6 +1,15 @@
 # Go Hue
 Phillips Hue Golang Library.
 
+## License
+Copyright (C) 2016 Collin Guarino (Collinux)  
+GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
+GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
+
+## Contributing  
+Pull requests happily accepted on GitHub
+
+
 ## Features
 - [ ] Lights
   - [x] Get all lights
@@ -57,11 +66,3 @@ Phillips Hue Golang Library.
 - [ ] Info
   - [ ] Get all timezones
   - [ ] Search for bridges
-
-## License
-Copyright (C) 2016 Collin Guarino (Collinux)  
-GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
-GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
-
-## Contributing  
-Pull requests happily accepted on GitHub
