@@ -7,12 +7,12 @@ Phillips Hue Golang Library.
   - [ ] Get new lights
   - [ ] Search for new lights
   - [x] Get lights attributes and state
-  - [ ] Set lights attributes (rename)
+  - [x] Set lights attributes (rename)
   - [x] Set light state
   - [ ] Delete light
   - [x] Turn On, Off, Toggle
   - [ ] Blink
-  - [ ] Color loop
+  - [x] Colorloop On, Off, Toggle
 - [ ] Groups
   - [ ] Get all groups
   - [ ] Create group
