@@ -18,30 +18,30 @@ import (
 // Light struct defines attributes of a light.
 type Light struct {
     State struct {
-        On          bool       `json:"on,omitempty"`     // On or Off state of the light ("true" or "false")
-        Bri         int        `json:"bri,omitempty"`    // Brightness value 1-254
-        Hue         int        `json:"hue,omitempty"`    // Hue value 1-65535
-        Saturation  int        `json:"sat,omitempty"`    // Saturation value 0-254
-        Effect      string     `json:"effect,omitempty"` // "None" or "Colorloop"
-        XY          [2]float32 `json:"xy,omitzero"`    // Coordinates of color in CIE color space
-        CT          int        `json:"ct,omitempty"`     // Mired Color Temperature (google it)
-        Alert       string     `json:"alert,omitempty"`
-        ColorMode   string     `json:"colormode,omitempty"`
-        Reachable   bool       `json:"reachable,omitempty"`
-    } `json:"state,omitempty"`
-    Type             string    `json:"type,omitempty"`
-    Name             string    `json:"name,omitempty"`
-    ModelID          string    `json:"modelid,omitempty"`
-    ManufacturerName string    `json:"manufacturername,omitempty"`
-    UniqueID         string    `json:"uniqueid,omitempty"`
-    SWVersion        string    `json:"swversion,omitempty"`
-    Index            int       `json:"index,omitempty"` // Set by index of light array response // TODO: change to smaller int
-    Bridge          *Bridge    `json:"bridge,omitempty"`
+        On          bool       `json:"on"`     // On or Off state of the light ("true" or "false")
+        Bri         int        `json:"bri"`    // Brightness value 1-254
+        Hue         int        `json:"hue"`    // Hue value 1-65535
+        Saturation  int        `json:"sat"`    // Saturation value 0-254
+        Effect      string     `json:"effect"` // "None" or "Colorloop"
+        XY          [2]float32 `json:"xy"`    // Coordinates of color in CIE color space
+        CT          int        `json:"ct"`     // Mired Color Temperature (google it)
+        Alert       string     `json:"alert"`
+        ColorMode   string     `json:"colormode"`
+        Reachable   bool       `json:"reachable"`
+    } `json:"state"`
+    Type             string    `json:"type"`
+    Name             string    `json:"name"`
+    ModelID          string    `json:"modelid"`
+    ManufacturerName string    `json:"manufacturername"`
+    UniqueID         string    `json:"uniqueid"`
+    SWVersion        string    `json:"swversion"`
+    Index            int        // Set by index of light array response // TODO: change to smaller int
+    Bridge          *Bridge
 }
 
 // LightState used in SetLightState to amend light attributes.
 type LightState struct {
-    On                   bool           `json:"on,omitempty"`
+    On                   bool           `json:"on"`
     Bri                  uint8          `json:"bri,omitempty"`
     Hue                  uint16         `json:"hue,omitempty"`
     Sat                  uint8          `json:"sat,omitempty"`
@@ -60,7 +60,8 @@ type LightState struct {
 
 func (self *Light) SetName(name string) error {
     uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
-    body := LightState{Name: name}
+    body := make(map[string]string)
+    body["name"] = name
     _, _, err := self.Bridge.Put(uri, body)
     if err != nil {
         return err
@@ -140,9 +141,9 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
 // GetLight will return a light struct containing data on a given name.
 func GetLight(bridge *Bridge, name string) (Light, error) {
     lights, _ := GetAllLights(bridge)
-    for index := 0; index < len(lights); index++ {
-        if lights[index].Name == name {
-            return lights[index], nil
+    for _, light := range lights {
+        if light.Name == name {
+            return light, nil
         }
     }
     return Light{}, errors.New("Light not found.")
