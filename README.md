@@ -22,6 +22,7 @@ Pull requests happily accepted on GitHub
 - [x] Turn On, Off, Toggle
 - [x] Blink
 - [x] Colorloop On/Off
+
 ##### Bridge
 - [x] Create user
 - [ ] Delete user
@@ -30,7 +31,8 @@ Pull requests happily accepted on GitHub
 - [ ] Get full state (datastore)
 - [ ] Search for bridges
 - [ ] Search for new lights
-- [ ] Get all timezones  
+- [ ] Get all timezones 
+
 ##### Groups
 - [ ] Get all groups
 - [ ] Create group
@@ -38,12 +40,14 @@ Pull requests happily accepted on GitHub
 - [ ] Set group attributes
 - [ ] Set group state
 - [ ] Delete Group
+
 ##### Schedules
 - [ ] Get all schedules
 - [ ] Create schedules
 - [ ] Get schedule attributes
 - [ ] Set schedule attributes
 - [ ] Delete schedule
+
 ##### Scenes
 - [ ] Get all scenes
 - [ ] Create scene
@@ -51,6 +55,7 @@ Pull requests happily accepted on GitHub
 - [ ] Recall scene
 - [ ] Delete scene
 - [ ] Get scene
+
 ##### Sensors
 - [ ] Get all sensors
 - [ ] Create sensor
@@ -60,6 +65,7 @@ Pull requests happily accepted on GitHub
 - [ ] Update sensor
 - [ ] Delete sensor
 - [ ] Change sensor configuration
+
 ##### Rules
 - [ ] Get all rules
 - [ ] Get rule
