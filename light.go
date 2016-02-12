@@ -13,6 +13,7 @@ import (
     "encoding/json"
     "strings"
     "errors"
+    "time"
 )
 
 // Light struct defines attributes of a light.
@@ -82,10 +83,38 @@ func (self *Light) On() error {
 // Light.Toggle will toggle the light source on and off
 func (self *Light) Toggle() error {
     if self.State.On {
+        fmt.Println("toggling off")
         return self.Off()
     } else {
+        fmt.Println("toggling on")
         return self.On()
     }
+    return nil
+}
+
+// Light.Blink will turn the light off and on repeatedly for a given seconds
+// interval and return the light back to its off or on state afterwards.
+// Note: time will vary based on connection speed and algorithm speed.
+func (self *Light) Blink(seconds int) error {
+    originalState := self.State.On
+
+    // Toggle the light on and off
+    for i := 0; i <= seconds; i++ {
+        err := self.Toggle()
+        if err != nil {
+            return err
+        }
+        time.Sleep(time.Second)
+    }
+
+    // Return the light to its original on or off state
+    if self.State.On != originalState {
+        err := self.Toggle()
+        if err != nil {
+            return err
+        }
+    }
+    return nil
 }
 
 // Light.ColorLoop will set the light state to 'colorloop' if `active`
@@ -103,7 +132,16 @@ func (self *Light) ColorLoop(activate bool) error {
 func SetLightState(light *Light, newState LightState) error {
     uri := fmt.Sprintf("/api/%s/lights/%d/state", light.Bridge.Username, light.Index)
     _, _, err := light.Bridge.Put(uri, newState)
-    return err
+    if err != nil {
+        return err
+    }
+
+    // Get the new light state and update the current Light struct
+    *light, err = GetLight(light.Bridge, light.Name)
+    if err != nil {
+        return err
+    }
+    return nil
 }
 
 // GetAllLights retreives the state of all lights that the bridge is aware of.
