@@ -1,5 +1,5 @@
-# Go Hue
-Phillips Hue Golang Library.
+# GoHue
+Philips Hue Golang Library.
 
 ## License
 Copyright (C) 2016 Collin Guarino (Collinux)  
@@ -29,7 +29,7 @@ Pull requests happily accepted on GitHub
   - [ ] Set group attributes
   - [ ] Set group state
   - [ ] Delete Group
-- [ ] Schedules 
+- [ ] Schedules
   - [ ] Get all schedules
   - [ ] Create schedules
   - [ ] Get schedule attributes
