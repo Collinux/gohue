@@ -137,7 +137,7 @@ func SetLightState(light *Light, newState LightState) error {
     }
 
     // Get the new light state and update the current Light struct
-    *light, err = GetLight(light.Bridge, light.Name)
+    *light, err = GetLightByIndex(light.Bridge, light.Index)
     if err != nil {
         return err
     }
