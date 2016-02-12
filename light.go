@@ -186,7 +186,7 @@ func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
 }
 
 // GetLight will return a light struct containing data on a given name.
-func GetLight(bridge *Bridge, name string) (Light, error) {
+func GetLightByName(bridge *Bridge, name string) (Light, error) {
     lights, _ := GetAllLights(bridge)
     for _, light := range lights {
         if light.Name == name {
