@@ -150,30 +150,39 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
     // and parse their values. Supports 100 lights.
     var lights []Light
     for index := 1; index < 101; index++ {
-
-        // Send an http GET and inspect the response
-        uri := fmt.Sprintf("/api/%s/lights/%d", bridge.Username, index)
-        body, _, err := bridge.Get(uri)
+        light, err := GetLightByIndex(bridge, index)
         if err != nil {
-            return lights, err
-        }
-        if strings.Contains(string(body), "not available") {
-            // Handle end of searchable lights
-            //fmt.Printf("\n\n%d lights found.\n\n", index)
             break
         }
-
-        // Parse and load the response into the light array
-        data := Light{}
-        err = json.Unmarshal(body, &data)
-        if err != nil {
-            trace("", err)
-        }
-        data.Index = index
-        data.Bridge = bridge
-        lights = append(lights, data)
+        lights = append(lights, light)
     }
     return lights, nil
+}
+
+// GetLightByIndex will return a light struct containing data on
+// a light given its index stored on the bridge. This is used for
+// quickly updating an individual light.
+func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
+
+    // Send an http GET and inspect the response
+    uri := fmt.Sprintf("/api/%s/lights/%d", bridge.Username, index)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return Light{}, err
+    }
+    if strings.Contains(string(body), "not available") {
+        return Light{}, errors.New("Index Error")
+    }
+
+    // Parse and load the response into the light array
+    light := Light{}
+    err = json.Unmarshal(body, &light)
+    if err != nil {
+        trace("", err)
+    }
+    light.Index = index
+    light.Bridge = bridge
+    return light, nil
 }
 
 // GetLight will return a light struct containing data on a given name.

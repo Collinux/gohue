@@ -10,7 +10,7 @@ package hue
 import (
     "testing"
     "fmt"
-    //"time"
+    "time"
 )
 
 func TestGetAllLights(t *testing.T) {
