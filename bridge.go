@@ -127,14 +127,6 @@ func (self *Bridge) Error(resp *http.Response, err error) (bool) {
     return false
 }
 
-// Error Struct
-// http://www.developers.meethue.com/documentation/error-messages
-type Error struct {
-    ID          int
-    Description string
-    Details     string
-}
-
 // NewBridge defines hardware that is compatible with Hue.
 func NewBridge(ip string, username string) *Bridge {
     bridge := Bridge {
