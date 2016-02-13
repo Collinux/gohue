@@ -90,6 +90,8 @@ func (self *Light) Toggle() error {
     return nil
 }
 
+// Light.Delete will remove the light from the list of
+// lights available on the bridge.
 func (self *Light) Delete() error {
     uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
     err := self.Bridge.Delete(uri)

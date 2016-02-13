@@ -80,6 +80,8 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
     return handleResponse(resp)
 }
 
+// Bridge.Put will send an http PUT to the bridge with
+// a body formatted with parameters (in a generic interface)
 func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
     client := &http.Client{}
@@ -99,6 +101,7 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
     return handleResponse(resp)
 }
 
+// Bridge.Delete will send an http DELETE to the bridge
 func (self *Bridge) Delete(path string) error {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
     client := &http.Client{}
