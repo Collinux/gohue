@@ -13,5 +13,6 @@ import (
 
 func TestCreateUser(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
-    bridge.CreateUser("linux")
+    bridge.CreateUser("test")
+    //bridge.DeleteUser(bridge.Username)
 }

@@ -177,10 +177,26 @@ func (self *Bridge) GetInfo() (BridgeInfo, error) {
     return data, nil
 }
 
-// CreateUser posts to ./api on the bridge to create a new whitelisted user.
+// Bridge.CreateUser posts to ./api on the bridge to create a new whitelisted user.
 func (bridge *Bridge) CreateUser(deviceType string) error {
     params := map[string]string{"devicetype": deviceType}
-    _, _, err := bridge.Post("/api", params)
+    body, _, err := bridge.Post("/api", params)
+    if err != nil {
+        return err
+    }
+    content := string(body)
+    username := content[strings.LastIndex(content, ":\"")+2 :
+        strings.LastIndex(content, "\"")]
+    bridge.Username = username
+    return nil
+}
+
+// Bridge.DeleteUser will delete a user given its USER KEY, not the string name.
+// See http://www.developers.meethue.com/documentation/configuration-api
+// for description on `username` deprecation in place of the devicetype key.
+func (bridge *Bridge) DeleteUser(username string) error {
+    uri := fmt.Sprintf("/api/%s/config/whitelist/%s", bridge.Username, username)
+    err := bridge.Delete(uri)
     if err != nil {
         return err
     }
