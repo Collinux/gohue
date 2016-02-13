@@ -146,28 +146,32 @@ func (self *Bridge) Error(resp *http.Response, err error) (bool) {
 }
 
 // NewBridge defines hardware that is compatible with Hue.
-func NewBridge(ip string, username string) *Bridge {
+func NewBridge(ip string, username string) (*Bridge, error) {
     bridge := Bridge {
         IPAddress: ip,
         Username: username,
     }
-    GetBridgeInfo(&bridge)
-    return &bridge
+    info, err := bridge.GetInfo()
+    if err != nil {
+        return &Bridge{}, err
+    }
+    bridge.Info = info
+    return &bridge, nil
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func GetBridgeInfo(self *Bridge) error {
+func (self *Bridge) GetInfo() (BridgeInfo, error) {
     _, reader, err := self.Get("/description.xml")
     if err != nil {
-        return err
+        return BridgeInfo{}, err
     }
     data := BridgeInfo{}
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
-        return err
+        return BridgeInfo{}, err
     }
     self.Info = data
-    return nil
+    return data, nil
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
