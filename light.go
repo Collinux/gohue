@@ -24,7 +24,7 @@ type Light struct {
         Hue         int        `json:"hue"`    // Hue value 1-65535
         Saturation  int        `json:"sat"`    // Saturation value 0-254
         Effect      string     `json:"effect"` // "None" or "Colorloop"
-        XY          [2]float32 `json:"xy"`    // Coordinates of color in CIE color space
+        XY          [2]float32 `json:"xy"`     // Coordinates of color in CIE color space
         CT          int        `json:"ct"`     // Mired Color Temperature (google it)
         Alert       string     `json:"alert"`
         ColorMode   string     `json:"colormode"`
@@ -59,6 +59,8 @@ type LightState struct {
     Name                 string         `json:"name,omitempty"`
 }
 
+// Light.SetName will assign a new name in the light's
+// attributes as recognized by the bridge.
 func (self *Light) SetName(name string) error {
     uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
     body := make(map[string]string)

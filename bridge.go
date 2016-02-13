@@ -60,26 +60,6 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     return handleResponse(resp)
 }
 
-// bridge.Post will send an http POST to the bridge with
-// a body formatted with parameters (in a generic interface)
-func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
-    // Add the params to the request
-    request, err := json.Marshal(params)
-    if err != nil {
-        trace("", err)
-        return []byte{}, nil, nil
-    }
-    log.Println("\nSending POST body: ", string(request))
-
-    // Send the request and handle the response
-    uri := fmt.Sprintf("http://" + self.IPAddress + path)
-    resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
-    if self.Error(resp, err) {
-        return []byte{}, nil, nil
-    }
-    return handleResponse(resp)
-}
-
 // Bridge.Put will send an http PUT to the bridge with
 // a body formatted with parameters (in a generic interface)
 func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
@@ -101,6 +81,26 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
     return handleResponse(resp)
 }
 
+// bridge.Post will send an http POST to the bridge with
+// a body formatted with parameters (in a generic interface)
+func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
+    // Add the params to the request
+    request, err := json.Marshal(params)
+    if err != nil {
+        trace("", err)
+        return []byte{}, nil, nil
+    }
+    log.Println("\nSending POST body: ", string(request))
+
+    // Send the request and handle the response
+    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+    resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
+    if self.Error(resp, err) {
+        return []byte{}, nil, nil
+    }
+    return handleResponse(resp)
+}
+
 // Bridge.Delete will send an http DELETE to the bridge
 func (self *Bridge) Delete(path string) error {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
@@ -110,7 +110,7 @@ func (self *Bridge) Delete(path string) error {
     if err != nil {
         return err
     }
-    _, _, err := handleResponse(resp)
+    _, _, err = handleResponse(resp)
     if err != nil {
         return err
     }
@@ -132,7 +132,7 @@ func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     return body, reader, nil
 }
 
-// bridge.Error handles all bridge response status errors
+// Bridge.Error handles all bridge response status errors
 func (self *Bridge) Error(resp *http.Response, err error) (bool) {
     if err != nil {
         trace("", err)

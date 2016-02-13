@@ -26,8 +26,7 @@ func TestGetLightByName(t *testing.T) {
 func TestSetLightState(t *testing.T) {
     fmt.Println("\nTESTING LIGHT STATE:\n\n")
     bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
-    lights, _ := GetAllLights(bridge)
-    selectedLight := lights[5]
+    selectedLight, _ := GetLightByIndex(bridge, 7)
 
     selectedLight.On()
     time.Sleep(time.Second)
