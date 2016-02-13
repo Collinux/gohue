@@ -57,7 +57,7 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     if self.Error(resp, err) {
         return []byte{}, nil, err
     }
-    return handleResponse(resp)
+    return HandleResponse(resp)
 }
 
 // Bridge.Put will send an http PUT to the bridge with
@@ -78,7 +78,7 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
 	if err != nil {
 		return []byte{}, nil, err
     }
-    return handleResponse(resp)
+    return HandleResponse(resp)
 }
 
 // bridge.Post will send an http POST to the bridge with
@@ -98,7 +98,7 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
     if self.Error(resp, err) {
         return []byte{}, nil, nil
     }
-    return handleResponse(resp)
+    return HandleResponse(resp)
 }
 
 // Bridge.Delete will send an http DELETE to the bridge
@@ -110,7 +110,7 @@ func (self *Bridge) Delete(path string) error {
     if err != nil {
         return err
     }
-    _, _, err = handleResponse(resp)
+    _, _, err = HandleResponse(resp)
     if err != nil {
         return err
     }
@@ -120,7 +120,7 @@ func (self *Bridge) Delete(path string) error {
 // HandleResponse manages the http.Response content from a
 // bridge Get/Put/Post/Delete by checking it for errors
 // and invalid return types.
-func handleResponse(resp *http.Response) ([]byte, io.Reader, error) {
+func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
         trace("Error parsing bridge description xml.", nil)

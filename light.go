@@ -40,7 +40,7 @@ type Light struct {
     Bridge          *Bridge
 }
 
-// LightState used in SetLightState to amend light attributes.
+// LightState used in Light.SetState to amend light attributes.
 type LightState struct {
     On                   bool           `json:"on"`
     Bri                  uint8          `json:"bri,omitempty"`
@@ -74,12 +74,12 @@ func (self *Light) SetName(name string) error {
 
 // Light.Off will turn the light source off
 func (self *Light) Off() error {
-    return SetLightState(self, LightState{On: false})
+    return self.SetState(LightState{On: false})
 }
 
 // Light.Off will turn the light source on
 func (self *Light) On() error {
-    return SetLightState(self, LightState{On: true})
+    return self.SetState(LightState{On: true})
 }
 
 // Light.Toggle will toggle the light source on and off
@@ -102,7 +102,6 @@ func (self *Light) Delete() error {
     }
     return nil
 }
-
 
 // Light.Blink will turn the light off and on repeatedly for a given seconds
 // interval and return the light back to its off or on state afterwards.
@@ -136,20 +135,20 @@ func (self *Light) ColorLoop(activate bool) error {
     if activate {
         state = "colorloop"
     }
-    return SetLightState(self, LightState{On: true, Effect: state})
+    return self.SetState(LightState{On: true, Effect: state})
 }
 
-// SetLightState will modify light attributes such as on/off, saturation,
-// brightness, and more. See `SetLightState` struct.
-func SetLightState(light *Light, newState LightState) error {
-    uri := fmt.Sprintf("/api/%s/lights/%d/state", light.Bridge.Username, light.Index)
-    _, _, err := light.Bridge.Put(uri, newState)
+// Light.SetState will modify light attributes such as on/off, saturation,
+// brightness, and more. See `LightState` struct.
+func (self *Light) SetState(newState LightState) error {
+    uri := fmt.Sprintf("/api/%s/lights/%d/state", self.Bridge.Username, self.Index)
+    _, _, err := self.Bridge.Put(uri, newState)
     if err != nil {
         return err
     }
 
     // Get the new light state and update the current Light struct
-    *light, err = GetLightByIndex(light.Bridge, light.Index)
+    *self, err = GetLightByIndex(self.Bridge, self.Index)
     if err != nil {
         return err
     }

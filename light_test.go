@@ -33,8 +33,5 @@ func TestSetLightState(t *testing.T) {
 
     selectedLight.Blink(2)
 
-    // err := selectedLight.Delete()
-    // if err != nil {
-    //     fmt.Println("error on delete")
-    // }
+    // _ := selectedLight.Delete()
 }
