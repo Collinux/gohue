@@ -83,14 +83,22 @@ func (self *Light) On() error {
 // Light.Toggle will toggle the light source on and off
 func (self *Light) Toggle() error {
     if self.State.On {
-        fmt.Println("toggling off")
         return self.Off()
     } else {
-        fmt.Println("toggling on")
         return self.On()
     }
     return nil
 }
+
+func (self *Light) Delete() error {
+    uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
+    err := self.Bridge.Delete(uri)
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
 
 // Light.Blink will turn the light off and on repeatedly for a given seconds
 // interval and return the light back to its off or on state afterwards.

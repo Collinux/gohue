@@ -40,5 +40,10 @@ func TestSetLightState(t *testing.T) {
 
     selectedLight.SetName(selectedLight.Name)
 
-    selectedLight.Blink(3)
+    selectedLight.Blink(2)
+
+    // err := selectedLight.Delete()
+    // if err != nil {
+    //     fmt.Println("error on delete")
+    // }
 }
