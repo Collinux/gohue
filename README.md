@@ -25,7 +25,7 @@ Pull requests happily accepted on GitHub
 
 ##### Bridge
 - [x] Create user
-- [ ] Delete user
+- [x] Delete user
 - [x] Get configuration
 - [ ] Modify configuration
 - [ ] Get full state (datastore)
