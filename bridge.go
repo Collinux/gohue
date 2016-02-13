@@ -171,7 +171,7 @@ func GetBridgeInfo(self *Bridge) error {
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
-func CreateUser(bridge *Bridge, deviceType string) (string, error) {
+func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
     // Send an HTTP POST with the body content
     params := map[string]string{"devicetype": deviceType}
     body, _, err := bridge.Post("/api", params)

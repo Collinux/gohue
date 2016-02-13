@@ -16,5 +16,6 @@ func TestNewBridge(t *testing.T) {
 }
 
 func TestCreateUser(t *testing.T) {
-    CreateUser(NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207"), "linux")
+    bridge := NewBridge("192.168.1.128", "319b36233bd2328f3e40731b23479207")
+    bridge.CreateUser("linux")
 }
