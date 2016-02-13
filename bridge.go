@@ -129,6 +129,9 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     reader := bytes.NewReader(body)
     log.Println("Handled response:\n--------------------\n", string(body) +
         "\n--------------------\n")
+    if strings.Contains(string(body), "error") {
+        return []byte{}, nil, errors.New(string(body))
+    }
     return body, reader, nil
 }
 
@@ -175,22 +178,13 @@ func (self *Bridge) GetInfo() (BridgeInfo, error) {
 }
 
 // CreateUser posts to ./api on the bridge to create a new whitelisted user.
-func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
-    // Send an HTTP POST with the body content
+func (bridge *Bridge) CreateUser(deviceType string) error {
     params := map[string]string{"devicetype": deviceType}
-    body, _, err := bridge.Post("/api", params)
+    _, _, err := bridge.Post("/api", params)
     if err != nil {
-        return "", err
+        return err
     }
-
-    // Parse the result and return it
-    result := string(body)
-    errFound := strings.Contains(result, "error")
-    noLink := strings.Contains(result, "link button not pressed")
-    if errFound && noLink {
-        return "", errors.New("Bridge link button not pressed.")
-    }
-    return "", nil
+    return nil
 }
 
 // Log the date, time, file location, line number, and function.
