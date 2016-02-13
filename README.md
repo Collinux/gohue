@@ -17,8 +17,8 @@ Pull requests happily accepted on GitHub
 - [x] Get light by index on bridge
 - [x] Get lights attributes and state
 - [x] Set lights attributes (rename)
-- [x] Set light state
-- [ ] Delete light
+- [x] Set light state (color, effects, brightness, etc)
+- [x] Delete light
 - [x] Turn On, Off, Toggle
 - [x] Blink
 - [x] Colorloop On/Off
@@ -31,7 +31,7 @@ Pull requests happily accepted on GitHub
 - [ ] Get full state (datastore)
 - [ ] Search for bridges
 - [ ] Search for new lights
-- [ ] Get all timezones 
+- [ ] Get all timezones
 
 ##### Groups
 - [ ] Get all groups
