@@ -51,10 +51,10 @@ type LightState struct {
     Effect               string         `json:"effect,omitempty"`
     Alert                string         `json:"alert,omitempty"`
     TransitionTime       string         `json:"transitiontime,omitempty"`
-    SaturationIncrement  int            `json:"sat_inc,omitempty"` // TODO: -254 to 254
-    HueIncrement         int            `json:"hue_inc,omitempty"` // TODO: -65534 to 65534
-    BrightnessIncrement  int            `json:"bri_inc,omitempty"` // TODO: -254 to 254
-    CTIncrement          int            `json:"ct_inc,omitempty"` // TODO: -65534 to 65534
+    SaturationIncrement  int16          `json:"sat_inc,omitempty"`
+    HueIncrement         int32          `json:"hue_inc,omitempty"`
+    BrightnessIncrement  int16          `json:"bri_inc,omitempty"`
+    CTIncrement          int32          `json:"ct_inc,omitempty"`
     XYIncrement          *[2]float32    `json:"xy_inc,omitempty"`
     Name                 string         `json:"name,omitempty"`
 }
@@ -114,6 +114,10 @@ func (self *Light) Blink(seconds int) error {
     blinkMin := LightState{On: true, Bri: uint8(50)}
 
     // Toggle the light on and off
+    err := self.SetState(blinkMax)
+    if err != nil {
+        return err
+    }
     for i := 0; i <= seconds*2; i++ {
         if i % 2 == 0 {
             err = self.SetState(blinkMax)
@@ -146,8 +150,11 @@ func (self *Light) ColorLoop(activate bool) error {
     return self.SetState(LightState{On: true, Effect: state})
 }
 
-// Light.SetState will modify light attributes such as on/off, saturation,
-// brightness, and more. See `LightState` struct.
+// Light.SetState will modify light attributes. See `LightState` struct for attributes.
+// Brightness must be between 1 and 254 (inclusive)
+// Hue must be between 0 and 65535 (inclusive)
+// Sat must be between 0 and 254 (inclusive)
+// See http://www.developers.meethue.com/documentation/lights-api for more info
 func (self *Light) SetState(newState LightState) error {
     uri := fmt.Sprintf("/api/%s/lights/%d/state", self.Bridge.Username, self.Index)
     _, _, err := self.Bridge.Put(uri, newState)
