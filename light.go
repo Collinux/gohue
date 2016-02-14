@@ -103,27 +103,35 @@ func (self *Light) Delete() error {
     return nil
 }
 
-// Light.Blink will turn the light off and on repeatedly for a given seconds
-// interval and return the light back to its off or on state afterwards.
+// Light.Blink will increase and decrease the brightness
+// repeatedly for a given seconds interval and return the
+// light back to its off  or on state afterwards.
 // Note: time will vary based on connection speed and algorithm speed.
 func (self *Light) Blink(seconds int) error {
-    originalState := self.State.On
+    originalPosition := self.State.On
+    originalBrightness := self.State.Bri
+    blinkMax := LightState{On: true, Bri: uint8(200)}
+    blinkMin := LightState{On: true, Bri: uint8(50)}
 
     // Toggle the light on and off
-    for i := 0; i <= seconds; i++ {
-        err := self.Toggle()
-        if err != nil {
-            return err
+    for i := 0; i <= seconds*2; i++ {
+        if i % 2 == 0 {
+            err = self.SetState(blinkMax)
+            if err != nil {
+                return err
+            }
+        } else {
+            err = self.SetState(blinkMin)
+            if err != nil {
+                return err
+            }
         }
-        time.Sleep(time.Second)
+        time.Sleep(time.Second/2)
     }
 
-    // Return the light to its original on or off state
-    if self.State.On != originalState {
-        err := self.Toggle()
-        if err != nil {
-            return err
-        }
+    // Return the light to its original on or off state and brightness
+    if self.State.Bri != originalBrightness || self.State.On != originalPosition {
+        self.SetState(LightState{On: originalPosition, Bri: uint8(originalBrightness)})
     }
     return nil
 }
@@ -174,7 +182,6 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
 // a light given its index stored on the bridge. This is used for
 // quickly updating an individual light.
 func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
-
     // Send an http GET and inspect the response
     uri := fmt.Sprintf("/api/%s/lights/%d", bridge.Username, index)
     body, _, err := bridge.Get(uri)

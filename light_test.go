@@ -31,7 +31,7 @@ func TestSetLightState(t *testing.T) {
 
     selectedLight.SetName(selectedLight.Name)
 
-    selectedLight.Blink(2)
+    selectedLight.Blink(3)
 
     // _ := selectedLight.Delete()
 }
