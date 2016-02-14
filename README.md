@@ -72,3 +72,6 @@ Pull requests happily accepted on GitHub
 - [ ] Create rule
 - [ ] Update rule
 - [ ] Delete rule
+
+## API documentation
+For official Philips Hue documentation check out the [Philips website](http://www.developers.meethue.com/philips-hue-api)
