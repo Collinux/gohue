@@ -8,43 +8,56 @@
 package hue
 
 import (
-    //"fmt"
+    "fmt"
+    "encoding/json"
 )
 
-type Timer struct {
-    Index       int
-    Name        string      `json:"name,omitempty"`
-    Description string      `json:"description,omitempty"`
-    Command     CommandInfo `json:"command,omitempty"`
-    Time        string      `json:"time,omitempty"`
-    Created     string      `json:"created,omitempty"`
-    Status      string      `json:"status,omitempty"`
-    AutoDelete  bool        `json:"autodelete,omitempty"`
-    StartTime   string      `json:"starttime,omitempty"`
+type Schedule struct {
+    Name        string   `json:"name"`
+    Description string   `json:"description"`
+	Command struct {
+		Address string   `json:"address"`
+		Body    struct {
+		    Scene string `json:"scene"`
+		} `json:"body"`
+		Method string    `json:"method"`
+	} `json:"command"`
+    Localtime   string   `json:"localtime"`
+    Time        string   `json:"time"`
+	Created     string   `json:"created"`
+	Status      string   `json:"status"`
+	Autodelete  bool     `json:"autodelete"`
+    ID          string
 }
 
-type Alarm struct {
-    Index       string
-    Name        string      `json:"name,omitempty"`
-    Description string      `json:"description,omitempty"`
-    Command     CommandInfo `json:"command,omitempty"`
-    LocalTime   string      `json:"localtime,omitempty"`
-    Time        string      `json:"time,omitempty"`
-    Created     string      `json:"created,omitempty"`
-    Status      string      `json:"status,omitempty"`
-    AutoDelete  bool        `json:"autodelete,omitempty"`
+func (bridge *Bridge) GetSchedules() ([]Schedule, error) {
+    uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return []Schedule{}, err
+    }
+
+    schedules := map[string]Schedule{}
+    err = json.Unmarshal(body, &schedules)
+	if err != nil {
+		return []Schedule{}, err
+	}
+
+    scheduleList := []Schedule{}
+    for key, value := range schedules {
+        schedule := Schedule{}
+        schedule = value
+        schedule.ID = key
+        scheduleList = append(scheduleList, schedule)
+    }
+
+    // for sched := range scheduleList {
+    //     fmt.Println("\n\nScheduleoutput: ", scheduleList[sched])
+    // }
+
+    return scheduleList, nil
 }
 
-type CommandInfo struct {
-    Address     string      `json:"address,omitempty"`
-    Body        string      `json:"body,omitempty"` // TODO: may be diff type
-    Method      string      `json:"method,omitempty"`
-}
-
-// func (bridge *Bridge) GetSchedules() ([]interface{}, error) {
-//     return []interface{}, nil
-// }
-//
 // func (bridge *Bridge) CreateSchedule(schedule interface{}) error {
 //     return nil
 // }
