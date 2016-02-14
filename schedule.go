@@ -13,32 +13,32 @@ import (
 
 type Timer struct {
     Index       int
-    Name        string      `json:"name",omitempty`
-    Description string      `json:"description",omitempty`
-    Command     CommandInfo `json:"command",omitempty`
-    Time        string      `json:"time",omitempty`
-    Created     string      `json:"created",omitempty`
-    Status      string      `json:"status",omitempty`
-    AutoDelete  bool        `json:"autodelete",omitempty`
-    StartTime   string      `json:"starttime",omitempty`
+    Name        string      `json:"name,omitempty"`
+    Description string      `json:"description,omitempty"`
+    Command     CommandInfo `json:"command,omitempty"`
+    Time        string      `json:"time,omitempty"`
+    Created     string      `json:"created,omitempty"`
+    Status      string      `json:"status,omitempty"`
+    AutoDelete  bool        `json:"autodelete,omitempty"`
+    StartTime   string      `json:"starttime,omitempty"`
 }
 
 type Alarm struct {
     Index       string
-    Name        string      `json:"name",omitempty`
-    Description string      `json:"description",omitempty`
-    Command     CommandInfo `json:"command",omitempty`
-    LocalTime   string      `json:"localtime",omitempty`
-    Time        string      `json:"time",omitempty`
-    Created     string      `json:"created",omitempty`
-    Status      string      `json:"status",omitempty`
-    AutoDelete  bool        `json:"autodelete",omitempty`
+    Name        string      `json:"name,omitempty"`
+    Description string      `json:"description,omitempty"`
+    Command     CommandInfo `json:"command,omitempty"`
+    LocalTime   string      `json:"localtime,omitempty"`
+    Time        string      `json:"time,omitempty"`
+    Created     string      `json:"created,omitempty"`
+    Status      string      `json:"status,omitempty"`
+    AutoDelete  bool        `json:"autodelete,omitempty"`
 }
 
 type CommandInfo struct {
-    Address     string      `json:"address",omitempty`
-    Body        string      `json:"body",omitempty` // TODO: may be diff type
-    Method      string      `json:"method",omitempty`
+    Address     string      `json:"address,omitempty"`
+    Body        string      `json:"body,omitempty"` // TODO: may be diff type
+    Method      string      `json:"method,omitempty"`
 }
 
 // func (bridge *Bridge) GetSchedules() ([]interface{}, error) {
