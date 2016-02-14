@@ -12,6 +12,7 @@ import (
     "encoding/json"
 )
 
+// Schedule struct defines attributes of Alarms and Timers
 type Schedule struct {
     Name        string   `json:"name"`
     Description string   `json:"description"`
@@ -30,6 +31,7 @@ type Schedule struct {
     ID          string
 }
 
+// Bridge.GetSchedules will get Alarms and Timers in a Schedule struct.
 func (bridge *Bridge) GetSchedules() ([]Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
     body, _, err := bridge.Get(uri)
