@@ -40,3 +40,23 @@ type CommandInfo struct {
     Body        string      `json:"body",omitempty` // TODO: may be diff type
     Method      string      `json:"method",omitempty`
 }
+
+// func (bridge *Bridge) GetSchedules() ([]interface{}, error) {
+//     return []interface{}, nil
+// }
+//
+// func (bridge *Bridge) CreateSchedule(schedule interface{}) error {
+//     return nil
+// }
+//
+// func (bridge *Bridge) GetSchedule(index int) (interface{}, error) {
+//     return []interface{}, nil
+// }
+//
+// func (bridge *Bridge) SetSchedule(index int, schedule interface{}) error {
+//     return nil
+// }
+//
+// func (bridge *Bridge) DeleteSchedule(index int) error {
+//     return nil
+// }
