@@ -74,9 +74,26 @@ func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
     return schedule, nil
 }
 
-// func (bridge *Bridge) CreateSchedule(schedule interface{}) error {
-//     return nil
+func (bridge *Bridge) CreateSchedule(schedule Schedule) error {
+    uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
+    body, _, err := bridge.Post(uri, schedule)
+    if err != nil {
+        return err
+    }
+
+    fmt.Println("CREATE SCHEDULE BODY: ", string(body))
+    // TODO: Not tested or fully implemented
+    return nil
+}
+
+// func (self *Schedule) Disable() {
+//
 // }
+//
+// func (self *Schedule) Enable() {
+//
+// }
+//
 //
 // func (bridge *Bridge) GetSchedule(index int) (interface{}, error) {
 //     return []interface{}, nil

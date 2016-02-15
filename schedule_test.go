@@ -20,3 +20,17 @@ func TestGetSchedule(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
     _, _ = bridge.GetSchedule("4673980164949558")
 }
+
+// func TestCreateSchedule(t *testing.T) {
+//     bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
+//     schedule := Schedule{
+//         Command: interface{
+//             Address: "/api/fffffffff6338294fffffffff585692d/groups/0/action",
+//             Body: {
+//                 Scene: "e5e33fdf2-off-0" // scene id
+//             }
+//             Method: "PUT",
+//         }
+//     }
+//     bridge.CreateSchedule()
+// }

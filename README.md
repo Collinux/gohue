@@ -33,14 +33,6 @@ Pull requests happily accepted on GitHub
 - [ ] Search for new lights
 - [ ] Get all timezones
 
-##### Schedules
-- [x] Get all schedules
-- [x] Get schedule by ID
-- [x] Get schedule attributes
-- [ ] Create schedules
-- [ ] Set schedule attributes
-- [ ] Delete schedule
-
 ##### Groups
 - [ ] Get all groups
 - [ ] Create group
@@ -48,6 +40,14 @@ Pull requests happily accepted on GitHub
 - [ ] Set group attributes
 - [ ] Set group state
 - [ ] Delete Group
+
+##### Schedules
+- [x] Get all schedules
+- [x] Get schedule by ID
+- [x] Get schedule attributes
+- [ ] Create schedules
+- [ ] Set schedule attributes
+- [ ] Delete schedule
 
 ##### Scenes
 - [ ] Get all scenes
