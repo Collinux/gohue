@@ -60,6 +60,17 @@ func (bridge *Bridge) GetSchedules() ([]Schedule, error) {
     return scheduleList, nil
 }
 
+// Bridge.GetSchedule will get the attributes for an individual schedule.
+// This is used as to optimize time when updating the state of a schedule item.
+func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
+    uri := fmt.Sprintf("/api/%s/schedules/%s", bridge.Username, id)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return Schedule{}, err
+    }
+    return Schedule{}, nil
+}
+
 // func (bridge *Bridge) CreateSchedule(schedule interface{}) error {
 //     return nil
 // }

@@ -15,3 +15,8 @@ func TestGetSchedules(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
     _, _ = bridge.GetSchedules()
 }
+
+func TestGetSchedule(t *testing.T) {
+    bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
+    _, _ = bridge.GetSchedule("4673980164949558")
+}
