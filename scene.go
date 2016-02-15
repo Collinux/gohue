@@ -12,6 +12,7 @@ import (
     "encoding/json"
 )
 
+// Scene struct defines attributes for Scene items
 type Scene struct {
     Appdata struct {
     	Data    string   `json:"data"`
@@ -29,7 +30,7 @@ type Scene struct {
 }
 
 // Bridge.GetScenes will get attributes for all scenes.
-func (bridge *Bridge) GetScenes() ([]Scene, error) {
+func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
     uri := fmt.Sprintf("/api/%s/scenes", bridge.Username)
     body, _, err := bridge.Get(uri)
     if err != nil  {
@@ -53,6 +54,9 @@ func (bridge *Bridge) GetScenes() ([]Scene, error) {
     return scenesList, nil
 }
 
+// Bridge.GetScene will get the attributes for an individual scene.
+// This is used to optimize time when updating the state of the scene.
+// Note: The ID is not an index, it's a unique key generated for each scene.
 func (bridge *Bridge) GetScene(id string) (Scene, error) {
     uri := fmt.Sprintf("/api/%s/scenes/%s", bridge.Username, id)
     body, _, err := bridge.Get(uri)

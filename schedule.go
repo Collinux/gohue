@@ -57,7 +57,7 @@ func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
 }
 
 // Bridge.GetSchedule will get the attributes for an individual schedule.
-// This is used as to optimize time when updating the state of a schedule item.
+// This is used to optimize time when updating the state of a schedule item.
 // Note: The ID is not an index, it's a unique key generated for each schedule.
 func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules/%s", bridge.Username, id)
