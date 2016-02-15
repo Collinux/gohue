@@ -74,7 +74,7 @@ func (bridge *Bridge) GetScene(id string) (Scene, error) {
 // Bridge.CreateScene will post a new scene configuration to the bridge.
 func (bridge *Bridge) CreateScene(scene Scene) error {
     uri := fmt.Sprintf("/api/%s/scenes/", bridge.Username)
-    body, _, err := bridge.Post(uri, scene)
+    _, _, err := bridge.Post(uri, scene)
     if err != nil {
         return err
     }
