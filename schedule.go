@@ -32,7 +32,7 @@ type Schedule struct {
 }
 
 // Bridge.GetSchedules will get Alarms and Timers in a Schedule struct.
-func (bridge *Bridge) GetSchedules() ([]Schedule, error) {
+func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
     body, _, err := bridge.Get(uri)
     if err != nil {
@@ -68,7 +68,13 @@ func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
     if err != nil {
         return Schedule{}, err
     }
-    return Schedule{}, nil
+
+    schedule := Schedule{}
+    err = json.Unmarshal(body, &schedule)
+	if err != nil {
+		return Schedule{}, err
+	}
+    return schedule, nil
 }
 
 // func (bridge *Bridge) CreateSchedule(schedule interface{}) error {
