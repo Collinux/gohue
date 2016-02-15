@@ -44,7 +44,7 @@ Pull requests happily accepted on GitHub
 ##### Scenes
 - [x] Get all scenes
 - [x] Get scene by ID
-- [ ] Create scene
+- [x] Create scene
 - [ ] Modify scene
 - [ ] Recall scene
 - [ ] Delete scene

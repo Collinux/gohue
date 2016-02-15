@@ -15,19 +15,19 @@ import (
 
 // Scene struct defines attributes for Scene items
 type Scene struct {
-    Appdata struct {
-    	Data    string   `json:"data"`
-    	Version int      `json:"version"`
-    } `json:"appdata"`
-    Lastupdated string   `json:"lastupdated"`
-    Lights      []string `json:"lights"`
-    Locked      bool     `json:"locked"`
-    Name        string   `json:"name"`
-    Owner       string   `json:"owner"`
-    Picture     string   `json:"picture"`
-    Recycle     bool     `json:"recycle"`
-    Version     int      `json:"version"`
-    ID          string
+    Appdata *struct {
+    	Data    string   `json:"data,omitempty"`
+    	Version int      `json:"version,omitempty"`
+    } `json:"appdata,omitempty"`
+    Lastupdated string   `json:"lastupdated,omitempty"`
+    Lights      []string `json:"lights,omitempty"`
+    Locked      bool     `json:"locked,omitempty"`
+    Name        string   `json:"name,omitempty"`
+    Owner       string   `json:"owner,omitempty"`
+    Picture     string   `json:"picture,omitempty"`
+    Recycle     bool     `json:"recycle,omitempty"`
+    Version     int      `json:"version,omitempty"`
+    ID          string   `json:",omitempty"`
 }
 
 // Bridge.GetScenes will get attributes for all scenes.
@@ -69,4 +69,14 @@ func (bridge *Bridge) GetScene(id string) (Scene, error) {
         return Scene{}, err
     }
     return scene, nil
+}
+
+// Bridge.CreateScene will post a new scene configuration to the bridge.
+func (bridge *Bridge) CreateScene(scene Scene) error {
+    uri := fmt.Sprintf("/api/%s/scenes/", bridge.Username)
+    body, _, err := bridge.Post(uri, scene)
+    if err != nil {
+        return err
+    }
+    return nil
 }
