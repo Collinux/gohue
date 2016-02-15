@@ -4,8 +4,8 @@
 * Copyright (C) 2016 Collin Guarino (Collinux) collin.guarino@gmail.com
 * License: GPL version 2 or higher http://www.gnu.org/licenses/gpl.html
 */
-
 // http://www.developers.meethue.com/documentation/lights-api
+
 package hue
 
 import (
@@ -113,7 +113,8 @@ func (self *Light) Blink(seconds int) error {
     blinkMax := LightState{On: true, Bri: uint8(200)}
     blinkMin := LightState{On: true, Bri: uint8(50)}
 
-    // Toggle the light on and off
+    // Start with near maximum brightness and toggle between that and
+    // a lesser brightness to create a blinking effect.
     err := self.SetState(blinkMax)
     if err != nil {
         return err

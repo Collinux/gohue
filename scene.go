@@ -4,6 +4,7 @@
 * Copyright (C) 2016 Collin Guarino (Collinux) collin.guarino@gmail.com
 * License: GPL version 2 or higher http://www.gnu.org/licenses/gpl.html
 */
+// http://www.developers.meethue.com/documentation/scenes-api
 
 package hue
 
@@ -36,8 +37,6 @@ func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
     if err != nil  {
         return []Scene{}, err
     }
-
-    fmt.Sprintf("GET SCENES BODY: ", string(body))
 
     scenes := map[string]Scene{}
     err = json.Unmarshal(body, &scenes)

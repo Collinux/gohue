@@ -4,6 +4,10 @@
 * Copyright (C) 2016 Collin Guarino (Collinux) collin.guarino@gmail.com
 * License: GPL version 2 or higher http://www.gnu.org/licenses/gpl.html
 */
+// All things start with the bridge. You will find many Bridge.Func() items
+// to use once a bridge has been created and identified.
+// See the getting started guide on the Philips hue website:
+// http://www.developers.meethue.com/documentation/getting-started
 
 package hue
 
