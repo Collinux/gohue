@@ -12,6 +12,7 @@ import (
     "encoding/json"
 )
 
+// Group struct defines the attributes for a group of lights.
 type Group struct {
     Action struct {
         Alert     string    `json:"alert"`
