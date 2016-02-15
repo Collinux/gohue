@@ -23,7 +23,7 @@ type Group struct {
         Hue       int       `json:"hue"`
         On        bool      `json:"on"`
         Sat       int       `json:"sat"`
-        Xy        []float64 `json:"xy"`
+        XY        []float64 `json:"xy"`
     } `json:"action"`
     Lights []string `json:"lights"`
     Name   string   `json:"name"`
