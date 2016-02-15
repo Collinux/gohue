@@ -74,6 +74,7 @@ func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
     return schedule, nil
 }
 
+// TODO: NOT TESTED, NOT FULLY IMPLEMENTED
 func (bridge *Bridge) CreateSchedule(schedule Schedule) error {
     uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
     body, _, err := bridge.Post(uri, schedule)
@@ -82,7 +83,6 @@ func (bridge *Bridge) CreateSchedule(schedule Schedule) error {
     }
 
     fmt.Println("CREATE SCHEDULE BODY: ", string(body))
-    // TODO: Not tested or fully implemented
     return nil
 }
 
