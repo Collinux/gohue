@@ -18,4 +18,7 @@ func TestGetScenes(t *testing.T) {
     for scene := range scenes {
         fmt.Println("SCENE: ", scenes[scene])
     }
+
+    individual, _ := bridge.GetScene(scenes[0].ID)
+    fmt.Println("Individual scene: ", individual)
 }

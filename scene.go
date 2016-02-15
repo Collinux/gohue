@@ -52,3 +52,18 @@ func (bridge *Bridge) GetScenes() ([]Scene, error) {
     }
     return scenesList, nil
 }
+
+func (bridge *Bridge) GetScene(id string) (Scene, error) {
+    uri := fmt.Sprintf("/api/%s/scenes/%s", bridge.Username, id)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return Scene{}, err
+    }
+
+    scene := Scene{}
+    err = json.Unmarshal(body, &scene)
+    if err != nil {
+        return Scene{}, err
+    }
+    return scene, nil
+}

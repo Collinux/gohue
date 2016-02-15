@@ -50,12 +50,12 @@ Pull requests happily accepted on GitHub
 - [ ] Delete schedule
 
 ##### Scenes
-- [ ] Get all scenes
+- [x] Get all scenes
+- [x] Get scene by ID
 - [ ] Create scene
 - [ ] Modify scene
 - [ ] Recall scene
 - [ ] Delete scene
-- [ ] Get scene
 
 ##### Sensors
 - [ ] Get all sensors
