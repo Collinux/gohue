@@ -31,7 +31,7 @@ type Schedule struct {
     ID          string
 }
 
-// Bridge.GetSchedules will get Alarms and Timers in a Schedule struct.
+// Bridge.GetAllSchedules will get Alarms and Timers in a Schedule struct.
 func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
     body, _, err := bridge.Get(uri)
@@ -39,12 +39,13 @@ func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
         return []Schedule{}, err
     }
 
+    // Each index key is the topmost element of the json array.
+    // Unmarshal the array, loop through each index key, and add it to the list
     schedules := map[string]Schedule{}
     err = json.Unmarshal(body, &schedules)
 	if err != nil {
 		return []Schedule{}, err
 	}
-
     scheduleList := []Schedule{}
     for key, value := range schedules {
         schedule := Schedule{}
@@ -52,16 +53,12 @@ func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
         schedule.ID = key
         scheduleList = append(scheduleList, schedule)
     }
-
-    // for sched := range scheduleList {
-    //     fmt.Println("\n\nScheduleoutput: ", scheduleList[sched])
-    // }
-
     return scheduleList, nil
 }
 
 // Bridge.GetSchedule will get the attributes for an individual schedule.
 // This is used as to optimize time when updating the state of a schedule item.
+// Note: The ID is not an index, it's a unique key generated for each schedule.
 func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules/%s", bridge.Username, id)
     body, _, err := bridge.Get(uri)
