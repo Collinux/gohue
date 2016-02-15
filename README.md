@@ -33,14 +33,6 @@ Pull requests happily accepted on GitHub
 - [ ] Search for new lights
 - [ ] Get all timezones
 
-##### Groups
-- [ ] Get all groups
-- [ ] Create group
-- [ ] Get group attributes
-- [ ] Set group attributes
-- [ ] Set group state
-- [ ] Delete Group
-
 ##### Schedules
 - [x] Get all schedules
 - [x] Get schedule by ID
@@ -56,6 +48,14 @@ Pull requests happily accepted on GitHub
 - [ ] Modify scene
 - [ ] Recall scene
 - [ ] Delete scene
+
+##### Groups
+- [ ] Get all groups
+- [ ] Create group
+- [ ] Get group attributes
+- [ ] Set group attributes
+- [ ] Set group state
+- [ ] Delete Group
 
 ##### Sensors
 - [ ] Get all sensors
