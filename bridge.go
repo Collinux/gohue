@@ -55,7 +55,7 @@ type Device struct {
     UDN                 string      `xml:"UDN"`
 }
 
-// bridge.Get will send an http GET to the bridge
+// bridge.Get sends an http GET to the bridge
 func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     resp, err := http.Get("http://" + self.IPAddress + path)
     if self.Error(resp, err) {
@@ -64,7 +64,7 @@ func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
     return HandleResponse(resp)
 }
 
-// Bridge.Put will send an http PUT to the bridge with
+// Bridge.Put sends an http PUT to the bridge with
 // a body formatted with parameters (in a generic interface)
 func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
@@ -85,7 +85,7 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
     return HandleResponse(resp)
 }
 
-// bridge.Post will send an http POST to the bridge with
+// bridge.Post sends an http POST to the bridge with
 // a body formatted with parameters (in a generic interface)
 func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
     // Add the params to the request
@@ -105,7 +105,7 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
     return HandleResponse(resp)
 }
 
-// Bridge.Delete will send an http DELETE to the bridge
+// Bridge.Delete sends an http DELETE to the bridge
 func (self *Bridge) Delete(path string) error {
     uri := fmt.Sprintf("http://" + self.IPAddress + path)
     client := &http.Client{}
@@ -195,7 +195,7 @@ func (bridge *Bridge) CreateUser(deviceType string) error {
     return nil
 }
 
-// Bridge.DeleteUser will delete a user given its USER KEY, not the string name.
+// Bridge.DeleteUser deletes a user given its USER KEY, not the string name.
 // See http://www.developers.meethue.com/documentation/configuration-api
 // for description on `username` deprecation in place of the devicetype key.
 func (bridge *Bridge) DeleteUser(username string) error {

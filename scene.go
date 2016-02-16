@@ -30,7 +30,7 @@ type Scene struct {
     ID          string   `json:",omitempty"`
 }
 
-// Bridge.GetScenes will get attributes for all scenes.
+// Bridge.GetScenes gets the attributes for all scenes.
 func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
     uri := fmt.Sprintf("/api/%s/scenes", bridge.Username)
     body, _, err := bridge.Get(uri)
@@ -53,7 +53,7 @@ func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
     return scenesList, nil
 }
 
-// Bridge.GetScene will get the attributes for an individual scene.
+// Bridge.GetScene gets the attributes for an individual scene.
 // This is used to optimize time when updating the state of the scene.
 // Note: The ID is not an index, it's a unique key generated for each scene.
 func (bridge *Bridge) GetScene(id string) (Scene, error) {

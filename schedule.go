@@ -32,7 +32,7 @@ type Schedule struct {
     ID          string
 }
 
-// Bridge.GetAllSchedules will get Alarms and Timers in a Schedule struct.
+// Bridge.GetAllSchedules gets Alarms and Timers in a Schedule struct.
 func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
     uri := fmt.Sprintf("/api/%s/schedules", bridge.Username)
     body, _, err := bridge.Get(uri)
@@ -57,7 +57,7 @@ func (bridge *Bridge) GetAllSchedules() ([]Schedule, error) {
     return scheduleList, nil
 }
 
-// Bridge.GetSchedule will get the attributes for an individual schedule.
+// Bridge.GetSchedule gets the attributes for an individual schedule.
 // This is used to optimize time when updating the state of a schedule item.
 // Note: The ID is not an index, it's a unique key generated for each schedule.
 func (bridge *Bridge) GetSchedule(id string) (Schedule, error) {

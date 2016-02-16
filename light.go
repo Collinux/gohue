@@ -59,7 +59,7 @@ type LightState struct {
     Name                 string         `json:"name,omitempty"`
 }
 
-// Light.SetName will assign a new name in the light's
+// Light.SetName assigns a new name in the light's
 // attributes as recognized by the bridge.
 func (self *Light) SetName(name string) error {
     uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
@@ -72,17 +72,17 @@ func (self *Light) SetName(name string) error {
     return nil
 }
 
-// Light.Off will turn the light source off
+// Light.Off turns the light source off
 func (self *Light) Off() error {
     return self.SetState(LightState{On: false})
 }
 
-// Light.Off will turn the light source on
+// Light.Off turns the light source on
 func (self *Light) On() error {
     return self.SetState(LightState{On: true})
 }
 
-// Light.Toggle will toggle the light source on and off
+// Light.Toggle switches the light source on and off
 func (self *Light) Toggle() error {
     if self.State.On {
         return self.Off()
@@ -92,8 +92,8 @@ func (self *Light) Toggle() error {
     return nil
 }
 
-// Light.Delete will remove the light from the list of
-// lights available on the bridge.
+// Light.Delete removes the light from the
+// list of lights available on the bridge.
 func (self *Light) Delete() error {
     uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
     err := self.Bridge.Delete(uri)
@@ -103,7 +103,7 @@ func (self *Light) Delete() error {
     return nil
 }
 
-// Light.Blink will increase and decrease the brightness
+// Light.Blink increases and decrease the brightness
 // repeatedly for a given seconds interval and return the
 // light back to its off  or on state afterwards.
 // Note: time will vary based on connection speed and algorithm speed.
@@ -141,8 +141,8 @@ func (self *Light) Blink(seconds int) error {
     return nil
 }
 
-// Light.ColorLoop will set the light state to 'colorloop' if `active`
-// is true or it will set the light state to "none" if `activate` is false.
+// Light.ColorLoop sets the light state to 'colorloop' if `active`
+// is true or it sets the light state to "none" if `activate` is false.
 func (self *Light) ColorLoop(activate bool) error {
     var state = "none"
     if activate {
@@ -151,7 +151,7 @@ func (self *Light) ColorLoop(activate bool) error {
     return self.SetState(LightState{On: true, Effect: state})
 }
 
-// Light.SetState will modify light attributes. See `LightState` struct for attributes.
+// Light.SetState modifyies light attributes. See `LightState` struct for attributes.
 // Brightness must be between 1 and 254 (inclusive)
 // Hue must be between 0 and 65535 (inclusive)
 // Sat must be between 0 and 254 (inclusive)
@@ -186,7 +186,7 @@ func GetAllLights(bridge *Bridge) ([]Light, error) {
     return lights, nil
 }
 
-// GetLightByIndex will return a light struct containing data on
+// GetLightByIndex returns a light struct containing data on
 // a light given its index stored on the bridge. This is used for
 // quickly updating an individual light.
 func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
@@ -211,7 +211,7 @@ func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
     return light, nil
 }
 
-// GetLight will return a light struct containing data on a given name.
+// GetLight returns a light struct containing data on a given name.
 func GetLightByName(bridge *Bridge, name string) (Light, error) {
     lights, _ := GetAllLights(bridge)
     for _, light := range lights {

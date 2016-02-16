@@ -31,7 +31,7 @@ type Group struct {
     Type   string   `json:"type"`
 }
 
-// Bridge.GetGroups get the attributes for each group of lights.
+// Bridge.GetGroups gets the attributes for each group of lights.
 // TODO: NOT TESTED, NOT FULLY IMPLEMENTED
 func (bridge *Bridge) GetGroups() ([]Group, error) {
     uri := fmt.Sprintf("/api/%s/groups", bridge.Username)
