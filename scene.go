@@ -71,7 +71,7 @@ func (bridge *Bridge) GetScene(id string) (Scene, error) {
     return scene, nil
 }
 
-// Bridge.CreateScene will post a new scene configuration to the bridge.
+// Bridge.CreateScene posts a new scene configuration to the bridge.
 func (bridge *Bridge) CreateScene(scene Scene) error {
     uri := fmt.Sprintf("/api/%s/scenes/", bridge.Username)
     _, _, err := bridge.Post(uri, scene)
@@ -80,3 +80,18 @@ func (bridge *Bridge) CreateScene(scene Scene) error {
     }
     return nil
 }
+
+// Bridge.ModifySceneState amends light states for lights
+// included in a scene list. See `Bridge.ModifyScene` for
+// changing the lights included in the scene list.
+// func (bridge *Bridge) ModifySceneState() error {
+//
+// }
+
+// Bridge.ModifyScene amends the lights included for a given scene or
+// it can be used to change the scene name. To amend light states for
+// lights included in a scene list see `Bridge.ModifySceneState`.
+// func (bridge *Bridge) ModifyScene() error {
+//     uri := fmt.Sprintf("/api/%s/scenes/%s/lightstates/%s",
+//         bridge.Username, oldScene.ID, )
+// }
