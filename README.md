@@ -1,5 +1,5 @@
 # GoHue
-Philips Hue Golang Library.
+Package hue interfaces Philips Hue devices to control lights, scenes, schedules, and groups.
 
 ## License
 Copyright (C) 2016 Collin Guarino (Collinux)  
