@@ -61,11 +61,11 @@ type LightState struct {
 
 // Light.SetName assigns a new name in the light's
 // attributes as recognized by the bridge.
-func (self *Light) SetName(name string) error {
-    uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
+func (light *Light) SetName(name string) error {
+    uri := fmt.Sprintf("/api/%s/lights/%d", light.Bridge.Username, light.Index)
     body := make(map[string]string)
     body["name"] = name
-    _, _, err := self.Bridge.Put(uri, body)
+    _, _, err := light.Bridge.Put(uri, body)
     if err != nil {
         return err
     }
@@ -73,21 +73,21 @@ func (self *Light) SetName(name string) error {
 }
 
 // Light.Off turns the light source off
-func (self *Light) Off() error {
-    return self.SetState(LightState{On: false})
+func (light *Light) Off() error {
+    return light.SetState(LightState{On: false})
 }
 
 // Light.Off turns the light source on
-func (self *Light) On() error {
-    return self.SetState(LightState{On: true})
+func (light *Light) On() error {
+    return light.SetState(LightState{On: true})
 }
 
 // Light.Toggle switches the light source on and off
-func (self *Light) Toggle() error {
-    if self.State.On {
-        return self.Off()
+func (light *Light) Toggle() error {
+    if light.State.On {
+        return light.Off()
     } else {
-        return self.On()
+        return light.On()
     }
     return nil
 }

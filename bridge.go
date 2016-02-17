@@ -56,9 +56,9 @@ type Device struct {
 }
 
 // bridge.Get sends an http GET to the bridge
-func (self *Bridge) Get(path string) ([]byte, io.Reader, error) {
-    resp, err := http.Get("http://" + self.IPAddress + path)
-    if self.Error(resp, err) {
+func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
+    resp, err := http.Get("http://" + bridge.IPAddress + path)
+    if bridge.Error(resp, err) {
         return []byte{}, nil, err
     }
     return HandleResponse(resp)

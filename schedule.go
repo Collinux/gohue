@@ -87,11 +87,11 @@ func (bridge *Bridge) CreateSchedule(schedule Schedule) error {
     return nil
 }
 
-// func (self *Schedule) Disable() {
+// func (schedule *Schedule) Disable() {
 //
 // }
 //
-// func (self *Schedule) Enable() {
+// func (schedule *Schedule) Enable() {
 //
 // }
 //
