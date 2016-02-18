@@ -66,8 +66,8 @@ func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 
 // Bridge.Put sends an http PUT to the bridge with
 // a body formatted with parameters (in a generic interface)
-func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
-    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
+    uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
     client := &http.Client{}
 
     data, err := json.Marshal(params)
@@ -87,7 +87,7 @@ func (self *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, err
 
 // bridge.Post sends an http POST to the bridge with
 // a body formatted with parameters (in a generic interface)
-func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
+func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
     // Add the params to the request
     request, err := json.Marshal(params)
     if err != nil {
@@ -97,17 +97,17 @@ func (self *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, er
     log.Println("\nSending POST body: ", string(request))
 
     // Send the request and handle the response
-    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+    uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
     resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
-    if self.Error(resp, err) {
+    if bridge.Error(resp, err) {
         return []byte{}, nil, nil
     }
     return HandleResponse(resp)
 }
 
 // Bridge.Delete sends an http DELETE to the bridge
-func (self *Bridge) Delete(path string) error {
-    uri := fmt.Sprintf("http://" + self.IPAddress + path)
+func (bridge *Bridge) Delete(path string) error {
+    uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
     client := &http.Client{}
     req, err := http.NewRequest("DELETE", uri, nil)
     resp, err := client.Do(req)
@@ -140,7 +140,7 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 }
 
 // Bridge.Error handles all bridge response status errors
-func (self *Bridge) Error(resp *http.Response, err error) (bool) {
+func (bridge *Bridge) Error(resp *http.Response, err error) (bool) {
     if err != nil {
         trace("", err)
         return true
@@ -167,8 +167,8 @@ func NewBridge(ip string, username string) (*Bridge, error) {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func (self *Bridge) GetInfo() (BridgeInfo, error) {
-    _, reader, err := self.Get("/description.xml")
+func (bridge *Bridge) GetInfo() (BridgeInfo, error) {
+    _, reader, err := bridge.Get("/description.xml")
     if err != nil {
         return BridgeInfo{}, err
     }
@@ -177,7 +177,7 @@ func (self *Bridge) GetInfo() (BridgeInfo, error) {
     if err != nil {
         return BridgeInfo{}, err
     }
-    self.Info = data
+    bridge.Info = data
     return data, nil
 }
 
