@@ -94,9 +94,9 @@ func (light *Light) Toggle() error {
 
 // Light.Delete removes the light from the
 // list of lights available on the bridge.
-func (self *Light) Delete() error {
-    uri := fmt.Sprintf("/api/%s/lights/%d", self.Bridge.Username, self.Index)
-    err := self.Bridge.Delete(uri)
+func (light *Light) Delete() error {
+    uri := fmt.Sprintf("/api/%s/lights/%d", light.Bridge.Username, light.Index)
+    err := light.Bridge.Delete(uri)
     if err != nil {
         return err
     }
@@ -107,26 +107,26 @@ func (self *Light) Delete() error {
 // repeatedly for a given seconds interval and return the
 // light back to its off  or on state afterwards.
 // Note: time will vary based on connection speed and algorithm speed.
-func (self *Light) Blink(seconds int) error {
-    originalPosition := self.State.On
-    originalBrightness := self.State.Bri
+func (light *Light) Blink(seconds int) error {
+    originalPosition := light.State.On
+    originalBrightness := light.State.Bri
     blinkMax := LightState{On: true, Bri: uint8(200)}
     blinkMin := LightState{On: true, Bri: uint8(50)}
 
     // Start with near maximum brightness and toggle between that and
     // a lesser brightness to create a blinking effect.
-    err := self.SetState(blinkMax)
+    err := light.SetState(blinkMax)
     if err != nil {
         return err
     }
     for i := 0; i <= seconds*2; i++ {
         if i % 2 == 0 {
-            err = self.SetState(blinkMax)
+            err = light.SetState(blinkMax)
             if err != nil {
                 return err
             }
         } else {
-            err = self.SetState(blinkMin)
+            err = light.SetState(blinkMin)
             if err != nil {
                 return err
             }
@@ -135,20 +135,20 @@ func (self *Light) Blink(seconds int) error {
     }
 
     // Return the light to its original on or off state and brightness
-    if self.State.Bri != originalBrightness || self.State.On != originalPosition {
-        self.SetState(LightState{On: originalPosition, Bri: uint8(originalBrightness)})
+    if light.State.Bri != originalBrightness || light.State.On != originalPosition {
+        light.SetState(LightState{On: originalPosition, Bri: uint8(originalBrightness)})
     }
     return nil
 }
 
 // Light.ColorLoop sets the light state to 'colorloop' if `active`
 // is true or it sets the light state to "none" if `activate` is false.
-func (self *Light) ColorLoop(activate bool) error {
+func (light *Light) ColorLoop(activate bool) error {
     var state = "none"
     if activate {
         state = "colorloop"
     }
-    return self.SetState(LightState{On: true, Effect: state})
+    return light.SetState(LightState{On: true, Effect: state})
 }
 
 // Light.SetState modifyies light attributes. See `LightState` struct for attributes.
@@ -156,15 +156,15 @@ func (self *Light) ColorLoop(activate bool) error {
 // Hue must be between 0 and 65535 (inclusive)
 // Sat must be between 0 and 254 (inclusive)
 // See http://www.developers.meethue.com/documentation/lights-api for more info
-func (self *Light) SetState(newState LightState) error {
-    uri := fmt.Sprintf("/api/%s/lights/%d/state", self.Bridge.Username, self.Index)
-    _, _, err := self.Bridge.Put(uri, newState)
+func (light *Light) SetState(newState LightState) error {
+    uri := fmt.Sprintf("/api/%s/lights/%d/state", light.Bridge.Username, light.Index)
+    _, _, err := light.Bridge.Put(uri, newState)
     if err != nil {
         return err
     }
 
     // Get the new light state and update the current Light struct
-    *self, err = GetLightByIndex(self.Bridge, self.Index)
+    *light, err = GetLightByIndex(light.Bridge, light.Index)
     if err != nil {
         return err
     }
