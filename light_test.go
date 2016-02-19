@@ -15,8 +15,9 @@ import (
 
 func TestSetLightState(t *testing.T) {
     fmt.Println("\nTESTING LIGHT STATE:\n\n")
-    bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
-    nameTest, _ := GetLightByName(bridge, "Desk Light")  // Also tests GetAllLights
+    bridge, _ := NewBridge("192.168.1.128")
+    bridge.Login("427de8bd6d49f149c8398e4fc08f")
+    nameTest, _ := bridge.GetLightByName("Desk Light")  // Also tests GetAllLights
     _ = nameTest
     selectedLight, _ := GetLightByIndex(bridge, 7)
 

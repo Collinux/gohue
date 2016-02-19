@@ -172,7 +172,7 @@ func (light *Light) SetState(newState LightState) error {
 }
 
 // GetAllLights retreives the state of all lights that the bridge is aware of.
-func GetAllLights(bridge *Bridge) ([]Light, error) {
+func (bridge *Bridge) GetAllLights() ([]Light, error) {
     // Loop through all light indicies to see if they exist
     // and parse their values. Supports 100 lights.
     var lights []Light
@@ -212,8 +212,8 @@ func GetLightByIndex(bridge *Bridge, index int) (Light, error) {
 }
 
 // GetLight returns a light struct containing data on a given name.
-func GetLightByName(bridge *Bridge, name string) (Light, error) {
-    lights, _ := GetAllLights(bridge)
+func (bridge *Bridge) GetLightByName(name string) (Light, error) {
+    lights, _ := bridge.GetAllLights()
     for _, light := range lights {
         if light.Name == name {
             return light, nil

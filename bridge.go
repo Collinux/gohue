@@ -153,10 +153,9 @@ func (bridge *Bridge) Error(resp *http.Response, err error) (bool) {
 }
 
 // NewBridge defines hardware that is compatible with Hue.
-func NewBridge(ip string, username string) (*Bridge, error) {
+func NewBridge(ip string) (*Bridge, error) {
     bridge := Bridge {
         IPAddress: ip,
-        Username: username,
     }
     info, err := bridge.GetInfo()
     if err != nil {
@@ -164,6 +163,17 @@ func NewBridge(ip string, username string) (*Bridge, error) {
     }
     bridge.Info = info
     return &bridge, nil
+}
+
+// Bridge.Login assigns a username to access the bridge with and
+// will create the username key if it does not exist.
+func (bridge *Bridge) Login(username string) error {
+    bridge.Username = username
+    err := bridge.CreateUser(username)
+    if err != nil {
+        return err
+    }
+    return nil
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.

@@ -13,7 +13,8 @@ import (
 )
 
 func TestGetAllScenes(t *testing.T) {
-    bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
+    bridge, _ := NewBridge("192.168.1.128")
+    bridge.Login("427de8bd6d49f149c8398e4fc08f")
     scenes, _ := bridge.GetAllScenes()
     for scene := range scenes {
         fmt.Println("SCENE: ", scenes[scene])
@@ -24,7 +25,8 @@ func TestGetAllScenes(t *testing.T) {
 }
 
 func TestCreateScene(t *testing.T) {
-    bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
+    bridge, _ := NewBridge("192.168.1.128")
+    bridge.Login("427de8bd6d49f149c8398e4fc08f")
     scene := Scene{Lights: []string{"1", "2"}}
     _ = bridge.CreateScene(scene)
 }
