@@ -174,7 +174,7 @@ func (bridge *Bridge) Login(username string) error {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func (bridge *Bridge) GetInfo() (error) {
+func (bridge *Bridge) GetInfo() error {
     _, reader, err := bridge.Get("/description.xml")
     if err != nil {
         return err
