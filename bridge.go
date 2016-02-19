@@ -32,27 +32,22 @@ type Bridge struct {
     Info        BridgeInfo
 }
 
-// BridgeInfo struct is the outermost (root) structure
-// for parsing xml from a bridge.
+// BridgeInfo struct is the format for parsing xml from a bridge.
 type BridgeInfo struct {
     XMLName	    xml.Name	`xml:"root"`
-    Device      Device      `xml:"device"`
-}
-
-// Device struct is the innermost (base) structure
-// for parsing device info xml from a bridge.
-type Device struct {
-    XMLName	            xml.Name    `xml:"device"`
-    DeviceType          string      `xml:"deviceType"`
-    FriendlyName        string      `xml:"friendlyName"`
-    Manufacturer        string      `xml:"manufacturer"`
-    ManufacturerURL     string      `xml:"manufacturerURL"`
-    ModelDescription    string      `xml:"modelDescription"`
-    ModelName           string      `xml:"modelName"`
-    ModelNumber         string      `xml:"modelNumber"`
-    ModelURL            string      `xml:"modelURL"`
-    SerialNumber        string      `xml:"serialNumber"`
-    UDN                 string      `xml:"UDN"`
+    Device      struct {
+        XMLName	            xml.Name    `xml:"device"`
+        DeviceType          string      `xml:"deviceType"`
+        FriendlyName        string      `xml:"friendlyName"`
+        Manufacturer        string      `xml:"manufacturer"`
+        ManufacturerURL     string      `xml:"manufacturerURL"`
+        ModelDescription    string      `xml:"modelDescription"`
+        ModelName           string      `xml:"modelName"`
+        ModelNumber         string      `xml:"modelNumber"`
+        ModelURL            string      `xml:"modelURL"`
+        SerialNumber        string      `xml:"serialNumber"`
+        UDN                 string      `xml:"UDN"`
+    } `xml:"device"`
 }
 
 // bridge.Get sends an http GET to the bridge
@@ -160,11 +155,10 @@ func NewBridge(ip string) (*Bridge, error) {
     bridge := Bridge {
         IPAddress: ip,
     }
-    info, err := bridge.GetInfo()
+    err := bridge.GetInfo()
     if err != nil {
         return &Bridge{}, err
     }
-    bridge.Info = info
     return &bridge, nil
 }
 
@@ -180,18 +174,18 @@ func (bridge *Bridge) Login(username string) error {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
-func (bridge *Bridge) GetInfo() (BridgeInfo, error) {
+func (bridge *Bridge) GetInfo() (error) {
     _, reader, err := bridge.Get("/description.xml")
     if err != nil {
-        return BridgeInfo{}, err
+        return err
     }
     data := BridgeInfo{}
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
-        return BridgeInfo{}, err
+        return err
     }
     bridge.Info = data
-    return data, nil
+    return nil
 }
 
 // Bridge.CreateUser posts to ./api on the bridge to create a new whitelisted user.
