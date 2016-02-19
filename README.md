@@ -8,9 +8,30 @@ go get github.com/collinux/gohue
 
 ## Usage
 ```
-import "github.com/collinux/gohue"
+package main
 
-EXAMPLES COMING SOON
+import (
+    "github.com/collinux/gohue"
+)
+
+func main() {
+    bridge, _ := hue.NewBridge("192.168.1.128")
+    bridge.Login("new_user")
+
+    lights, _ := bridge.GetAllLights()
+    for _, light := range lights {
+        light.On()
+        light.ColorLoop(true)
+    }
+
+    nightstandLight, _ := bridge.GetLightByName("Nightstand")
+    nightstandLight.Blink(5)
+    nightstandLight.SetName("Bedroom Lamp")
+
+    for _, light := range lights {
+        light.Off()
+    }
+}
 ```
 
 ## Features
