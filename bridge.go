@@ -72,14 +72,16 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 
     data, err := json.Marshal(params)
     if err != nil {
+        trace("", err)
         return []byte{}, nil, err
     }
     //fmt.Println("\n\nPARAMS: ", params)
-    log.Println("\nSending PUT body: ", string(data))
+    //log.Println("\nSending PUT body: ", string(data))
 
 	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
     resp, err := client.Do(request)
 	if err != nil {
+        trace("", err)
 		return []byte{}, nil, err
     }
     return HandleResponse(resp)
@@ -94,7 +96,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
         trace("", err)
         return []byte{}, nil, nil
     }
-    log.Println("\nSending POST body: ", string(request))
+    //log.Println("\nSending POST body: ", string(request))
 
     // Send the request and handle the response
     uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
@@ -116,6 +118,7 @@ func (bridge *Bridge) Delete(path string) error {
     }
     _, _, err = HandleResponse(resp)
     if err != nil {
+        trace("", err)
         return err
     }
     return nil
@@ -131,22 +134,22 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     reader := bytes.NewReader(body)
-    log.Println("Handled response:\n--------------------\n", string(body) +
-        "\n--------------------\n")
+    //log.Println("Handled response:\n------\n", string(body) + "\n------\n")
     if strings.Contains(string(body), "error") {
         return []byte{}, nil, errors.New(string(body))
     }
     return body, reader, nil
 }
 
-// Bridge.Error handles all bridge response status errors
-func (bridge *Bridge) Error(resp *http.Response, err error) (bool) {
+// Bridge.Error handles all bridge response status errors and
+// will return a boolean to notify functions to proceed or not.
+func (bridge *Bridge) Error(resp *http.Response, err error) bool {
     if err != nil {
         trace("", err)
         return true
     } else if resp.StatusCode != 200 {
         // TODO: handle other status codes
-        log.Println(fmt.Sprintf("Bridge status error: %d", resp.StatusCode))
+        //log.Println(fmt.Sprintf("Bridge status error: %d", resp.StatusCode))
         return true
     }
     return false

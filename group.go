@@ -40,14 +40,14 @@ func (bridge *Bridge) GetGroups() ([]Group, error) {
         return []Group{}, err
     }
 
-    fmt.Println("GROUP GET: ", string(body))
+    //fmt.Println("GROUP GET: ", string(body))
 
     groups := map[string]Group{}
     err = json.Unmarshal(body, &groups)
     if err != nil {
         return []Group{}, err
     }
-    fmt.Println("GROUPS: ", groups)
+    //fmt.Println("GROUPS: ", groups)
 
     return []Group{}, nil
 }

@@ -9,19 +9,20 @@ package hue
 
 import (
     "testing"
-    "fmt"
+    //"fmt"
 )
 
 func TestGetAllScenes(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128")
     bridge.Login("427de8bd6d49f149c8398e4fc08f")
     scenes, _ := bridge.GetAllScenes()
-    for scene := range scenes {
-        fmt.Println("SCENE: ", scenes[scene])
-    }
+    // for scene := range scenes {
+    //     fmt.Println("SCENE: ", scenes[scene])
+    // }
 
     individual, _ := bridge.GetScene(scenes[0].ID)
-    fmt.Println("Individual scene: ", individual)
+    _ = individual
+    //fmt.Println("Individual scene: ", individual)
 }
 
 func TestCreateScene(t *testing.T) {
