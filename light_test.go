@@ -19,7 +19,7 @@ func TestSetLightState(t *testing.T) {
     bridge.Login("427de8bd6d49f149c8398e4fc08f")
     nameTest, _ := bridge.GetLightByName("Desk Light")  // Also tests GetAllLights
     _ = nameTest
-    selectedLight, _ := GetLightByIndex(bridge, 7)
+    selectedLight, _ := bridge.GetLightByIndex(7)
 
     selectedLight.On()
     time.Sleep(time.Second)

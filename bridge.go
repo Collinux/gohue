@@ -217,6 +217,57 @@ func (bridge *Bridge) DeleteUser(username string) error {
     return nil
 }
 
+// GetAllLights retreives the state of all lights that the bridge is aware of.
+func (bridge *Bridge) GetAllLights() ([]Light, error) {
+    // Loop through all light indicies to see if they exist
+    // and parse their values. Supports 100 lights.
+    var lights []Light
+    for index := 1; index < 101; index++ {
+        light, err := bridge.GetLightByIndex(index)
+        if err != nil {
+            break
+        }
+        lights = append(lights, light)
+    }
+    return lights, nil
+}
+
+// GetLightByIndex returns a light struct containing data on
+// a light given its index stored on the bridge. This is used for
+// quickly updating an individual light.
+func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
+    // Send an http GET and inspect the response
+    uri := fmt.Sprintf("/api/%s/lights/%d", bridge.Username, index)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return Light{}, err
+    }
+    if strings.Contains(string(body), "not available") {
+        return Light{}, errors.New("Index Error")
+    }
+
+    // Parse and load the response into the light array
+    light := Light{}
+    err = json.Unmarshal(body, &light)
+    if err != nil {
+        trace("", err)
+    }
+    light.Index = index
+    light.Bridge = bridge
+    return light, nil
+}
+
+// GetLight returns a light struct containing data on a given name.
+func (bridge *Bridge) GetLightByName(name string) (Light, error) {
+    lights, _ := bridge.GetAllLights()
+    for _, light := range lights {
+        if light.Name == name {
+            return light, nil
+        }
+    }
+    return Light{}, errors.New("Light not found.")
+}
+
 // Log the date, time, file location, line number, and function.
 // Message can be "" or Err can be nil (not both)
 func trace(message string, err error) {
