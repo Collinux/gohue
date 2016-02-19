@@ -1,14 +1,17 @@
 # GoHue
 Package hue interfaces Philips Hue devices to control lights, scenes, schedules, and groups.
 
-## License
-Copyright (C) 2016 Collin Guarino (Collinux)  
-GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
-GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
+## Installation
+```
+go get github.com/collinux/gohue
+```
 
-## Contributing  
-Pull requests happily accepted on GitHub
+## Usage
+```
+import "github.com/collinux/gohue"
 
+EXAMPLES COMING SOON
+```
 
 ## Features
 ##### Lights
@@ -76,3 +79,11 @@ Pull requests happily accepted on GitHub
 
 ## API Documentation
 For official Philips Hue documentation check out the [Philips website](http://www.developers.meethue.com/philips-hue-api)
+
+## License
+Copyright (C) 2016 Collin Guarino (Collinux)  
+GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
+GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
+
+## Contributing  
+Pull requests happily accepted on GitHub
