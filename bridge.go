@@ -88,6 +88,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
     // Add the params to the request
     request, err := json.Marshal(params)
     if err != nil {
+        panic(err)
         trace("", err)
         return []byte{}, nil, nil
     }
@@ -97,7 +98,8 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
     uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
     resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
     if bridge.Error(resp, err) {
-        return []byte{}, nil, nil
+        panic(err)
+        return []byte{}, nil, err
     }
     return HandleResponse(resp)
 }
@@ -129,9 +131,16 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     reader := bytes.NewReader(body)
-    //log.Println("Handled response:\n------\n", string(body) + "\n------\n")
     if strings.Contains(string(body), "error") {
-        return []byte{}, nil, errors.New(string(body))
+        errString := string(body)
+        errNum := errString[strings.Index(errString, "type\":")+6 :
+            strings.Index(errString, ",\"address")]
+        errDesc := errString[strings.Index(errString, "description\":\"")+14 :
+            strings.Index(errString, "\"}}")]
+        errOut := fmt.Sprintf("Error type %s: %s.", errNum, errDesc)
+        err = errors.New(errOut)
+        log.Println(err)
+        return []byte{}, nil, err
     }
     return body, reader, nil
 }

@@ -10,7 +10,7 @@ package hue
 import (
     "testing"
     //"fmt"
-    //"time"
+    "time"
 )
 
 func TestSetLightState(t *testing.T) {
