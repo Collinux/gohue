@@ -28,6 +28,10 @@ func main() {
     nightstandLight.Blink(5)
     nightstandLight.SetName("Bedroom Lamp")
 
+    lights[0].SetColor(hue.RED)
+    lights[1].SetColor(hue.BLUE)
+    lights[2].SetColor(hue.GREEN)
+
     for _, light := range lights {
         light.Off()
     }
