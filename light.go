@@ -17,15 +17,15 @@ import (
 // Light struct defines attributes of a light.
 type Light struct {
     State struct {
-        On          bool       `json:"on"`     // On or Off state of the light ("true" or "false")
-        Bri         int        `json:"bri"`    // Brightness value 1-254
-        Hue         int        `json:"hue"`    // Hue value 1-65535
-        Saturation  int        `json:"sat"`    // Saturation value 0-254
-        Effect      string     `json:"effect"` // "None" or "Colorloop"
-        XY          [2]float32 `json:"xy"`     // Coordinates of color in CIE color space
-        CT          int        `json:"ct"`     // Mired Color Temperature (google it)
-        Alert       string     `json:"alert"`
-        ColorMode   string     `json:"colormode"`
+        On          bool       `json:"on"`        // On or Off state of the light ("true" or "false")
+        Bri         int        `json:"bri"`       // Brightness value 1-254
+        Hue         int        `json:"hue"`       // Hue value 1-65535
+        Saturation  int        `json:"sat"`       // Saturation value 0-254
+        Effect      string     `json:"effect"`    // "None" or "Colorloop"
+        XY          [2]float32 `json:"xy"`        // Coordinates of color in CIE color space
+        CT          int        `json:"ct"`        // Mired Color Temperature (google it)
+        Alert       string     `json:"alert"`     // "selected" or "none"
+        ColorMode   string     `json:"colormode"` // HS or XY mode for choosing color
         Reachable   bool       `json:"reachable"`
     } `json:"state"`
     Type             string    `json:"type"`
@@ -34,8 +34,8 @@ type Light struct {
     ManufacturerName string    `json:"manufacturername"`
     UniqueID         string    `json:"uniqueid"`
     SWVersion        string    `json:"swversion"`
-    Index            int        // Set by index of light array response // TODO: change to smaller int
-    Bridge          *Bridge
+    Index            int        // Set by index of light array response
+    Bridge          *Bridge     // Set by the bridge when the light is found
 }
 
 // LightState used in Light.SetState to amend light attributes.
