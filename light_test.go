@@ -33,5 +33,23 @@ func TestSetLightState(t *testing.T) {
 
     selectedLight.Blink(3)
 
+    // selectedLight.SetColor(RED)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(YELLOW)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(ORANGE)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(GREEN)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(CYAN)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(BLUE)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(PURPLE)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(PINK)
+    // time.Sleep(time.Second)
+    // selectedLight.SetColor(WHITE)
+
     // _ := selectedLight.Delete()
 }

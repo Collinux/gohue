@@ -148,6 +148,30 @@ func (light *Light) ColorLoop(activate bool) error {
     return light.SetState(LightState{On: true, Effect: state})
 }
 
+// XY HSL colors used in `Light.SetColor`
+var (
+    RED    = &[2]float32{0.6915, 0.3083}
+    YELLOW = &[2]float32{0.4023, 0.4725}
+    ORANGE = &[2]float32{0.4693, 0.4007}
+    GREEN  = &[2]float32{0.1700, 0.7000}
+    CYAN   = &[2]float32{0.1610, 0.3549}
+    BLUE   = &[2]float32{0.1530, 0.0480}
+    PURPLE = &[2]float32{0.2363, 0.1154}
+    PINK   = &[2]float32{0.3645, 0.1500}
+    WHITE  = &[2]float32{0.3227, 0.3290}
+)
+
+// Light.SetColor requires a selection from the above light
+// color variable section and sets the light to that XY HSL color
+func (light *Light) SetColor(color *[2]float32) error {
+    lightState := LightState{On: true, XY: color}
+    err := light.SetState(lightState)
+    if err != nil {
+        return err
+    }
+    return nil
+}
+
 // Light.SetState modifyies light attributes. See `LightState` struct for attributes.
 // Brightness must be between 1 and 254 (inclusive)
 // Hue must be between 0 and 65535 (inclusive)
