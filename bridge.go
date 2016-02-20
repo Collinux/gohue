@@ -53,7 +53,9 @@ type BridgeInfo struct {
 // bridge.Get sends an http GET to the bridge
 func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
     resp, err := http.Get("http://" + bridge.IPAddress + path)
-    if bridge.Error(resp, err) {
+    if err != nil {
+        err = errors.New("Unable to access bridge.")
+        log.Println(err)
         return []byte{}, nil, err
     }
     return HandleResponse(resp)
@@ -67,7 +69,8 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 
     data, err := json.Marshal(params)
     if err != nil {
-        trace("", err)
+        err = errors.New("Error: Unable marshal PUT request interface.")
+        log.Println(err)
         return []byte{}, nil, err
     }
     //fmt.Println("\n\nPARAMS: ", params)
@@ -75,9 +78,10 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 
 	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
     resp, err := client.Do(request)
-	if err != nil {
-        trace("", err)
-		return []byte{}, nil, err
+    if err != nil {
+        err = errors.New("Error: Unable to access bridge.")
+        log.Println(err)
+        return []byte{}, nil, err
     }
     return HandleResponse(resp)
 }
@@ -88,17 +92,17 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
     // Add the params to the request
     request, err := json.Marshal(params)
     if err != nil {
-        panic(err)
-        trace("", err)
-        return []byte{}, nil, nil
+        err = errors.New("Error: Unable to marshal request from bridge http POST")
+        log.Println(err)
+        return []byte{}, nil, err
     }
-    //log.Println("\nSending POST body: ", string(request))
 
     // Send the request and handle the response
     uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
     resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
-    if bridge.Error(resp, err) {
-        panic(err)
+    if err != nil {
+        err = errors.New("Error: Unable to access bridge.")
+        log.Println(err)
         return []byte{}, nil, err
     }
     return HandleResponse(resp)
@@ -111,14 +115,12 @@ func (bridge *Bridge) Delete(path string) error {
     req, err := http.NewRequest("DELETE", uri, nil)
     resp, err := client.Do(req)
     if err != nil {
+        err = errors.New("Error: Unable to access bridge.")
+        log.Println(err)
         return err
     }
     _, _, err = HandleResponse(resp)
-    if err != nil {
-        trace("", err)
-        return err
-    }
-    return nil
+    return err
 }
 
 // HandleResponse manages the http.Response content from a
@@ -143,20 +145,6 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     return body, reader, nil
-}
-
-// Bridge.Error handles all bridge response status errors and
-// will return a boolean to notify functions to proceed or not.
-func (bridge *Bridge) Error(resp *http.Response, err error) bool {
-    if err != nil {
-        trace("", err)
-        return true
-    } else if resp.StatusCode != 200 {
-        // TODO: handle other status codes
-        //log.Println(fmt.Sprintf("Bridge status error: %d", resp.StatusCode))
-        return true
-    }
-    return false
 }
 
 // NewBridge defines hardware that is compatible with Hue.
@@ -191,6 +179,8 @@ func (bridge *Bridge) GetInfo() error {
     data := BridgeInfo{}
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
+        err = errors.New("Error: Unable to decode XML response from bridge.")
+        log.Println(err)
         return err
     }
     bridge.Info = data
@@ -249,7 +239,7 @@ func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
         return Light{}, err
     }
     if strings.Contains(string(body), "not available") {
-        return Light{}, errors.New("Index Error")
+        return Light{}, errors.New("Error: Light selection index out of bounds")
     }
 
     // Parse and load the response into the light array
@@ -271,7 +261,8 @@ func (bridge *Bridge) GetLightByName(name string) (Light, error) {
             return light, nil
         }
     }
-    return Light{}, errors.New("Light not found.")
+    errOut := fmt.Sprintf("Error: Light name '%s' not found.", name)
+    return Light{}, errors.New(errOut)
 }
 
 // Log the date, time, file location, line number, and function.
