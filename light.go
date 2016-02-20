@@ -11,6 +11,7 @@ package hue
 import (
     "fmt"
     "time"
+    "errors"
 )
 
 // Light struct defines attributes of a light.
@@ -170,6 +171,24 @@ func (light *Light) SetColor(color *[2]float32) error {
         return err
     }
     return nil
+}
+
+// Light.Dim will lower the brightness by a percent.
+// Note the required value is an integer, for example "20" is converted to 20%.
+func (light *Light) Dim(percent int) error {
+    if percent > 0 && percent <= 100 {
+        originalBri := light.State.Bri
+        decreaseBri := float32(originalBri)*float32((float32(percent)/100.0))
+        newBri := (originalBri-int(decreaseBri))
+        lightState := LightState{On: true, Bri: uint8(newBri)}
+        err := light.SetState(lightState)
+        if err != nil {
+            return err
+        }
+        return nil
+    } else {
+        return errors.New("Light.Dim percentage given is not between 1 and 100")
+    }
 }
 
 // Light.SetState modifyies light attributes. See `LightState` struct for attributes.
