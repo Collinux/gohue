@@ -221,9 +221,14 @@ func (bridge *Bridge) GetAllLights() ([]Light, error) {
     for index := 1; index < 101; index++ {
         light, err := bridge.GetLightByIndex(index)
         if err != nil {
-            break
+            break  // Final light index reached, index does not exist.
         }
         lights = append(lights, light)
+    }
+    if len(lights) == 0 {
+        err := errors.New("Error: No lights found by GetAllLights.")
+        log.Println(err)
+        return lights, err
     }
     return lights, nil
 }
