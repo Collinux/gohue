@@ -181,11 +181,11 @@ func (bridge *Bridge) GetInfo() error {
 // will create the username key if it does not exist.
 func (bridge *Bridge) Login(username string) error {
     bridge.Username = username
-    err := bridge.CreateUser(username)
-    if err != nil {
-        log.Fatal("Error: Unable to login as user ", username, " ", err)
-        return err
-    }
+    // err := bridge.CreateUser(username)
+    // if err != nil {
+    //     log.Fatal("Error: Unable to login as user ", username, " ", err)
+    //     return err
+    // }
     return nil
 }
 
