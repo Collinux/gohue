@@ -154,20 +154,10 @@ func NewBridge(ip string) (*Bridge, error) {
     }
     err := bridge.GetInfo()
     if err != nil {
+        log.Fatal("Error: Unable to access bridge. ", err)
         return &Bridge{}, err
     }
     return &bridge, nil
-}
-
-// Bridge.Login assigns a username to access the bridge with and
-// will create the username key if it does not exist.
-func (bridge *Bridge) Login(username string) error {
-    bridge.Username = username
-    err := bridge.CreateUser(username)
-    if err != nil {
-        return err
-    }
-    return nil
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
@@ -187,11 +177,24 @@ func (bridge *Bridge) GetInfo() error {
     return nil
 }
 
+// Bridge.Login assigns a username to access the bridge with and
+// will create the username key if it does not exist.
+func (bridge *Bridge) Login(username string) error {
+    bridge.Username = username
+    err := bridge.CreateUser(username)
+    if err != nil {
+        log.Fatal("Error: Unable to login as user ", username, " ", err)
+        return err
+    }
+    return nil
+}
+
 // Bridge.CreateUser posts to ./api on the bridge to create a new whitelisted user.
 func (bridge *Bridge) CreateUser(deviceType string) error {
     params := map[string]string{"devicetype": deviceType}
     body, _, err := bridge.Post("/api", params)
     if err != nil {
+        log.Fatal("Error: Unable to create user. ", err)
         return err
     }
     content := string(body)
