@@ -221,7 +221,7 @@ func (bridge *Bridge) GetAllLights() ([]Light, error) {
     // Loop through all light indicies to see if they exist
     // and parse their values. Supports 100 lights.
     var lights []Light
-    for index := 1; index < 101; index++ {
+    for index := 0; index < 101; index++ {
         light, err := bridge.GetLightByIndex(index)
         if err != nil {
             break  // Final light index reached, index does not exist.
