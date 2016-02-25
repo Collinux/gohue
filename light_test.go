@@ -21,6 +21,7 @@ func TestSetLightState(t *testing.T) {
     selectedLight, _ := bridge.GetLightByIndex(7)
 
     selectedLight.On()
+    selectedLight.SetBrightness(100)
     time.Sleep(time.Second)
     selectedLight.Off()
     time.Sleep(time.Second)

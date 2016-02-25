@@ -173,7 +173,7 @@ func (light *Light) SetColor(color *[2]float32) error {
     return nil
 }
 
-// Light.Dim will lower the brightness by a percent.
+// Light.Dim lowers the brightness by a percent.
 // Note the required value is an integer, for example "20" is converted to 20%.
 func (light *Light) Dim(percent int) error {
     if percent > 0 && percent <= 100 {
@@ -187,7 +187,20 @@ func (light *Light) Dim(percent int) error {
         }
         return nil
     } else {
-        return errors.New("Light.Dim percentage given is not between 1 and 100")
+        return errors.New("Light.Dim percentage given is not between 1 and 100. ")
+    }
+}
+
+// Light.SetBrightness sets the brightness to a percentage of the maximum
+// maximum brightness as an integer (`LightStruct.Bri between 1 and 254 inclusive`)
+func (light *Light) SetBrightness(percent int) error {
+    if percent > 0 && percent <= 100 {
+        brightness := uint8(float32(percent)*2.54)  // 100=254x --> 2.54
+        lightState := LightState{On: true, Bri: brightness}
+        light.SetState(lightState)
+        return nil
+    } else {
+        return errors.New("Light.SetBrightness percentage is not between 1 and 100. ")
     }
 }
 
