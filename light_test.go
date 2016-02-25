@@ -9,8 +9,8 @@ package hue
 
 import (
     "testing"
-    "fmt"
-    //"time"
+    //"fmt"
+    "time"
 )
 
 func TestSetLightState(t *testing.T) {
@@ -35,6 +35,7 @@ func TestSetLightState(t *testing.T) {
     selectedLight.Blink(3)
 
     selectedLight.Dim(20)
+    selectedLight.Brighten(20)
 
     // selectedLight.SetColor(RED)
     // time.Sleep(time.Second)

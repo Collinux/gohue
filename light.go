@@ -19,7 +19,7 @@ import (
 type Light struct {
     State struct {
         On          bool       `json:"on"`        // On or Off state of the light ("true" or "false")
-        Bri         int        `json:"bri"`       // Brightness value 1-254
+        Bri         uint8      `json:"bri"`       // Brightness value 1-254
         Hue         int        `json:"hue"`       // Hue value 1-65535
         Saturation  int        `json:"sat"`       // Saturation value 0-254
         Effect      string     `json:"effect"`    // "None" or "Colorloop"
@@ -109,23 +109,24 @@ func (light *Light) Delete() error {
 func (light *Light) Blink(seconds int) error {
     originalPosition := light.State.On
     originalBrightness := light.State.Bri
-    blinkMax := LightState{On: true, Bri: uint8(200)}
-    blinkMin := LightState{On: true, Bri: uint8(50)}
+    blinkMax := 75  // Percent brightness
+    blinkMin := 25  // Percent brightness
 
     // Start with near maximum brightness and toggle between that and
     // a lesser brightness to create a blinking effect.
-    err := light.SetState(blinkMax)
-    if err != nil {
-        return err
-    }
     for i := 0; i <= seconds*2; i++ {
-        if i % 2 == 0 {
-            err = light.SetState(blinkMax)
+        if i == 0 {
+            err := light.SetBrightness(blinkMax)
+            if err != nil {
+                return err
+            }
+        } else if i % 2 == 0 {
+            err := light.SetBrightness(blinkMax)
             if err != nil {
                 return err
             }
         } else {
-            err = light.SetState(blinkMin)
+            err := light.SetBrightness(blinkMin)
             if err != nil {
                 return err
             }
@@ -135,7 +136,7 @@ func (light *Light) Blink(seconds int) error {
 
     // Return the light to its original on or off state and brightness
     if light.State.Bri != originalBrightness || light.State.On != originalPosition {
-        light.SetState(LightState{On: originalPosition, Bri: uint8(originalBrightness)})
+        light.SetState(LightState{On: originalPosition, Bri: originalBrightness})
     }
     return nil
 }
@@ -180,7 +181,7 @@ func (light *Light) Dim(percent int) error {
     if percent > 0 && percent <= 100 {
         originalBri := light.State.Bri
         decreaseBri := float32(originalBri)*float32((float32(percent)/100.0))
-        newBri := uint8(originalBri-int(decreaseBri))
+        newBri := uint8(originalBri-uint8(decreaseBri))
         if newBri < 0 {
             newBri = 0
             log.Println("Light.Dim state set under 0%, setting brightness to 0. ")
@@ -218,7 +219,7 @@ func (light *Light) Brighten(percent int) error {
     if percent > 0 && percent <= 100 {
         originalBri := light.State.Bri
         increaseBri := float32(originalBri)*float32((float32(percent)/100.0))
-        newBri := uint8(originalBri+int(increaseBri))
+        newBri := uint8(originalBri+uint8(increaseBri))
         if newBri > 254 {  // LightState.Bri must be between 1 and 254 inclusive
             newBri = 254
             log.Println("Light.Brighten state set over 100%, setting brightness to 100%. ")
