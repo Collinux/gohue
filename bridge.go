@@ -149,10 +149,14 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 }
 
 // NewBridge defines hardware that is compatible with Hue.
+// The function is the core of all functionality, it's necessary
+// to call `NewBridge` and `Login` or `CreateUser` to access any
+// lights, scenes, groups, etc.
 func NewBridge(ip string) (*Bridge, error) {
     bridge := Bridge {
         IPAddress: ip,
     }
+    // Test the connection by attempting to get the bridge info.
     err := bridge.GetInfo()
     if err != nil {
         log.Fatal("Error: Unable to access bridge. ", err)
@@ -170,7 +174,7 @@ func (bridge *Bridge) GetInfo() error {
     data := BridgeInfo{}
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
-        err = errors.New("Error: Unable to decode XML response from bridge.")
+        err = errors.New("Error: Unable to decode XML response from bridge. ")
         log.Println(err)
         return err
     }
@@ -229,7 +233,7 @@ func (bridge *Bridge) GetAllLights() ([]Light, error) {
     lightMap := map[string]Light{}
     err = json.Unmarshal(body, &lightMap)
     if err != nil {
-        return []Light{}, errors.New("Unable to marshal GetAllLights response.")
+        return []Light{}, errors.New("Unable to marshal GetAllLights response. ")
     }
 
     // Parse the index, add the light to the list, and return the array
@@ -256,7 +260,7 @@ func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
         return Light{}, err
     }
     if strings.Contains(string(body), "not available") {
-        return Light{}, errors.New("Error: Light selection index out of bounds")
+        return Light{}, errors.New("Error: Light selection index out of bounds. ")
     }
 
     // Parse and load the response into the light array
@@ -278,7 +282,7 @@ func (bridge *Bridge) GetLightByName(name string) (Light, error) {
             return light, nil
         }
     }
-    errOut := fmt.Sprintf("Error: Light name '%s' not found.", name)
+    errOut := fmt.Sprintf("Error: Light name '%s' not found. ", name)
     return Light{}, errors.New(errOut)
 }
 
