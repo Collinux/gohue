@@ -106,7 +106,7 @@ func main() {
 - [ ] Delete rule
 
 ## API Documentation
-For official Philips Hue documentation check out the [Philips website](http://www.developers.meethue.com/philips-hue-api)
+For official Philips Hue documentation check out the [Philips Hue website](http://www.developers.meethue.com/philips-hue-api)
 
 ## License
 Copyright (C) 2016 Collin Guarino (Collinux)  
