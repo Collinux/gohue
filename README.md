@@ -21,6 +21,7 @@ func main() {
     lights, _ := bridge.GetAllLights()
     for _, light := range lights {
         light.On()
+        light.SetBrightness(100)
         light.ColorLoop(true)
     }
 
