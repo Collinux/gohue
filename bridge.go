@@ -239,6 +239,7 @@ func (bridge *Bridge) GetAllLights() ([]Light, error) {
         if err != nil {
             return []Light{}, errors.New("Unable to convert light index to integer. ")
         }
+        light.Bridge = bridge
         lights = append(lights, light)
     }
     return lights, nil
