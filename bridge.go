@@ -23,6 +23,7 @@ import (
     "bytes"
     "io"
     "errors"
+    "strconv"
 )
 
 // Bridge struct defines hardware that is used to communicate with the lights.
@@ -218,20 +219,27 @@ func (bridge *Bridge) DeleteUser(username string) error {
 
 // GetAllLights retreives the state of all lights that the bridge is aware of.
 func (bridge *Bridge) GetAllLights() ([]Light, error) {
-    // Loop through all light indicies to see if they exist
-    // and parse their values. Supports 100 lights.
-    var lights []Light
-    for index := 1; index < 101; index++ {
-        light, err := bridge.GetLightByIndex(index)
+    uri := fmt.Sprintf("/api/%s/lights", bridge.Username)
+    body, _, err := bridge.Get(uri)
+    if err != nil {
+        return []Light{}, err
+    }
+
+    // An index is at the top of every Light in the array
+    lightMap := map[string]Light{}
+    err = json.Unmarshal(body, &lightMap)
+    if err != nil {
+        return []Light{}, errors.New("Unable to marshal GetAllLights response.")
+    }
+
+    // Parse the index, add the light to the list, and return the array
+    lights := []Light{}
+    for index, light := range lightMap {
+        light.Index, err = strconv.Atoi(index)
         if err != nil {
-            break  // Final light index reached, index does not exist.
+            return []Light{}, errors.New("Unable to convert light index to integer. ")
         }
         lights = append(lights, light)
-    }
-    if len(lights) == 0 {
-        err := errors.New("Error: No lights found by GetAllLights.")
-        log.Println(err)
-        return lights, err
     }
     return lights, nil
 }
