@@ -12,6 +12,7 @@ import (
     "fmt"
     "time"
     "errors"
+    "log"
 )
 
 // Light struct defines attributes of a light.
@@ -201,6 +202,28 @@ func (light *Light) SetBrightness(percent int) error {
         return nil
     } else {
         return errors.New("Light.SetBrightness percentage is not between 1 and 100. ")
+    }
+}
+
+
+// Light.Brighten will increase LightStruct.Bri by a given percent (integer)
+func (light *Light) Brighten(percent int) error {
+    if percent > 0 && percent <= 100 {
+        originalBri := light.State.Bri
+        increaseBri := float32(originalBri)*float32((float32(percent)/100.0))
+        newBri := uint8(originalBri+int(increaseBri))
+        if newBri > 254 {  // LightState.Bri must be between 1 and 254 inclusive
+            newBri = 254
+            log.Println("Light.Brighten state set over 100%, setting brightness to 100%. ")
+        }
+        lightState := LightState{On: true, Bri: newBri}
+        err := light.SetState(lightState)
+        if err != nil  {
+            return err
+        }
+        return nil
+    } else {
+        return errors.New("Light.Brighten percentage is not between 1 and 100. ")
     }
 }
 
