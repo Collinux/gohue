@@ -180,8 +180,12 @@ func (light *Light) Dim(percent int) error {
     if percent > 0 && percent <= 100 {
         originalBri := light.State.Bri
         decreaseBri := float32(originalBri)*float32((float32(percent)/100.0))
-        newBri := (originalBri-int(decreaseBri))
-        lightState := LightState{On: true, Bri: uint8(newBri)}
+        newBri := uint8(originalBri-int(decreaseBri))
+        if newBri < 0 {
+            newBri = 0
+            log.Println("Light.Dim state set under 0%, setting brightness to 0. ")
+        }
+        lightState := LightState{On: true, Bri: newBri}
         err := light.SetState(lightState)
         if err != nil {
             return err
@@ -198,7 +202,10 @@ func (light *Light) SetBrightness(percent int) error {
     if percent > 0 && percent <= 100 {
         brightness := uint8(float32(percent)*2.54)  // 100=254x --> 2.54
         lightState := LightState{On: true, Bri: brightness}
-        light.SetState(lightState)
+        err := light.SetState(lightState)
+        if err != nil  {
+            return err
+        }
         return nil
     } else {
         return errors.New("Light.SetBrightness percentage is not between 1 and 100. ")
