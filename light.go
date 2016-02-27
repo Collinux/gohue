@@ -151,7 +151,8 @@ func (light *Light) ColorLoop(activate bool) error {
     return light.SetState(LightState{On: true, Effect: state})
 }
 
-// XY HSL colors used in `Light.SetColor`
+// XY positions on the HSL color spectrum used in `Light.SetColor`
+// https://en.wikipedia.org/wiki/HSL_and_HSV
 var (
     RED    = &[2]float32{0.6915, 0.3083}
     YELLOW = &[2]float32{0.4023, 0.4725}
