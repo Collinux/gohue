@@ -14,7 +14,8 @@ import (
 
 func TestCreateUser(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128")
-    bridge.CreateUser("test")
+    username, _ := bridge.CreateUser("test")
+    bridge.Login(username)
     //bridge.DeleteUser(bridge.Username)
 }
 

@@ -221,19 +221,27 @@ func (bridge *Bridge) Login(username string) error {
     return nil
 }
 
-// Bridge.CreateUser posts to ./api on the bridge to create a new whitelisted user.
-func (bridge *Bridge) CreateUser(deviceType string) error {
+// Bridge.CreateUser adds a new user token on the whitelist.
+// The token is the first return value in this function which must
+// be used with `Bridge.Login`. You cannot use a plaintext username
+// like the argument provided in this function.
+// This was done by Philips Hue for security reasons.
+func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
     params := map[string]string{"devicetype": deviceType}
     body, _, err := bridge.Post("/api", params)
     if err != nil {
-        log.Fatal("Error: Unable to create user. ", err)
-        return err
+        log.Fatal("Error: Failed to create user. ", err)
+        return "", err
     }
     content := string(body)
     username := content[strings.LastIndex(content, ":\"")+2 :
         strings.LastIndex(content, "\"")]
+    userOut := fmt.Sprintf(
+        "Created user token '%s'. Use Bridge.Login with this token from now on.",
+         username)
+    log.Println(userOut)
     bridge.Username = username
-    return nil
+    return username, nil
 }
 
 // Bridge.DeleteUser deletes a user given its USER KEY, not the string name.
