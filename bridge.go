@@ -53,9 +53,10 @@ type BridgeInfo struct {
 
 // bridge.Get sends an http GET to the bridge
 func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
-    resp, err := http.Get("http://" + bridge.IPAddress + path)
+    uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
+    resp, err := http.Get(uri)
     if err != nil {
-        err = errors.New("Unable to access bridge.")
+        err = errors.New("Error: Unable to access bridge. ")
         log.Println(err)
         return []byte{}, nil, err
     }
@@ -134,7 +135,7 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
         return []byte{}, nil, err
     }
     reader := bytes.NewReader(body)
-    if strings.Contains(string(body), "error") {
+    if strings.Contains(string(body), "\"error\"") {
         errString := string(body)
         errNum := errString[strings.Index(errString, "type\":")+6 :
             strings.Index(errString, ",\"address")]
@@ -155,7 +156,7 @@ func FindBridge() (Bridge, error) {
     bridge := Bridge { IPAddress: "www.meethue.com" }
     body, _, err := bridge.Get("/api/nupnp")
     if err != nil {
-        err = errors.New("Unable to locate bridge.")
+        err = errors.New("Error: Unable to locate bridge.")
         log.Fatal(err)
         return Bridge{}, err
     }
@@ -207,15 +208,16 @@ func (bridge *Bridge) GetInfo() error {
     return nil
 }
 
-// Bridge.Login assigns a username to access the bridge with and
-// will create the username key if it does not exist.
+// Bridge.Login verifies that the username token has bridge access
+// and only assigns the bridge its Username value if verification is successful.
 func (bridge *Bridge) Login(username string) error {
+    uri := fmt.Sprintf("/api/%s", username)
+    _, _, err := bridge.Get(uri)
+    if err != nil {
+        log.Fatal(err)
+        return err
+    }
     bridge.Username = username
-    // err := bridge.CreateUser(username)
-    // if err != nil {
-    //     log.Fatal("Error: Unable to login as user ", username, " ", err)
-    //     return err
-    // }
     return nil
 }
 
@@ -292,7 +294,7 @@ func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
     light := Light{}
     err = json.Unmarshal(body, &light)
     if err != nil {
-        trace("", err)
+        return Light{}, errors.New("Error: Unable to unmarshal light data. ")
     }
     light.Index = index
     light.Bridge = bridge

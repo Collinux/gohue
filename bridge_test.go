@@ -22,3 +22,12 @@ func TestFindBridge(t *testing.T) {
     bridge, _ := FindBridge()
     fmt.Println(bridge.IPAddress)
 }
+
+func TestBridgeLogin(t *testing.T) {
+    bridge, err := FindBridge()
+    if err != nil {
+        fmt.Println("Error on TestBridgeLogin")
+    }
+    bridge.Login("427de8bd6d49f149c8398e4fc08f")
+
+}
