@@ -9,10 +9,16 @@ package hue
 
 import (
     "testing"
+    "fmt"
 )
 
 func TestCreateUser(t *testing.T) {
     bridge, _ := NewBridge("192.168.1.128")
     bridge.CreateUser("test")
     //bridge.DeleteUser(bridge.Username)
+}
+
+func TestFindBridge(t *testing.T) {
+    bridge, _ := FindBridge()
+    fmt.Println(bridge.IPAddress)
 }

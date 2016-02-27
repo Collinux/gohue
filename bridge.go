@@ -148,6 +148,28 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
     return body, reader, nil
 }
 
+// FindBridge will visit www.meethue.com/api/nupnp to see if a bridge
+// is available on the local network. This feature currently only supports one
+// bridge on the network.
+func FindBridge() (Bridge, error) {
+    bridge := Bridge { IPAddress: "www.meethue.com" }
+    body, _, err := bridge.Get("/api/nupnp")
+    if err != nil {
+        err = errors.New("Unable to locate bridge.")
+        log.Fatal(err)
+        return Bridge{}, err
+    }
+    content := string(body)
+    ip := content[strings.LastIndex(content, ":\"")+2 :
+        strings.LastIndex(content, "\"}]")]
+    bridge.IPAddress = ip
+    err = bridge.GetInfo()
+    if err != nil {
+        return Bridge{}, err
+    }
+    return bridge, nil
+}
+
 // NewBridge defines hardware that is compatible with Hue.
 // The function is the core of all functionality, it's necessary
 // to call `NewBridge` and `Login` or `CreateUser` to access any
@@ -166,6 +188,9 @@ func NewBridge(ip string) (*Bridge, error) {
 }
 
 // GetBridgeInfo retreives the description.xml file from the bridge.
+// This is used as a check to see if the bridge is accessible
+// and any error will be fatal as the bridge is required for nearly
+// all functions.
 func (bridge *Bridge) GetInfo() error {
     _, reader, err := bridge.Get("/description.xml")
     if err != nil {
@@ -175,7 +200,7 @@ func (bridge *Bridge) GetInfo() error {
     err = xml.NewDecoder(reader).Decode(&data)
     if err != nil {
         err = errors.New("Error: Unable to decode XML response from bridge. ")
-        log.Println(err)
+        log.Fatal(err)
         return err
     }
     bridge.Info = data
