@@ -17,8 +17,12 @@ import (
 )
 
 func main() {
-    bridge, _ := hue.NewBridge("192.168.1.128")
-    bridge.Login("new_user")
+    // It is recommended that you save the username from bridge.CreateUser
+    // so you don't have to press the link button every time and re-auth.
+    // When CreateUser is called it will print the generated user token.
+    bridge, _ := hue.FindBridge()
+    username, _ := bridge.CreateUser("someusernamehere")
+    bridge.Login(username)
 
     lights, _ := bridge.GetAllLights()
     for _, light := range lights {
