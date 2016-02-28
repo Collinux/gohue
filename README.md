@@ -65,7 +65,7 @@ func main() {
 - [ ] Modify configuration
 - [ ] Get full state (datastore)
 - [x] Search for bridges
-- [ ] Search for new lights
+- [x] Search for new lights
 - [ ] Get all timezones
 
 ##### Schedules
