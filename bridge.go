@@ -134,6 +134,7 @@ func (bridge *Bridge) Delete(path string) error {
 // and invalid return types.
 func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 	body, err := ioutil.ReadAll(resp.Body)
+    defer resp.Body.Close()
 	if err != nil {
 		trace("Error parsing bridge description xml.", nil)
 		return []byte{}, nil, err
