@@ -89,16 +89,20 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 }
 
 // bridge.Post sends an http POST to the bridge with
-// a body formatted with parameters (in a generic interface)
+// a body formatted with parameters (in a generic interface).
+// If `params` is nil then it will send an empty body with the post request.
 func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
-	// Add the params to the request
-	request, err := json.Marshal(params)
-	if err != nil {
-		err = errors.New("Error: Unable to marshal request from bridge http POST")
-		log.Println(err)
-		return []byte{}, nil, err
-	}
-
+    // Add the params to the request or allow an empty body
+    request := []byte{}
+    if params != nil {
+        reqBody, err := json.Marshal(params)
+        if err != nil {
+    		err = errors.New("Error: Unable to add POST body parameters due to json marshal error.")
+    		log.Println(err)
+    		return []byte{}, nil, err
+    	}
+        request = reqBody
+    }
 	// Send the request and handle the response
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
 	resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
@@ -107,7 +111,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 		log.Println(err)
 		return []byte{}, nil, err
 	}
-	return HandleResponse(resp)
+    return HandleResponse(resp)
 }
 
 // Bridge.Delete sends an http DELETE to the bridge
@@ -303,6 +307,26 @@ func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
 	light.Index = index
 	light.Bridge = bridge
 	return light, nil
+}
+
+// Bridge.FindNewLights makes the bridge search the zigbee spectrum for
+// lights in the area and will add them to the list of lights available.
+// If successful these new lights can be used by `Bridge.GetAllLights`
+//
+// Notes from Philips Hue API documentation:
+// The bridge will search for 1 minute and will add a maximum of 15 new
+// lights. To add further lights, the command needs to be sent again after
+// the search has completed. If a search is already active, it will be
+// aborted and a new search will start.
+// http://www.developers.meethue.com/documentation/lights-api#13_search_for_new_lights
+func (bridge *Bridge) FindNewLights() error {
+	uri := fmt.Sprintf("/api/%s/lights", bridge.Username)
+	_, _, err := bridge.Post(uri, nil)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 // GetLight returns a light struct containing data on a given name.

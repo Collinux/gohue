@@ -57,3 +57,9 @@ func TestSetLightState(t *testing.T) {
 
 	// _ := selectedLight.Delete()
 }
+
+func TestFindNewLights(t *testing.T) {
+    bridge, _ := NewBridge("192.168.1.128")
+	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+    bridge.FindNewLights()
+}
