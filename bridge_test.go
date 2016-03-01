@@ -19,16 +19,16 @@ func TestCreateUser(t *testing.T) {
 	//bridge.DeleteUser(bridge.Username)
 }
 
-func TestFindBridge(t *testing.T) {
-	bridge, _ := FindBridge()
-	fmt.Println(bridge.IPAddress)
+func TestFindBridges(t *testing.T) {
+	bridges, _ := FindBridges()
+	fmt.Println(bridges[0].IPAddress)
 }
 
 func TestBridgeLogin(t *testing.T) {
-	bridge, err := FindBridge()
+	bridges, err := FindBridges()
 	if err != nil {
 		fmt.Println("Error on TestBridgeLogin")
 	}
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	bridges[0].Login("427de8bd6d49f149c8398e4fc08f")
 
 }

@@ -28,7 +28,7 @@ import (
 
 // Bridge struct defines hardware that is used to communicate with the lights.
 type Bridge struct {
-	IPAddress string
+	IPAddress string `json:"internalipaddress"`
 	Username  string
 	Info      BridgeInfo
 }
@@ -155,22 +155,20 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 // FindBridge will visit www.meethue.com/api/nupnp to see if a bridge
 // is available on the local network. This feature currently only supports one
 // bridge on the network.
-func FindBridge() (Bridge, error) {
+func FindBridges() ([]Bridge, error) {
 	bridge := Bridge{IPAddress: "www.meethue.com"}
 	body, _, err := bridge.Get("/api/nupnp")
 	if err != nil {
 		err = errors.New("Error: Unable to locate bridge.")
 		log.Fatal(err)
-		return Bridge{}, err
+		return []Bridge{}, err
 	}
-	content := string(body)
-	ip := content[strings.LastIndex(content, ":\"")+2 : strings.LastIndex(content, "\"}]")]
-	bridge.IPAddress = ip
-	err = bridge.GetInfo()
-	if err != nil {
-		return Bridge{}, err
-	}
-	return bridge, nil
+    bridges := []Bridge{}
+    err = json.Unmarshal(body, &bridges)
+    if err != nil {
+        return []Bridge{}, errors.New("Unable to parse FindBridges response. ")
+    }
+	return bridges, nil
 }
 
 // NewBridge defines hardware that is compatible with Hue.
