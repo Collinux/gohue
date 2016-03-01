@@ -152,9 +152,8 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 	return body, reader, nil
 }
 
-// FindBridge will visit www.meethue.com/api/nupnp to see if a bridge
-// is available on the local network. This feature currently only supports one
-// bridge on the network.
+// FindBridges will visit www.meethue.com/api/nupnp to see a list of
+// bridges on the local network.
 func FindBridges() ([]Bridge, error) {
 	bridge := Bridge{IPAddress: "www.meethue.com"}
 	body, _, err := bridge.Get("/api/nupnp")

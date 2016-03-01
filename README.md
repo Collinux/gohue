@@ -20,7 +20,8 @@ func main() {
     // It is recommended that you save the username from bridge.CreateUser
     // so you don't have to press the link button every time and re-auth.
     // When CreateUser is called it will print the generated user token.
-    bridge, _ := hue.FindBridge()
+    bridgesOnNetwork, _ := hue.FindBridges()
+    bridge := bridgesOnNetwork[0]
     username, _ := bridge.CreateUser("someusernamehere")
     bridge.Login(username)
 
