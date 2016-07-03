@@ -110,6 +110,10 @@ func main() {
 - [ ] Update rule
 - [ ] Delete rule
 
+## See GoHue in action!
+##### Have a cool project you made using GoHue? Add yours here in a pull request!
+[HueBeat](https://github.com/Mobilpadde/HueBeat) by Mobilpadde - Light up a room in sync with your heartbeat.
+
 ## API Documentation
 For official Philips Hue documentation check out the [Philips Hue website](http://www.developers.meethue.com/philips-hue-api)
 
