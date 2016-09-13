@@ -13,19 +13,23 @@ import (
 	"fmt"
 )
 
+// Action struct defines the state of a group
+type Action struct {
+	Alert     string    `json:"alert,omitempty"`
+	Bri       int       `json:"bri,omitempty"`
+	Colormode string    `json:"colormode,omitempty"`
+	Ct        int       `json:"ct,omitempty"`
+	Effect    string    `json:"effect,omitempty"`
+	Hue       int       `json:"hue,omitempty"`
+	On        bool      `json:"on,omitempty"`
+	Sat       int       `json:"sat,omitempty"`
+	XY        []float64 `json:"xy,omitempty"`
+	Scene     string    `json:"scene,omitempty"`
+}
+
 // Group struct defines the attributes for a group of lights.
 type Group struct {
-	Action struct {
-		Alert     string    `json:"alert"`
-		Bri       int       `json:"bri"`
-		Colormode string    `json:"colormode"`
-		Ct        int       `json:"ct"`
-		Effect    string    `json:"effect"`
-		Hue       int       `json:"hue"`
-		On        bool      `json:"on"`
-		Sat       int       `json:"sat"`
-		XY        []float64 `json:"xy"`
-	} `json:"action"`
+	Action Action   `json:"action"`
 	Lights []string `json:"lights"`
 	Name   string   `json:"name"`
 	Type   string   `json:"type"`
@@ -50,4 +54,14 @@ func (bridge *Bridge) GetGroups() ([]Group, error) {
 	//fmt.Println("GROUPS: ", groups)
 
 	return []Group{}, nil
+}
+
+// Bridge.SetGroupState sends an action to group
+func (bridge *Bridge) SetGroupState(group int, action *Action) error {
+	uri := fmt.Sprintf("/api/%s/groups/%d/action", bridge.Username, group)
+	_, _, err := bridge.Put(uri, action)
+	if err != nil {
+		return err
+	}
+	return nil
 }
