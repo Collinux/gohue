@@ -88,6 +88,12 @@ func (bridge *Bridge) GetSceneByName(name string) (Scene, error) {
 	return Scene{}, errors.New(errOut)
 }
 
+// Bridge.RecallScene recalls a scene
+func (bridge *Bridge) RecallScene(id string) error {
+	action := &Action{Scene: id}
+	return bridge.SetGroupState(0, action)
+}
+
 // Bridge.CreateScene posts a new scene configuration to the bridge.
 func (bridge *Bridge) CreateScene(scene Scene) error {
 	uri := fmt.Sprintf("/api/%s/scenes/", bridge.Username)
