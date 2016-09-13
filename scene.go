@@ -10,6 +10,7 @@ package hue
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -69,6 +70,22 @@ func (bridge *Bridge) GetScene(id string) (Scene, error) {
 		return Scene{}, err
 	}
 	return scene, nil
+}
+
+// Bridge.GetSceneByName gets the attributes for the scene identified by a name
+func (bridge *Bridge) GetSceneByName(name string) (Scene, error) {
+
+	scenes, _ := bridge.GetAllScenes()
+
+	// Iterate in reverse, as later entries seem to be the newest
+	for i := len(scenes) - 1; i >= 0; i-- {
+		if scenes[i].Name == name {
+			return scenes[i], nil
+		}
+	}
+
+	errOut := fmt.Sprintf("Error: Scene name '%s' not found. ", name)
+	return Scene{}, errors.New(errOut)
 }
 
 // Bridge.CreateScene posts a new scene configuration to the bridge.
