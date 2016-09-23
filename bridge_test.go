@@ -8,26 +8,33 @@
 package hue
 
 import (
-	"fmt"
+	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestCreateUser(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	username, _ := bridge.CreateUser("test")
 	bridge.Login(username)
 	//bridge.DeleteUser(bridge.Username)
 }
 
 func TestFindBridges(t *testing.T) {
-	bridges, _ := FindBridges()
-	fmt.Println(bridges[0].IPAddress)
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(bridges)
 }
 
 func TestBridgeLogin(t *testing.T) {
-	bridges, err := FindBridges()
+	bridges, err := hue.FindBridges()
 	if err != nil {
-		fmt.Println("Error on TestBridgeLogin")
+		t.Fatal(err)
 	}
 	bridges[0].Login("427de8bd6d49f149c8398e4fc08f")
 
