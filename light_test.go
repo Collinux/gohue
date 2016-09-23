@@ -20,9 +20,15 @@ func TestSetLightState(t *testing.T) {
 	}
 	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	nameTest, _ := bridge.GetLightByName("Desk Light") // Also tests GetAllLights
+	nameTest, err := bridge.GetLightByName("Desk Light") // Also tests GetAllLights
+	if err != nil {
+		t.Fatal(err)
+	}
 	_ = nameTest
-	selectedLight, _ := bridge.GetLightByIndex(7)
+	selectedLight, err := bridge.GetLightByIndex(7)
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	selectedLight.On()
 	selectedLight.SetBrightness(100)
