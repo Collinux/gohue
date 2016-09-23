@@ -8,15 +8,20 @@
 package hue
 
 import (
-	"fmt"
+	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestGetGroups(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	groups, _ := bridge.GetGroups()
-	for group := range groups {
-		fmt.Println(groups[group])
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
 	}
+	bridge := bridges[0]
+	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	groups, err := bridge.GetGroups()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(groups)
 }

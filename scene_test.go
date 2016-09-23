@@ -8,26 +8,36 @@
 package hue
 
 import (
+	"github.com/collinux/GoHue"
 	"testing"
-	//"fmt"
 )
 
 func TestGetAllScenes(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	scenes, _ := bridge.GetAllScenes()
-	// for scene := range scenes {
-	//     fmt.Println("SCENE: ", scenes[scene])
-	// }
-
-	individual, _ := bridge.GetScene(scenes[0].ID)
-	_ = individual
-	//fmt.Println("Individual scene: ", individual)
+	scenes, err := bridge.GetAllScenes()
+	if err != nil {
+		t.Fatal(err)
+	}
+	_ = scenes
+	// t.Log(scenes)
 }
 
+// TODO not functional
 func TestCreateScene(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	scene := Scene{Lights: []string{"1", "2"}}
-	_ = bridge.CreateScene(scene)
+	scene := hue.Scene{Name: "Testing", Lights: []string{"1", "2"}}
+	err = bridge.CreateScene(scene)
+	if err != nil {
+		t.Fatal(err)
+	}
 }
