@@ -8,13 +8,17 @@
 package hue
 
 import (
+	"github.com/collinux/GoHue"
 	"testing"
-	//"fmt"
 	"time"
 )
 
 func TestSetLightState(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
 	nameTest, _ := bridge.GetLightByName("Desk Light") // Also tests GetAllLights
 	_ = nameTest
@@ -59,7 +63,14 @@ func TestSetLightState(t *testing.T) {
 }
 
 func TestFindNewLights(t *testing.T) {
-    bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-    bridge.FindNewLights()
+	err = bridge.FindNewLights()
+	if err != nil {
+		t.Fatal(err)
+	}
 }

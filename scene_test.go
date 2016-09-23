@@ -23,8 +23,7 @@ func TestGetAllScenes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	_ = scenes
-	// t.Log(scenes)
+	t.Log(scenes)
 }
 
 // TODO not functional
