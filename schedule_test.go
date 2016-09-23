@@ -8,19 +8,40 @@
 package hue
 
 import (
+	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestGetAllSchedules(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	_, _ = bridge.GetAllSchedules()
+	schedules, err := bridge.GetAllSchedules()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(schedules)
 }
 
 func TestGetSchedule(t *testing.T) {
-	bridge, _ := NewBridge("192.168.1.128")
+	bridges, err := hue.FindBridges()
+	if err != nil {
+		t.Fatal(err)
+	}
+	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	_, _ = bridge.GetSchedule("4673980164949558")
+	schedules, err := bridge.GetAllSchedules()
+	if err != nil {
+		t.Fatal(err)
+	}
+	schedule, err := bridge.GetSchedule(schedules[0].ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Log(schedule)
 }
 
 // func TestCreateSchedule(t *testing.T) {
