@@ -20,8 +20,8 @@ type Light struct {
 	State struct {
 		On         bool       `json:"on"`        // On or Off state of the light ("true" or "false")
 		Bri        uint8      `json:"bri"`       // Brightness value 1-254
-		Hue        int        `json:"hue"`       // Hue value 1-65535
-		Saturation int        `json:"sat"`       // Saturation value 0-254
+		Hue        uint16     `json:"hue"`       // Hue value 1-65535
+		Saturation uint8      `json:"sat"`       // Saturation value 0-254
 		Effect     string     `json:"effect"`    // "None" or "Colorloop"
 		XY         [2]float32 `json:"xy"`        // Coordinates of color in CIE color space
 		CT         int        `json:"ct"`        // Mired Color Temperature (google it)
