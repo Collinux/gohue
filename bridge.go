@@ -92,17 +92,17 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 // a body formatted with parameters (in a generic interface).
 // If `params` is nil then it will send an empty body with the post request.
 func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
-    // Add the params to the request or allow an empty body
-    request := []byte{}
-    if params != nil {
-        reqBody, err := json.Marshal(params)
-        if err != nil {
-    		err = errors.New("Error: Unable to add POST body parameters due to json marshal error.")
-    		log.Println(err)
-    		return []byte{}, nil, err
-    	}
-        request = reqBody
-    }
+	// Add the params to the request or allow an empty body
+	request := []byte{}
+	if params != nil {
+		reqBody, err := json.Marshal(params)
+		if err != nil {
+			err = errors.New("Error: Unable to add POST body parameters due to json marshal error.")
+			log.Println(err)
+			return []byte{}, nil, err
+		}
+		request = reqBody
+	}
 	// Send the request and handle the response
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
 	resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
@@ -111,7 +111,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 		log.Println(err)
 		return []byte{}, nil, err
 	}
-    return HandleResponse(resp)
+	return HandleResponse(resp)
 }
 
 // Bridge.Delete sends an http DELETE to the bridge
@@ -134,7 +134,7 @@ func (bridge *Bridge) Delete(path string) error {
 // and invalid return types.
 func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 	body, err := ioutil.ReadAll(resp.Body)
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 	if err != nil {
 		trace("Error parsing bridge description xml.", nil)
 		return []byte{}, nil, err
@@ -162,11 +162,11 @@ func FindBridges() ([]Bridge, error) {
 		log.Fatal(err)
 		return []Bridge{}, err
 	}
-    bridges := []Bridge{}
-    err = json.Unmarshal(body, &bridges)
-    if err != nil {
-        return []Bridge{}, errors.New("Unable to parse FindBridges response. ")
-    }
+	bridges := []Bridge{}
+	err = json.Unmarshal(body, &bridges)
+	if err != nil {
+		return []Bridge{}, errors.New("Unable to parse FindBridges response. ")
+	}
 	return bridges, nil
 }
 
