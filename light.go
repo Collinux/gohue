@@ -88,7 +88,6 @@ func (light *Light) Toggle() error {
 	} else {
 		return light.On()
 	}
-	return nil
 }
 
 // Light.Delete removes the light from the
@@ -185,7 +184,7 @@ func (light *Light) Dim(percent int) error {
 		newBri := uint8(originalBri - uint8(decreaseBri))
 		if newBri < 0 {
 			newBri = 0
-			log.Println("Light.Dim state set under 0%, setting brightness to 0. ")
+			log.Printf("Light.Dim state set under 0%%, setting brightness to 0. ")
 		}
 		lightState := LightState{On: true, Bri: newBri}
 		err := light.SetState(lightState)
@@ -222,7 +221,7 @@ func (light *Light) Brighten(percent int) error {
 		newBri := uint8(originalBri + uint8(increaseBri))
 		if newBri > 254 { // LightState.Bri must be between 1 and 254 inclusive
 			newBri = 254
-			log.Println("Light.Brighten state set over 100%, setting brightness to 100%. ")
+			log.Printf("Light.Brighten state set over 100%%, setting brightness to 100%%. ")
 		}
 		lightState := LightState{On: true, Bri: newBri}
 		err := light.SetState(lightState)
