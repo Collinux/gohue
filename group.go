@@ -20,9 +20,9 @@ type Action struct {
 	Colormode string    `json:"colormode,omitempty"`
 	Ct        int       `json:"ct,omitempty"`
 	Effect    string    `json:"effect,omitempty"`
-	Hue       int       `json:"hue,omitempty"`
-	On        bool      `json:"on,omitempty"`
-	Sat       int       `json:"sat,omitempty"`
+	Hue       *int      `json:"hue,omitempty"`
+	On        *bool     `json:"on,omitempty"`
+	Sat       *int      `json:"sat,omitempty"`
 	XY        []float64 `json:"xy,omitempty"`
 	Scene     string    `json:"scene,omitempty"`
 }
