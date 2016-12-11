@@ -57,7 +57,6 @@ func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 	resp, err := http.Get(uri)
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge. ")
-		log.Println(err)
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
@@ -72,7 +71,6 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 	data, err := json.Marshal(params)
 	if err != nil {
 		err = errors.New("Error: Unable marshal PUT request interface.")
-		log.Println(err)
 		return []byte{}, nil, err
 	}
 	//fmt.Println("\n\nPARAMS: ", params)
@@ -82,7 +80,6 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 	resp, err := client.Do(request)
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge.")
-		log.Println(err)
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
@@ -98,7 +95,6 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 		reqBody, err := json.Marshal(params)
 		if err != nil {
 			err = errors.New("Error: Unable to add POST body parameters due to json marshal error.")
-			log.Println(err)
 			return []byte{}, nil, err
 		}
 		request = reqBody
@@ -108,7 +104,6 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 	resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge.")
-		log.Println(err)
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
@@ -122,7 +117,6 @@ func (bridge *Bridge) Delete(path string) error {
 	resp, err := client.Do(req)
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge.")
-		log.Println(err)
 		return err
 	}
 	_, _, err = HandleResponse(resp)
@@ -146,7 +140,6 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 		errDesc := errString[strings.Index(errString, "description\":\"")+14 : strings.Index(errString, "\"}}")]
 		errOut := fmt.Sprintf("Error type %s: %s.", errNum, errDesc)
 		err = errors.New(errOut)
-		log.Println(err)
 		return []byte{}, nil, err
 	}
 	return body, reader, nil
@@ -159,7 +152,6 @@ func FindBridges() ([]Bridge, error) {
 	body, _, err := bridge.Get("/api/nupnp")
 	if err != nil {
 		err = errors.New("Error: Unable to locate bridge.")
-		log.Fatal(err)
 		return []Bridge{}, err
 	}
 	bridges := []Bridge{}
@@ -181,7 +173,6 @@ func NewBridge(ip string) (*Bridge, error) {
 	// Test the connection by attempting to get the bridge info.
 	err := bridge.GetInfo()
 	if err != nil {
-		log.Fatal("Error: Unable to access bridge. ", err)
 		return &Bridge{}, err
 	}
 	return &bridge, nil
@@ -200,7 +191,6 @@ func (bridge *Bridge) GetInfo() error {
 	err = xml.NewDecoder(reader).Decode(&data)
 	if err != nil {
 		err = errors.New("Error: Unable to decode XML response from bridge. ")
-		log.Fatal(err)
 		return err
 	}
 	bridge.Info = data
@@ -213,7 +203,6 @@ func (bridge *Bridge) Login(username string) error {
 	uri := fmt.Sprintf("/api/%s", username)
 	_, _, err := bridge.Get(uri)
 	if err != nil {
-		log.Fatal(err)
 		return err
 	}
 	bridge.Username = username
@@ -229,15 +218,10 @@ func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
 	params := map[string]string{"devicetype": deviceType}
 	body, _, err := bridge.Post("/api", params)
 	if err != nil {
-		log.Fatal("Error: Failed to create user. ", err)
 		return "", err
 	}
 	content := string(body)
 	username := content[strings.LastIndex(content, ":\"")+2 : strings.LastIndex(content, "\"")]
-	userOut := fmt.Sprintf(
-		"Created user token '%s'. Use Bridge.Login with this token from now on.",
-		username)
-	log.Println(userOut)
 	bridge.Username = username
 	return username, nil
 }
@@ -321,7 +305,6 @@ func (bridge *Bridge) FindNewLights() error {
 	uri := fmt.Sprintf("/api/%s/lights", bridge.Username)
 	_, _, err := bridge.Post(uri, nil)
 	if err != nil {
-		log.Println(err)
 		return err
 	}
 	return nil
