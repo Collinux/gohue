@@ -24,6 +24,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Bridge struct defines hardware that is used to communicate with the lights.
@@ -54,7 +55,8 @@ type BridgeInfo struct {
 // bridge.Get sends an http GET to the bridge
 func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
-	resp, err := http.Get(uri)
+	client := &http.Client{Timeout: time.Second * 5}
+	resp, err := client.Get(uri)
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge. ")
 		return []byte{}, nil, err
@@ -66,7 +68,7 @@ func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 // a body formatted with parameters (in a generic interface)
 func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Second * 5}
 
 	data, err := json.Marshal(params)
 	if err != nil {
@@ -74,7 +76,6 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 		return []byte{}, nil, err
 	}
 	//fmt.Println("\n\nPARAMS: ", params)
-	//log.Println("\nSending PUT body: ", string(data))
 
 	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
 	resp, err := client.Do(request)
@@ -101,7 +102,8 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 	}
 	// Send the request and handle the response
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
-	resp, err := http.Post(uri, "text/json", bytes.NewReader(request))
+	client := &http.Client{Timeout: time.Second * 5}
+	resp, err := client.Post(uri, "text/json", bytes.NewReader(request))
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge.")
 		return []byte{}, nil, err
@@ -112,7 +114,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 // Bridge.Delete sends an http DELETE to the bridge
 func (bridge *Bridge) Delete(path string) error {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
-	client := &http.Client{}
+	client := &http.Client{Timeout: time.Second * 5}
 	req, err := http.NewRequest("DELETE", uri, nil)
 	resp, err := client.Do(req)
 	if err != nil {
