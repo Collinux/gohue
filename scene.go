@@ -31,7 +31,7 @@ type Scene struct {
 	ID          string   `json:",omitempty"`
 }
 
-// Bridge.GetScenes gets the attributes for all scenes.
+// GetAllScenes gets the attributes for all scenes.
 func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
 	uri := fmt.Sprintf("/api/%s/scenes", bridge.Username)
 	body, _, err := bridge.Get(uri)
@@ -54,7 +54,7 @@ func (bridge *Bridge) GetAllScenes() ([]Scene, error) {
 	return scenesList, nil
 }
 
-// Bridge.GetScene gets the attributes for an individual scene.
+// GetScene gets the attributes for an individual scene.
 // This is used to optimize time when updating the state of the scene.
 // Note: The ID is not an index, it's a unique key generated for each scene.
 func (bridge *Bridge) GetScene(id string) (Scene, error) {
@@ -72,7 +72,7 @@ func (bridge *Bridge) GetScene(id string) (Scene, error) {
 	return scene, nil
 }
 
-// Bridge.GetSceneByName gets the attributes for the scene identified by a name
+// GetSceneByName gets the attributes for the scene identified by a name
 func (bridge *Bridge) GetSceneByName(name string) (Scene, error) {
 
 	scenes, _ := bridge.GetAllScenes()
@@ -88,13 +88,13 @@ func (bridge *Bridge) GetSceneByName(name string) (Scene, error) {
 	return Scene{}, errors.New(errOut)
 }
 
-// Bridge.RecallScene recalls a scene
+// RecallScene recalls a scene
 func (bridge *Bridge) RecallScene(id string) error {
 	action := &Action{Scene: id}
 	return bridge.SetGroupState(0, action)
 }
 
-// Bridge.RecallSceneByName recalls a scene
+// RecallSceneByName recalls a scene
 func (bridge *Bridge) RecallSceneByName(name string) error {
 	scene, err := bridge.GetSceneByName(name)
 	if err != nil {
@@ -103,7 +103,7 @@ func (bridge *Bridge) RecallSceneByName(name string) error {
 	return bridge.RecallScene(scene.ID)
 }
 
-// Bridge.CreateScene posts a new scene configuration to the bridge.
+// CreateScene posts a new scene configuration to the bridge.
 func (bridge *Bridge) CreateScene(scene Scene) error {
 	uri := fmt.Sprintf("/api/%s/scenes/", bridge.Username)
 	_, _, err := bridge.Post(uri, scene)
