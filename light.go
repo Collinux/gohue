@@ -173,6 +173,24 @@ func (light *Light) SetColor(color *[2]float32) error {
 	return nil
 }
 
+// SetColorXY requires a selection from the above light
+// color variable section and sets the light to that XY HSL color
+// aliased for clarity
+func (light *Light) SetColorXY(color *[2]float32) {
+	light.SetColor(color)
+}
+
+// SetColorHS requires a selection from the above light
+// color variable section and sets the light to the Hue value
+func (light *Light) SetColorHS(color uint16) error {
+	lightState := LightState{On: true, Hue: color}
+	err := light.SetState(lightState)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Dim lowers the brightness by a percent.
 // Note the required value is an integer, for example "20" is converted to 20%.
 func (light *Light) Dim(percent int) error {
