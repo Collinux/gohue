@@ -52,11 +52,12 @@ type BridgeInfo struct {
 	} `xml:"device"`
 }
 
-// bridge.Get sends an http GET to the bridge
+// Get sends an http GET to the bridge
 func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
 	client := &http.Client{Timeout: time.Second * 5}
 	resp, err := client.Get(uri)
+
 	if err != nil {
 		err = errors.New("Error: Unable to access bridge. ")
 		return []byte{}, nil, err
@@ -64,7 +65,7 @@ func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 	return HandleResponse(resp)
 }
 
-// Bridge.Put sends an http PUT to the bridge with
+// Put sends an http PUT to the bridge with
 // a body formatted with parameters (in a generic interface)
 func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, error) {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
@@ -72,21 +73,21 @@ func (bridge *Bridge) Put(path string, params interface{}) ([]byte, io.Reader, e
 
 	data, err := json.Marshal(params)
 	if err != nil {
-		err = errors.New("Error: Unable marshal PUT request interface.")
+		err = errors.New("unable to marshal PUT request interface")
 		return []byte{}, nil, err
 	}
 	//fmt.Println("\n\nPARAMS: ", params)
 
-	request, err := http.NewRequest("PUT", uri, bytes.NewReader(data))
+	request, _ := http.NewRequest("PUT", uri, bytes.NewReader(data))
 	resp, err := client.Do(request)
 	if err != nil {
-		err = errors.New("Error: Unable to access bridge.")
+		err = errors.New("unable to access bridge")
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
 }
 
-// bridge.Post sends an http POST to the bridge with
+// Post sends an http POST to the bridge with
 // a body formatted with parameters (in a generic interface).
 // If `params` is nil then it will send an empty body with the post request.
 func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, error) {
@@ -95,7 +96,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 	if params != nil {
 		reqBody, err := json.Marshal(params)
 		if err != nil {
-			err = errors.New("Error: Unable to add POST body parameters due to json marshal error.")
+			err = errors.New("unable to add POST body parameters due to json marshal error")
 			return []byte{}, nil, err
 		}
 		request = reqBody
@@ -104,21 +105,23 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
 	client := &http.Client{Timeout: time.Second * 5}
 	resp, err := client.Post(uri, "text/json", bytes.NewReader(request))
+
 	if err != nil {
-		err = errors.New("Error: Unable to access bridge.")
+		err = errors.New("unable to access bridge")
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
 }
 
-// Bridge.Delete sends an http DELETE to the bridge
+// Delete sends an http DELETE to the bridge
 func (bridge *Bridge) Delete(path string) error {
 	uri := fmt.Sprintf("http://" + bridge.IPAddress + path)
 	client := &http.Client{Timeout: time.Second * 5}
-	req, err := http.NewRequest("DELETE", uri, nil)
+	req, _ := http.NewRequest("DELETE", uri, nil)
 	resp, err := client.Do(req)
+
 	if err != nil {
-		err = errors.New("Error: Unable to access bridge.")
+		err = errors.New("unable to access bridge")
 		return err
 	}
 	_, _, err = HandleResponse(resp)
@@ -153,13 +156,13 @@ func FindBridges() ([]Bridge, error) {
 	bridge := Bridge{IPAddress: "www.meethue.com"}
 	body, _, err := bridge.Get("/api/nupnp")
 	if err != nil {
-		err = errors.New("Error: Unable to locate bridge.")
+		err = errors.New("unable to locate bridge")
 		return []Bridge{}, err
 	}
 	bridges := []Bridge{}
 	err = json.Unmarshal(body, &bridges)
 	if err != nil {
-		return []Bridge{}, errors.New("Unable to parse FindBridges response. ")
+		return []Bridge{}, errors.New("unable to parse FindBridges response")
 	}
 	return bridges, nil
 }
@@ -180,7 +183,7 @@ func NewBridge(ip string) (*Bridge, error) {
 	return &bridge, nil
 }
 
-// GetBridgeInfo retreives the description.xml file from the bridge.
+// GetInfo retreives the description.xml file from the bridge.
 // This is used as a check to see if the bridge is accessible
 // and any error will be fatal as the bridge is required for nearly
 // all functions.
@@ -199,7 +202,7 @@ func (bridge *Bridge) GetInfo() error {
 	return nil
 }
 
-// Bridge.Login verifies that the username token has bridge access
+// Login verifies that the username token has bridge access
 // and only assigns the bridge its Username value if verification is successful.
 func (bridge *Bridge) Login(username string) error {
 	uri := fmt.Sprintf("/api/%s", username)
@@ -211,7 +214,7 @@ func (bridge *Bridge) Login(username string) error {
 	return nil
 }
 
-// Bridge.CreateUser adds a new user token on the whitelist.
+// CreateUser adds a new user token on the whitelist.
 // The token is the first return value in this function which must
 // be used with `Bridge.Login`. You cannot use a plaintext username
 // like the argument provided in this function.
@@ -228,7 +231,7 @@ func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
 	return username, nil
 }
 
-// Bridge.DeleteUser deletes a user given its USER KEY, not the string name.
+// DeleteUser deletes a user given its USER KEY, not the string name.
 // See http://www.developers.meethue.com/documentation/configuration-api
 // for description on `username` deprecation in place of the devicetype key.
 func (bridge *Bridge) DeleteUser(username string) error {
@@ -293,7 +296,7 @@ func (bridge *Bridge) GetLightByIndex(index int) (Light, error) {
 	return light, nil
 }
 
-// Bridge.FindNewLights makes the bridge search the zigbee spectrum for
+// FindNewLights makes the bridge search the zigbee spectrum for
 // lights in the area and will add them to the list of lights available.
 // If successful these new lights can be used by `Bridge.GetAllLights`
 //
@@ -312,7 +315,7 @@ func (bridge *Bridge) FindNewLights() error {
 	return nil
 }
 
-// GetLight returns a light struct containing data on a given name.
+// GetLightByName returns a light struct containing data on a given name.
 func (bridge *Bridge) GetLightByName(name string) (Light, error) {
 	lights, _ := bridge.GetAllLights()
 	for _, light := range lights {
