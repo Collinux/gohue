@@ -59,7 +59,7 @@ func (bridge *Bridge) Get(path string) ([]byte, io.Reader, error) {
 	resp, err := client.Get(uri)
 
 	if err != nil {
-		err = errors.New("Error: Unable to access bridge. ")
+		err = errors.New("unable to access bridge")
 		return []byte{}, nil, err
 	}
 	return HandleResponse(resp)
@@ -96,7 +96,7 @@ func (bridge *Bridge) Post(path string, params interface{}) ([]byte, io.Reader, 
 	if params != nil {
 		reqBody, err := json.Marshal(params)
 		if err != nil {
-			err = errors.New("unable to add POST body parameters due to json marshal error")
+			err = errors.New("unable to add POST body parameters due to json marshalling error")
 			return []byte{}, nil, err
 		}
 		request = reqBody
