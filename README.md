@@ -46,6 +46,12 @@ func main() {
 }
 ```
 
+## See GoHue in action!
+##### Have a cool project you made using GoHue? Add yours here in a pull request!
+[HueBeat](https://github.com/Mobilpadde/HueBeat) by [Mobilpadde](https://github.com/mobilpadde) - Light up a room in sync with your heartbeat.
+
+[BitHue](https://github.com/realytcracker/go-bithue) by [ytcracker](https://github.com/realytcracker) - Light color according to profit gain/loss in bitcoin price
+
 ## Features
 ##### Lights
 - [x] Get all lights
@@ -109,12 +115,6 @@ func main() {
 - [ ] Create rule
 - [ ] Update rule
 - [ ] Delete rule
-
-## See GoHue in action!
-##### Have a cool project you made using GoHue? Add yours here in a pull request!
-[HueBeat](https://github.com/Mobilpadde/HueBeat) by [Mobilpadde](https://github.com/mobilpadde) - Light up a room in sync with your heartbeat.
-
-[BitHue](https://github.com/realytcracker/go-bithue) by [ytcracker](https://github.com/realytcracker) - Light color according to profit gain/loss in bitcoin price
 
 ## API Documentation
 For official Philips Hue documentation check out the [Philips Hue website](http://www.developers.meethue.com/philips-hue-api)
