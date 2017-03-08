@@ -35,7 +35,7 @@ type Group struct {
 	Type   string   `json:"type"`
 }
 
-// Bridge.GetGroups gets the attributes for each group of lights.
+// GetGroups gets the attributes for each group of lights.
 // TODO: NOT TESTED, NOT FULLY IMPLEMENTED
 func (bridge *Bridge) GetGroups() ([]Group, error) {
 	uri := fmt.Sprintf("/api/%s/groups", bridge.Username)
@@ -56,7 +56,7 @@ func (bridge *Bridge) GetGroups() ([]Group, error) {
 	return []Group{}, nil
 }
 
-// Bridge.SetGroupState sends an action to group
+// SetGroupState sends an action to group
 func (bridge *Bridge) SetGroupState(group int, action *Action) error {
 	uri := fmt.Sprintf("/api/%s/groups/%d/action", bridge.Username, group)
 	_, _, err := bridge.Put(uri, action)

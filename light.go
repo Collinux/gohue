@@ -57,7 +57,7 @@ type LightState struct {
 	Name                string      `json:"name,omitempty"`
 }
 
-// Light.SetName assigns a new name in the light's
+// SetName assigns a new name in the light's
 // attributes as recognized by the bridge.
 func (light *Light) SetName(name string) error {
 	uri := fmt.Sprintf("/api/%s/lights/%d", light.Bridge.Username, light.Index)
@@ -70,26 +70,25 @@ func (light *Light) SetName(name string) error {
 	return nil
 }
 
-// Light.Off turns the light source off
+// Off turns the light source off
 func (light *Light) Off() error {
 	return light.SetState(LightState{On: false})
 }
 
-// Light.Off turns the light source on
+// On turns the light source on
 func (light *Light) On() error {
 	return light.SetState(LightState{On: true})
 }
 
-// Light.Toggle switches the light source on and off
+// Toggle switches the light source on and off
 func (light *Light) Toggle() error {
 	if light.State.On {
 		return light.Off()
-	} else {
-		return light.On()
 	}
+	return light.On()
 }
 
-// Light.Delete removes the light from the
+// Delete removes the light from the
 // list of lights available on the bridge.
 func (light *Light) Delete() error {
 	uri := fmt.Sprintf("/api/%s/lights/%d", light.Bridge.Username, light.Index)
@@ -100,7 +99,7 @@ func (light *Light) Delete() error {
 	return nil
 }
 
-// Light.Blink increases and decrease the brightness
+// Blink increases and decrease the brightness
 // repeatedly for a given seconds interval and return the
 // light back to its off  or on state afterwards.
 // Note: time will vary based on connection speed and algorithm speed.
@@ -139,7 +138,7 @@ func (light *Light) Blink(seconds int) error {
 	return nil
 }
 
-// Light.ColorLoop sets the light state to 'colorloop' if `active`
+// ColorLoop sets the light state to 'colorloop' if `active`
 // is true or it sets the light state to "none" if `activate` is false.
 func (light *Light) ColorLoop(activate bool) error {
 	var state = "none"
@@ -163,7 +162,7 @@ var (
 	WHITE  = &[2]float32{0.3227, 0.3290}
 )
 
-// Light.SetColor requires a selection from the above light
+// SetColor requires a selection from the above light
 // color variable section and sets the light to that XY HSL color
 func (light *Light) SetColor(color *[2]float32) error {
 	lightState := LightState{On: true, XY: color}
@@ -174,7 +173,25 @@ func (light *Light) SetColor(color *[2]float32) error {
 	return nil
 }
 
-// Light.Dim lowers the brightness by a percent.
+// SetColorXY requires a selection from the above light
+// color variable section and sets the light to that XY HSL color
+// aliased for clarity
+func (light *Light) SetColorXY(color *[2]float32) {
+	light.SetColor(color)
+}
+
+// SetColorHS requires a selection from the above light
+// color variable section and sets the light to the Hue value
+func (light *Light) SetColorHS(color uint16) error {
+	lightState := LightState{On: true, Hue: color}
+	err := light.SetState(lightState)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Dim lowers the brightness by a percent.
 // Note the required value is an integer, for example "20" is converted to 20%.
 func (light *Light) Dim(percent int) error {
 	if percent > 0 && percent <= 100 {
@@ -190,12 +207,11 @@ func (light *Light) Dim(percent int) error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("Light.Dim percentage given is not between 1 and 100. ")
 	}
+	return errors.New("Light.Dim percentage given is not between 1 and 100. ")
 }
 
-// Light.SetBrightness sets the brightness to a percentage of the maximum
+// SetBrightness sets the brightness to a percentage of the maximum
 // maximum brightness as an integer (`LightStruct.Bri between 1 and 254 inclusive`)
 func (light *Light) SetBrightness(percent int) error {
 	if percent > 0 && percent <= 100 {
@@ -206,12 +222,11 @@ func (light *Light) SetBrightness(percent int) error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("Light.SetBrightness percentage is not between 1 and 100. ")
 	}
+	return errors.New("Light.SetBrightness percentage is not between 1 and 100. ")
 }
 
-// Light.Brighten will increase LightStruct.Bri by a given percent (integer)
+// Brighten will increase LightStruct.Bri by a given percent (integer)
 func (light *Light) Brighten(percent int) error {
 	if percent > 0 && percent <= 100 {
 		originalBri := light.State.Bri
@@ -226,12 +241,11 @@ func (light *Light) Brighten(percent int) error {
 			return err
 		}
 		return nil
-	} else {
-		return errors.New("Light.Brighten percentage is not between 1 and 100. ")
 	}
+	return errors.New("Light.Brighten percentage is not between 1 and 100. ")
 }
 
-// Light.SetState modifyies light attributes. See `LightState` struct for attributes.
+// SetState modifyies light attributes. See `LightState` struct for attributes.
 // Brightness must be between 1 and 254 (inclusive)
 // Hue must be between 0 and 65535 (inclusive)
 // Sat must be between 0 and 254 (inclusive)
