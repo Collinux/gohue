@@ -3,6 +3,13 @@ Package hue interfaces Philips Hue devices to control lights, scenes, schedules,
 
 [![GoDoc](https://camo.githubusercontent.com/b3b2a2b7fad4e76052830945cd839a3bba5be723/687474703a2f2f696d672e736869656c64732e696f2f62616467652f676f646f632d7265666572656e63652d3532373242342e706e67)](https://godoc.org/github.com/Collinux/GoHue)
 [![Go Report Card](https://goreportcard.com/badge/github.com/Collinux/GoHue)](https://goreportcard.com/report/github.com/Collinux/GoHue)
+
+## See GoHue in action!
+##### Have a cool project you made using GoHue? Add yours here in a pull request!
+[HueBeat](https://github.com/Mobilpadde/HueBeat) by [Mobilpadde](https://github.com/mobilpadde) - Light up a room in sync with your heartbeat.
+
+[BitHue](https://github.com/realytcracker/go-bithue) by [ytcracker](https://github.com/realytcracker) - Light color according to profit gain/loss in bitcoin price
+
 ## Installation
 ```
 go get github.com/collinux/gohue
@@ -45,12 +52,6 @@ func main() {
     }
 }
 ```
-
-## See GoHue in action!
-##### Have a cool project you made using GoHue? Add yours here in a pull request!
-[HueBeat](https://github.com/Mobilpadde/HueBeat) by [Mobilpadde](https://github.com/mobilpadde) - Light up a room in sync with your heartbeat.
-
-[BitHue](https://github.com/realytcracker/go-bithue) by [ytcracker](https://github.com/realytcracker) - Light color according to profit gain/loss in bitcoin price
 
 ## Features
 ##### Lights
