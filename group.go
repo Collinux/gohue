@@ -16,15 +16,15 @@ import (
 // Action struct defines the state of a group
 type Action struct {
 	Alert     string    `json:"alert,omitempty"`
-	Bri       int       `json:"bri,omitempty"`
 	Colormode string    `json:"colormode,omitempty"`
-	Ct        int       `json:"ct,omitempty"`
 	Effect    string    `json:"effect,omitempty"`
-	Hue       int       `json:"hue,omitempty"`
-	On        bool      `json:"on,omitempty"`
-	Sat       int       `json:"sat,omitempty"`
-	XY        []float64 `json:"xy,omitempty"`
 	Scene     string    `json:"scene,omitempty"`
+	On        *bool     `json:"on,omitempty"`
+	Bri       *int      `json:"bri,omitempty"`
+	Ct        *int      `json:"ct,omitempty"`
+	Hue       *int      `json:"hue,omitempty"`
+	Sat       *int      `json:"sat,omitempty"`
+	XY        []float64 `json:"xy,omitempty"`
 }
 
 // Group struct defines the attributes for a group of lights.
