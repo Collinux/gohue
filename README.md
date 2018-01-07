@@ -117,9 +117,11 @@ func main() {
 - [ ] Delete rule
 
 ## API Documentation
-For official Philips Hue documentation check out the [Philips Hue website](http://www.developers.meethue.com/philips-hue-api)
+This repository is featured on the Philips Hue® developer site and was not developed by "Philips Lighting Holding B.V"...
+for official Hue® documentation check out the [Philips Hue® website](http://www.developers.meethue.com/philips-hue-api). This codebase comes with no guaranetees. Use at your own risk.
 
 ## License
+GoHue - Third party golang library for Philips Hue® gateway interface.
 Copyright (C) 2016 Collin Guarino (Collinux)  
 GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
 GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
