@@ -122,9 +122,8 @@ for official Hue® documentation check out the [Philips Hue® website](http://ww
 
 ## License
 GoHue - Third party golang library for Philips Hue® gateway interface.
-Copyright (C) 2016 Collin Guarino (Collinux)  
+Copyright (C) 2016 Collinux 
 GPL version 2 or higher http://www.gnu.org/licenses/gpl.html  
-GoHue project maintained by Collin Guarino, collin.guarino@gmail.com
 
 ## Contributing  
 Pull requests happily accepted on GitHub
