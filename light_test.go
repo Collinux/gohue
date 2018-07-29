@@ -8,13 +8,12 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
 	"testing"
 	"time"
 )
 
 func TestSetLightState(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,29 +46,29 @@ func TestSetLightState(t *testing.T) {
 	selectedLight.Dim(20)
 	selectedLight.Brighten(20)
 
-	selectedLight.SetColor(hue.RED)
+	selectedLight.SetColor(RED)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.YELLOW)
+	selectedLight.SetColor(YELLOW)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.ORANGE)
+	selectedLight.SetColor(ORANGE)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.GREEN)
+	selectedLight.SetColor(GREEN)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.CYAN)
+	selectedLight.SetColor(CYAN)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.BLUE)
+	selectedLight.SetColor(BLUE)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.PURPLE)
+	selectedLight.SetColor(PURPLE)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.PINK)
+	selectedLight.SetColor(PINK)
 	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.WHITE)
+	selectedLight.SetColor(WHITE)
 
 	// _ := selectedLight.Delete()
 }
 
 func TestFindNewLights(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}

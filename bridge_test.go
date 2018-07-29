@@ -8,12 +8,11 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestCreateUser(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +23,7 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestFindBridges(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -32,7 +31,7 @@ func TestFindBridges(t *testing.T) {
 }
 
 func TestBridgeLogin(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}

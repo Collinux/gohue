@@ -8,12 +8,11 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestGetAllScenes(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -28,13 +27,13 @@ func TestGetAllScenes(t *testing.T) {
 
 // TODO not functional
 // func TestCreateScene(t *testing.T) {
-// 	bridges, err := hue.FindBridges()
+// 	bridges, err := FindBridges()
 // 	if err != nil {
 // 		t.Fatal(err)
 // 	}
 // 	bridge := bridges[0]
 // 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-// 	scene := hue.Scene{Name: "Testing", Lights: []string{"1", "2"}}
+// 	scene := Scene{Name: "Testing", Lights: []string{"1", "2"}}
 // 	err = bridge.CreateScene(scene)
 // 	if err != nil {
 // t.Fatal(err)

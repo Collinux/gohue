@@ -8,12 +8,11 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestGetAllSchedules(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -27,7 +26,7 @@ func TestGetAllSchedules(t *testing.T) {
 }
 
 func TestGetSchedule(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}

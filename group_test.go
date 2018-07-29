@@ -8,12 +8,11 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
 	"testing"
 )
 
 func TestGetGroups(t *testing.T) {
-	bridges, err := hue.FindBridges()
+	bridges, err := FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
