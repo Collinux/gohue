@@ -37,15 +37,29 @@ func (u *UpdateTime) UnmarshalJSON(b []byte) error {
 // Sensor struct defines attributes of a sensor.
 type Sensor struct {
 	State struct {
-		Daylight     bool       `json:"daylight"`    // True if day & false if night
-		LastUpdated  UpdateTime `json:"lastupdated"` // Time of last update
-		ButtonEvent  uint16     `json:"buttonevent"` // ID of button event
+		Daylight    bool       `json:"daylight"`    // True if day & false if night
+		LastUpdated UpdateTime `json:"lastupdated"` // Time of last update
+		ButtonEvent uint16     `json:"buttonevent"` // ID of button event
+		Status      uint16     `json:"status"`      // Generic status value
+		Temperature int16      `json:"temperature"` // Temperature in hundredths °C
+		LightLevel  uint16     `json:"lightlevel"`  // Light level in Lux
+		Dark        bool       `json:"dark"`        // True if sensor configuration judges the current light level to be "dark"
+		Presence    bool       `json:"presence"`    // True if the sensor has detected movement
 	} `json:"state"`
 
 	Config struct {
-		On         bool   `json:"on"`        // Turns the sensor on/off. When off, state changes of the sensor are not reflected in the sensor resource.
-		Reachable  bool   `json:"reachable"` // Indicates whether communication with devices is possible
-		Battery    uint8  `json:"battery"`   // The current battery state in percent, only for battery powered devices
+		On              bool   `json:"on"`             // Turns the sensor on/off. When off, state changes of the sensor are not reflected in the sensor resource.
+		Reachable       bool   `json:"reachable"`      // Indicates whether communication with devices is possible
+		Battery         uint8  `json:"battery"`        // The current battery state in percent, only for battery powered devices
+		SunriseOffset   int8   `json:"sunriseoffset"`  // Offset from sunrise in minutes after which the sensor considers it to be "daylight"
+		SunsetOffset    int8   `json:"sunsetoffset"`   // Offset from sunset in minutes before which the sensor considers it to be "daylight"
+		Alert           string `json:"alert"`          // Motion sensor "alert" state - usually "none"
+		LEDIndication   bool   `json:"ledindication"`  // True if the motion sensor's LED is enabled
+		UserTest        bool   `json:"usertest"`       // True if the motion sensor is in user test mode
+		Sensitivity     uint8  `json:"sensitivity"`    // Motion sensor movement sensitivity level
+		SensitivityMax  uint8  `json:"sensitivitymax"` // Motion sensor maximum movement sensitivity level
+		ThresholdDark   uint16 `json:"tholddark"`      // Motion sensor threshold below which it is considered "dark" (Lux)
+		ThresholdOffset uint16 `json:"tholdoffset"`    // Motion sensor level above darkness threshold that is considered "daylight" (Lux)
 	} `json:"config"`
 
 	Type             string  `json:"type"`
@@ -54,6 +68,7 @@ type Sensor struct {
 	ManufacturerName string  `json:"manufacturername"`
 	UniqueID         string  `json:"uniqueid"`
 	SWVersion        string  `json:"swversion"`
+	Recycle          bool    `json:"recycle"`
 	Index            int     // Set by index of sensor array response
 	Bridge           *Bridge // Set by the bridge when the sensor is found
 }
