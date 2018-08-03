@@ -9,8 +9,8 @@
 package hue
 
 import (
-	"time"
 	"strings"
+	"time"
 )
 
 // special time type for unmarshal of lastupdated
