@@ -62,10 +62,20 @@ type Sensor struct {
 		ThresholdOffset uint16 `json:"tholdoffset"`    // Motion sensor level above darkness threshold that is considered "daylight" (Lux)
 	} `json:"config"`
 
+	SwUpdate struct {
+		State       string     `json:"state"`       // Usually "noupdates"
+		LastInstall UpdateTime `json:"lastinstall"` // Last time software was updated on this device
+	} `json:"swupdate"`
+
+	Capabilities struct {
+		Certified bool `json:"certified"` // Certified Hue product
+	} `json:"capabilities"`
+
 	Type             string  `json:"type"`
 	Name             string  `json:"name"`
 	ModelID          string  `json:"modelid"`
 	ManufacturerName string  `json:"manufacturername"`
+	ProductName      string  `json:"productname"`
 	UniqueID         string  `json:"uniqueid"`
 	SWVersion        string  `json:"swversion"`
 	Recycle          bool    `json:"recycle"`
