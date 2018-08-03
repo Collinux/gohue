@@ -22,7 +22,7 @@ type UpdateTime struct {
 // required for "none" as lastupdated in unused sensor
 func (u *UpdateTime) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
-	if s == "none" {
+	if s == "none" || s == "null" {
 		*u = UpdateTime{&time.Time{}}
 		return nil
 	}
