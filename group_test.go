@@ -12,14 +12,14 @@ import (
 	"testing"
 )
 
-func TestGetGroups(t *testing.T) {
+func TestGetAllGroups(t *testing.T) {
 	bridges, err := hue.FindBridges()
 	if err != nil {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
 	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	groups, err := bridge.GetGroups()
+	groups, err := bridge.GetAllGroups()
 	if err != nil {
 		t.Fatal(err)
 	}
