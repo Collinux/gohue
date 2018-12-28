@@ -243,7 +243,7 @@ func (bridge *Bridge) DeleteUser(username string) error {
 	return nil
 }
 
-// GetAllLights retreives the state of all lights that the bridge is aware of.
+// GetAllLights retrieves the state of all lights that the bridge is aware of.
 func (bridge *Bridge) GetAllLights() ([]Light, error) {
 	uri := fmt.Sprintf("/api/%s/lights", bridge.Username)
 	body, _, err := bridge.Get(uri)
@@ -325,6 +325,60 @@ func (bridge *Bridge) GetLightByName(name string) (Light, error) {
 	}
 	errOut := fmt.Sprintf("Error: Light name '%s' not found. ", name)
 	return Light{}, errors.New(errOut)
+}
+
+
+// GetAllSensors retrieves the state of all sensors that the bridge is aware of.
+func (bridge *Bridge) GetAllSensors() ([]Sensor, error) {
+	uri := fmt.Sprintf("/api/%s/sensors", bridge.Username)
+	body, _, err := bridge.Get(uri)
+	if err != nil {
+		return []Sensor{}, err
+	}
+
+	// An index is at the top of every sensor in the array
+	sensorList := map[string]Sensor{}
+	err = json.Unmarshal(body, &sensorList)
+	if err != nil {
+		fmt.Print(err)
+		return []Sensor{}, errors.New("Unable to marshal GetAllSensors response. ")
+	}
+
+	// Parse the index, add the sensor to the list, and return the array
+	sensors := make([]Sensor, 0, len(sensorList))
+	for index, sensor := range sensorList {
+		sensor.Index, err = strconv.Atoi(index)
+		if err != nil {
+			return []Sensor{}, errors.New("Unable to convert sensor index to integer. ")
+		}
+		sensor.Bridge = bridge
+		sensors = append(sensors, sensor)
+	}
+	return sensors, nil
+}
+
+// GetSensorByIndex returns a sensor struct containing data on
+// a sensor given its index stored on the bridge.
+func (bridge *Bridge) GetSensorByIndex(index int) (Sensor, error) {
+	// Send an http GET and inspect the response
+	uri := fmt.Sprintf("/api/%s/sensors/%d", bridge.Username, index)
+	body, _, err := bridge.Get(uri)
+	if err != nil {
+		return Sensor{}, err
+	}
+	if strings.Contains(string(body), "not available") {
+		return Sensor{}, errors.New("Error: Sensor selection index out of bounds. ")
+	}
+
+	// Parse and load the response into the sensor array
+	sensor := Sensor{}
+	err = json.Unmarshal(body, &sensor)
+	if err != nil {
+		return Sensor{}, errors.New("Error: Unable to unmarshal light data. ")
+	}
+	sensor.Index = index
+	sensor.Bridge = bridge
+	return sensor, nil
 }
 
 // Log the date, time, file location, line number, and function.
