@@ -106,12 +106,12 @@ func main() {
 - [ ] Delete Group
 
 ##### Sensors
-- [ ] Get all sensors
+- [x] Get all sensors
 - [ ] Create sensor
 - [ ] Find new sensors
 - [ ] Get new sensors
 - [ ] Get sensor
-- [ ] Update sensor
+- [x] Update sensor
 - [ ] Delete sensor
 - [ ] Change sensor configuration
 
