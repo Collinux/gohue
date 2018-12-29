@@ -10,6 +10,7 @@ package hue
 import (
 	"github.com/collinux/GoHue"
 	"testing"
+	"os"
 )
 
 func TestGetAllSchedules(t *testing.T) {
@@ -18,7 +19,10 @@ func TestGetAllSchedules(t *testing.T) {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	if os.Getenv("HUE_USER_TOKEN") == "" {
+		t.Fatal("The environment variable HUE_USER_TOKEN must be set to the value from bridge.CreateUser")
+	}
+	bridge.Login(os.Getenv("HUE_USER_TOKEN"))
 	schedules, err := bridge.GetAllSchedules()
 	if err != nil {
 		t.Fatal(err)
@@ -32,7 +36,10 @@ func TestGetSchedule(t *testing.T) {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	if os.Getenv("HUE_USER_TOKEN") == "" {
+		t.Fatal("The environment variable HUE_USER_TOKEN must be set to the value from bridge.CreateUser")
+	}
+	bridge.Login(os.Getenv("HUE_USER_TOKEN"))
 	schedules, err := bridge.GetAllSchedules()
 	if err != nil {
 		t.Fatal(err)
@@ -44,16 +51,5 @@ func TestGetSchedule(t *testing.T) {
 	t.Log(schedule)
 }
 
-// func TestCreateSchedule(t *testing.T) {
-//     bridge, _ := NewBridge("192.168.1.128", "427de8bd6d49f149c8398e4fc08f")
-//     schedule := Schedule{
-//         Command: interface{
-//             Address: "/api/fffffffff6338294fffffffff585692d/groups/0/action",
-//             Body: {
-//                 Scene: "e5e33fdf2-off-0" // scene id
-//             }
-//             Method: "PUT",
-//         }
-//     }
-//     bridge.CreateSchedule()
-// }
+// TODO
+// func TestCreateSchedule(t *testing.T) { }

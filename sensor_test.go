@@ -11,6 +11,7 @@ import (
 	"github.com/collinux/GoHue"
 
 	"testing"
+	"os"
 	"fmt"
 )
 
@@ -20,7 +21,10 @@ func TestGetAllSensors(t *testing.T) {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	if os.Getenv("HUE_USER_TOKEN") == "" {
+		t.Fatal("The environment variable HUE_USER_TOKEN must be set to the value from bridge.CreateUser")
+	}
+	bridge.Login(os.Getenv("HUE_USER_TOKEN"))
 
 	sensors, err := bridge.GetAllSensors()
 	if err != nil {

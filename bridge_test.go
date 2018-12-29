@@ -10,6 +10,7 @@ package hue
 import (
 	"github.com/collinux/GoHue"
 	"testing"
+	"os"
 )
 
 func TestCreateUser(t *testing.T) {
@@ -36,6 +37,9 @@ func TestBridgeLogin(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	bridges[0].Login("427de8bd6d49f149c8398e4fc08f")
+	if os.Getenv("HUE_USER_TOKEN") == "" {
+		t.Fatal("The environment variable HUE_USER_TOKEN must be set to the value from bridge.CreateUser")
+	}
+	bridges[0].Login(os.Getenv("HUE_USER_TOKEN"))
 
 }

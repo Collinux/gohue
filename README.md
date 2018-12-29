@@ -52,6 +52,11 @@ func main() {
 }
 ```
 
+## Testing & Validation
+1. Set the environment variable "HUE_USER_TOKEN" (example: export HUE_USER_TOKEN="sby7xirR87dUpnfzp1yGRVBeP0Zoxo3LH1krNxSi")
+2. Run `go test *_test.go` 
+3. Wait for all covered tests to be executed (Estimated 15 seconds - may vary depending on network latency).
+
 ## Features
 ##### Lights
 - [x] Get all lights

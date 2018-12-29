@@ -11,6 +11,7 @@ import (
 	"github.com/collinux/GoHue"
 	"testing"
 	"time"
+	"os"
 )
 
 func TestSetLightState(t *testing.T) {
@@ -19,13 +20,13 @@ func TestSetLightState(t *testing.T) {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
-	nameTest, err := bridge.GetLightByName("Desk Light") // Also tests GetAllLights
-	if err != nil {
-		t.Fatal(err)
-	}
-	_ = nameTest
-	selectedLight, err := bridge.GetLightByIndex(7)
+	bridge.Login(os.Getenv("HUE_USER_TOKEN"))
+	//nameTest, err := bridge.GetLightByName("Desk Light") // Also tests GetAllLights
+	//if err != nil {
+	//	t.Fatal(err)
+	//}
+	//_ = nameTest
+	selectedLight, err := bridge.GetLightByIndex(1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -47,24 +48,19 @@ func TestSetLightState(t *testing.T) {
 	selectedLight.Dim(20)
 	selectedLight.Brighten(20)
 
-	selectedLight.SetColor(hue.RED)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.YELLOW)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.ORANGE)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.GREEN)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.CYAN)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.BLUE)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.PURPLE)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.PINK)
-	time.Sleep(time.Second)
-	selectedLight.SetColor(hue.WHITE)
+	// Skip validation of colors
+	//selectedLight.SetColor(hue.RED)
+	//time.Sleep(time.Second)
+	//selectedLight.SetColor(hue.YELLOW)
+	//time.Sleep(time.Second)
+	//selectedLight.SetColor(hue.GREEN)
+	//time.Sleep(time.Second)
+	//selectedLight.SetColor(hue.WHITE)
+	//time.Sleep(time.Second)
+	//selectedLight.Off()
 
+	// TODO
+	// Skip validation of deleting and re-adding light
 	// _ := selectedLight.Delete()
 }
 
@@ -74,7 +70,10 @@ func TestFindNewLights(t *testing.T) {
 		t.Fatal(err)
 	}
 	bridge := bridges[0]
-	bridge.Login("427de8bd6d49f149c8398e4fc08f")
+	if os.Getenv("HUE_USER_TOKEN") == "" {
+		t.Fatal("The environment variable HUE_USER_TOKEN must be set to the value from bridge.CreateUser")
+	}
+	bridge.Login(os.Getenv("HUE_USER_TOKEN"))
 	err = bridge.FindNewLights()
 	if err != nil {
 		t.Fatal(err)

@@ -30,7 +30,7 @@ import (
 // Bridge struct defines hardware that is used to communicate with the lights.
 type Bridge struct {
 	IPAddress string `json:"internalipaddress"`
-	Username  string
+	Username  string // Token from Bridge.CreateUser
 	Info      BridgeInfo
 }
 
@@ -215,10 +215,15 @@ func (bridge *Bridge) Login(username string) error {
 }
 
 // CreateUser adds a new user token on the whitelist.
-// The token is the first return value in this function which must
-// be used with `Bridge.Login`. You cannot use a plaintext username
-// like the argument provided in this function.
-// This was done by Philips Hue for security reasons.
+// and returns this value as a string.
+//
+// The 'Bridge.Login` function **must be run** with
+// the user token as an argument. No functions can
+// be called until a valid user token is assigned as the
+// bridge's `Username` value.
+// 
+// You cannot set a plaintext username, it must be a 
+// generated user token. This was done by Philips Hue for security purposes.
 func (bridge *Bridge) CreateUser(deviceType string) (string, error) {
 	params := map[string]string{"devicetype": deviceType}
 	body, _, err := bridge.Post("/api", params)
