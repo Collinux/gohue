@@ -1,7 +1,7 @@
 /*
 * light.go
 * GoHue library for Philips Hue
-* Copyright (C) 2016 Collin Guarino (Collinux) collin.guarino@gmail.com
+* Copyright (C) 2016 Collin Guarino (Collinux) collinux[-at-]users.noreply.github.com
 * License: GPL version 2 or higher http://www.gnu.org/licenses/gpl.html
  */
 // http://www.developers.meethue.com/documentation/lights-api
