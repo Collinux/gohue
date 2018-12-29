@@ -162,7 +162,10 @@ func FindBridges() ([]Bridge, error) {
 	bridges := []Bridge{}
 	err = json.Unmarshal(body, &bridges)
 	if err != nil {
-		return []Bridge{}, errors.New("unable to parse FindBridges response")
+		return bridges, errors.New("unable to parse FindBridges response")
+	}
+	if len(bridges) == 0 {
+		return bridges, errors.New("no bridges found")
 	}
 	return bridges, nil
 }
