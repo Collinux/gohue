@@ -30,4 +30,5 @@ jobs:
     - name: Lint
       run: |
         go get -u golang.org/x/lint/golint
-        golint *.go
+        $GOPATH/bin/golint *.go
+
