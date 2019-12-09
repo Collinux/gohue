@@ -12,7 +12,7 @@ Package hue interfaces Philips Hue devices to control lights, scenes, schedules,
 
 ## Installation
 ```
-go get github.com/collinux/GoHue
+go get github.com/collinux/gohue
 ```
 
 ## Usage
@@ -20,7 +20,7 @@ go get github.com/collinux/GoHue
 package main
 
 import (
-    "github.com/collinux/GoHue"
+    "github.com/collinux/gohue"
 )
 
 func main() {

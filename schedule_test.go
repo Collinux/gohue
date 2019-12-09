@@ -8,9 +8,9 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
-	"testing"
+	"github.com/collinux/gohue"
 	"os"
+	"testing"
 )
 
 func TestGetAllSchedules(t *testing.T) {

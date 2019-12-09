@@ -8,7 +8,7 @@
 package hue
 
 import (
-	"github.com/collinux/GoHue"
+	"github.com/collinux/gohue"
 
 	"testing"
 	"os"
