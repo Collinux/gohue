@@ -153,8 +153,8 @@ func HandleResponse(resp *http.Response) ([]byte, io.Reader, error) {
 // FindBridges will visit www.meethue.com/api/nupnp to see a list of
 // bridges on the local network.
 func FindBridges() ([]Bridge, error) {
-	bridge := Bridge{IPAddress: "www.meethue.com"}
-	body, _, err := bridge.Get("/api/nupnp")
+	bridge := Bridge{IPAddress: "discovery.meethue.com"}
+	body, _, err := bridge.Get("/")
 	if err != nil {
 		err = errors.New("unable to locate bridge")
 		return []Bridge{}, err
